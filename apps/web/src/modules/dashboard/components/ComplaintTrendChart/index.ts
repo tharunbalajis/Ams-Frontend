@@ -1,0 +1,1 @@
+export { ComplaintTrendChart } from './ComplaintTrendChart';

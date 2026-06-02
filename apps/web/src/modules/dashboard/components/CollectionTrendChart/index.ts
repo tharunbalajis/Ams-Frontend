@@ -1,0 +1,1 @@
+export { CollectionTrendChart } from './CollectionTrendChart';

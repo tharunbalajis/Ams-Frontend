@@ -1,0 +1,1 @@
+export { ResidentStats } from './ResidentStats';

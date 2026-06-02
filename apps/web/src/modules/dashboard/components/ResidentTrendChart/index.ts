@@ -1,0 +1,1 @@
+export { ResidentTrendChart } from './ResidentTrendChart';
