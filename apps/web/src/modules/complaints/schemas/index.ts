@@ -1,3 +1,14 @@
-// Complaints module schemas — implement in Phase 2
+export { createComplaintSchema, updateComplaintSchema } from './complaint.schema';
+export type { CreateComplaintFormValues, UpdateComplaintFormValues } from './complaint.schema';
 
-export {};
+export { assignmentSchema } from './assignment.schema';
+export type { AssignmentFormValues } from './assignment.schema';
+
+export { escalationSchema } from './escalation.schema';
+export type { EscalationFormValues } from './escalation.schema';
+
+export { slaPolicySchema } from './sla.schema';
+export type { SLAPolicyFormValues } from './sla.schema';
+
+export { resolutionSchema } from './resolution.schema';
+export type { ResolutionFormValues } from './resolution.schema';

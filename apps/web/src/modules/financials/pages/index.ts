@@ -1,3 +1,9 @@
-// Financials module pages — implement in Phase 2
-
-export {};
+export { FinancialDashboardPage } from './FinancialDashboardPage';
+export { InvoiceListPage }        from './InvoiceListPage';
+export { InvoiceDetailPage }      from './InvoiceDetailPage';
+export { PaymentsPage }           from './PaymentsPage';
+export { ExpensesPage }           from './ExpensesPage';
+export { CollectionsPage }        from './CollectionsPage';
+export { DefaultersPage }         from './DefaultersPage';
+export { FinancialReportsPage }   from './FinancialReportsPage';
+export { BudgetTrackingPage }     from './BudgetTrackingPage';

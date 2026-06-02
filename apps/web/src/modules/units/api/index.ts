@@ -1,4 +1,4 @@
-// Units module API hooks — implement in Phase 2
-// Uses @/api/units.api.ts
-
-export {};
+export { unitsApi }     from './units.api';
+export { occupancyApi } from './occupancy.api';
+export { ownershipApi } from './ownership.api';
+export { floorApi }     from './floor.api';

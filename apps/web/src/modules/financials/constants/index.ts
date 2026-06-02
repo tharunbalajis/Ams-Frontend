@@ -1,3 +1,38 @@
-// Financials module constants — implement in Phase 2
+export {
+  INVOICE_STATUS_OPTIONS,
+  INVOICE_STATUS_COLOR,
+  INVOICE_TYPE_OPTIONS,
+  FINANCIAL_ROUTES,
+  FINANCIAL_PAGE_SIZE,
+} from './invoice.constants';
 
-export {};
+export {
+  PAYMENT_METHOD_OPTIONS,
+  PAYMENT_STATUS_OPTIONS,
+  PAYMENT_STATUS_COLOR,
+} from './payment.constants';
+
+export {
+  EXPENSE_CATEGORY_OPTIONS,
+  EXPENSE_STATUS_OPTIONS,
+  EXPENSE_STATUS_COLOR,
+} from './expense.constants';
+
+export {
+  COLLECTION_RATE_THRESHOLDS,
+  AGING_BUCKET_LABELS,
+  NOTICE_STATUS_OPTIONS,
+} from './collection.constants';
+
+export {
+  MAINTENANCE_CHARGE_TYPE_OPTIONS,
+  DEFAULT_MAINTENANCE_AMOUNT,
+  LATE_FEE_PERCENTAGE,
+  LATE_FEE_GRACE_DAYS,
+} from './maintenance.constants';
+
+export {
+  BUDGET_STATUS_OPTIONS,
+  BUDGET_STATUS_COLOR,
+  BUDGET_UTILIZATION_THRESHOLDS,
+} from './budget.constants';

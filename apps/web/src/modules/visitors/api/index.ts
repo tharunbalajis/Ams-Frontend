@@ -1,4 +1,5 @@
-// Visitors module API hooks — implement in Phase 2
-// Uses @/api/visitors.api.ts
-
-export {};
+export { visitorsApi }             from './visitors.api';
+export { preApprovedVisitorsApi }  from './preApprovedVisitors.api';
+export { attendanceApi }           from './attendance.api';
+export { securityApi }             from './security.api';
+export { sosApi }                  from './sos.api';

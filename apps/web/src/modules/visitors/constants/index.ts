@@ -1,3 +1,27 @@
-// Visitors module constants — implement in Phase 2
+export {
+  VISITOR_TYPE_OPTIONS,
+  VISITOR_STATUS_OPTIONS,
+  ENTRY_STATUS_OPTIONS,
+  ENTRY_STATUS_COLOR,
+  VISITOR_ROUTES,
+  VISITOR_PAGE_SIZE,
+} from './visitor.constants';
 
-export {};
+export {
+  ATTENDANCE_STATUS_OPTIONS,
+  ATTENDANCE_STATUS_COLOR,
+} from './attendance.constants';
+
+export {
+  VERIFICATION_METHOD_OPTIONS,
+  VERIFICATION_STATUS_COLOR,
+  OTP_EXPIRY_MINUTES,
+  QR_EXPIRY_HOURS,
+} from './security.constants';
+
+export {
+  SOS_ALERT_TYPE_OPTIONS,
+  SOS_ALERT_STATUS_OPTIONS,
+  SOS_STATUS_COLOR,
+  SOS_TYPE_ICON,
+} from './sos.constants';

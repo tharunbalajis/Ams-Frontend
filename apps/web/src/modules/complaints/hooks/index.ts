@@ -1,3 +1,9 @@
-// Complaints module hooks — implement in Phase 2
-
-export {};
+export { useComplaints }           from './useComplaints';
+export { useComplaint }            from './useComplaint';
+export { useCreateComplaint }      from './useCreateComplaint';
+export { useUpdateComplaint }      from './useUpdateComplaint';
+export { useComplaintTimeline }    from './useComplaintTimeline';
+export { useComplaintAssignments } from './useComplaintAssignments';
+export { useSLA }                  from './useSLA';
+export { useEscalations }          from './useEscalations';
+export { useComplaintAnalytics }   from './useComplaintAnalytics';

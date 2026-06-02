@@ -1,3 +1,6 @@
-// Units module hooks — implement in Phase 2
-
-export {};
+export { useUnits }      from './useUnits';
+export { useUnit }       from './useUnit';
+export { useCreateUnit } from './useCreateUnit';
+export { useUpdateUnit } from './useUpdateUnit';
+export { useOccupancy }  from './useOccupancy';
+export { useOwnership }  from './useOwnership';

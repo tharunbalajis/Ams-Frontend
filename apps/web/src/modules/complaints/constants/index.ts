@@ -1,3 +1,32 @@
-// Complaints module constants — implement in Phase 2
+export {
+  COMPLAINT_CATEGORY_OPTIONS,
+  COMPLAINT_TYPE_OPTIONS,
+  COMPLAINT_ROUTES,
+  COMPLAINT_PAGE_SIZE,
+} from './complaint.constants';
 
-export {};
+export {
+  PRIORITY_OPTIONS,
+  PRIORITY_COLOR,
+  PRIORITY_WEIGHT,
+} from './priority.constants';
+
+export {
+  STATUS_OPTIONS,
+  STATUS_COLOR,
+  STATUS_FLOW,
+  KANBAN_COLUMNS,
+} from './status.constants';
+
+export {
+  SLA_STATUS_OPTIONS,
+  SLA_STATUS_COLOR,
+  DEFAULT_SLA_POLICIES,
+} from './sla.constants';
+
+export {
+  ESCALATION_LEVEL_OPTIONS,
+  ESCALATION_STATUS_OPTIONS,
+  ESCALATION_STATUS_COLOR,
+  ESCALATION_TRIGGER_HOURS,
+} from './escalation.constants';
