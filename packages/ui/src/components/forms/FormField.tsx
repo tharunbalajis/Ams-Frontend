@@ -6,8 +6,11 @@ import { cn } from '../../styles/theme';
 export interface FormFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TTransformedValues extends FieldValues | undefined = undefined,
 > {
-  control: Control<TFieldValues>;
+  // Accept both the 2-generic (old) and 3-generic (new) Control shapes
+  control: Control<TFieldValues, unknown, TTransformedValues>;
   name: TName;
   label?: string;
   description?: string;
@@ -25,10 +28,19 @@ export interface FormFieldProps<
 function FormField<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({ control, name, label, description, required, className, children }: FormFieldProps<TFieldValues, TName>) {
+  TTransformedValues extends FieldValues | undefined = undefined,
+>({
+  control,
+  name,
+  label,
+  description,
+  required,
+  className,
+  children,
+}: FormFieldProps<TFieldValues, TName, TTransformedValues>) {
   return (
     <Controller
-      control={control}
+      control={control as Control<TFieldValues>}
       name={name}
       render={({ field, fieldState }) => (
         <div className={cn('flex flex-col gap-1.5', className)}>
