@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { Breadcrumbs, Button, PageHeader } from '@ams/ui';
 import { InvoiceTable }    from '../components/InvoiceTable';
 import { InvoiceForm }     from '../components/InvoiceForm';
@@ -13,6 +14,21 @@ import {
   INVOICE_TYPE_OPTIONS,
 } from '../constants/invoice.constants';
 import type { InvoiceFiltersParams }   from '../types/invoice.types';
+=======
+import { Breadcrumbs, Button, Modal, ModalContent, ModalHeader, ModalTitle, PageHeader } from '@ams/ui';
+import { useMutation } from '@tanstack/react-query';
+import { InvoiceTable }   from '../components/InvoiceTable';
+import { InvoiceForm }    from '../components/InvoiceForm';
+import { FinancialFilters } from '../components/FinancialFilters';
+import { useInvoices }    from '../hooks/useInvoices';
+import { invoicesApi }    from '../api/invoices.api';
+import { queryClient }    from '@/lib/queryClient';
+import { financialKeys }  from '@/lib/index';
+import { usePagination }  from '@/hooks/usePagination';
+import { useDebounce }    from '@/hooks/useDebounce';
+import { FINANCIAL_ROUTES, INVOICE_STATUS_OPTIONS, INVOICE_TYPE_OPTIONS } from '../constants/invoice.constants';
+import type { InvoiceFiltersParams } from '../types/invoice.types';
+>>>>>>> d852c2e (final)
 import type { CreateInvoiceFormValues } from '../schemas/invoice.schema';
 
 export function InvoiceListPage() {
@@ -25,9 +41,22 @@ export function InvoiceListPage() {
   const { data, isLoading } = useInvoices({ ...filters, search: debouncedSearch, page, limit: pageSize });
   const { mutate: createInvoice, isPending } = useCreateInvoice();
 
+<<<<<<< HEAD
   const handleCreate = (values: CreateInvoiceFormValues) => {
     createInvoice(values, { onSuccess: () => setShowForm(false) });
   };
+=======
+  const { mutate: createInvoice, isPending } = useMutation({
+    mutationFn: (values: CreateInvoiceFormValues) => invoicesApi.create({
+      ...values,
+      lineItems: values.lineItems.map((item) => {
+        const taxAmount = item.amount * item.taxRate / 100;
+        return { ...item, taxAmount, total: item.amount + taxAmount };
+      }),
+    }),
+    onSuccess:  () => { queryClient.invalidateQueries({ queryKey: financialKeys.invoices.lists() }); setShowForm(false); },
+  });
+>>>>>>> d852c2e (final)
 
   return (
     <div className="space-y-6">
@@ -60,6 +89,7 @@ export function InvoiceListPage() {
         onRecordPayment={(id) => void navigate(FINANCIAL_ROUTES.INVOICE_DETAIL.replace(':id', id))}
       />
 
+<<<<<<< HEAD
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-2xl rounded-lg bg-background p-6 shadow-xl">
@@ -72,6 +102,14 @@ export function InvoiceListPage() {
           </div>
         </div>
       )}
+=======
+      <Modal open={showForm} onOpenChange={setShowForm}>
+        <ModalContent className="max-w-2xl">
+          <ModalHeader><ModalTitle>Generate Invoice</ModalTitle></ModalHeader>
+          <InvoiceForm onSubmit={(v) => createInvoice(v)} onCancel={() => setShowForm(false)} isPending={isPending} />
+        </ModalContent>
+      </Modal>
+>>>>>>> d852c2e (final)
     </div>
   );
 }

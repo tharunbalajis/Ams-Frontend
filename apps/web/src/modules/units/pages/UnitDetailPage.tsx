@@ -51,11 +51,8 @@ export function UnitDetailPage() {
         </TabsContent>
 
         <TabsContent value="ownership" className="mt-4">
-          {ownership?.data && (
-            <OwnershipSection
-              ownership={ownership.data}
-              loading={loadingOwnership}
-            />
+          {!loadingOwnership && ownership?.data && (
+            <OwnershipSection ownership={ownership.data} />
           )}
         </TabsContent>
       </Tabs>

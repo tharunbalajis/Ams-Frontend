@@ -6,6 +6,7 @@ export interface KPISectionProps {
   loading?:  boolean;
 }
 
+<<<<<<< HEAD
 export function KPISection({ dashboard: d, loading }: KPISectionProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -16,6 +17,30 @@ export function KPISection({ dashboard: d, loading }: KPISectionProps) {
       <KPIWidget title="Collection Rate"  value={`${d.collectionRate.toFixed(1)}%`}        loading={loading} />
       <KPIWidget title="Pending Invoices" value={d.pendingInvoices}                        loading={loading} />
       <KPIWidget title="Overdue Invoices" value={d.overdueInvoices}                        loading={loading} />
+=======
+export function KPISection({ kpi, loading }: KPISectionProps) {
+  const items = [
+    { title: 'Total Revenue',    value: `₹${kpi.totalRevenue.toLocaleString()}` },
+    { title: 'Total Expenses',   value: `₹${kpi.totalExpenses.toLocaleString()}` },
+    { title: 'Net Surplus',      value: `₹${kpi.netSurplus.toLocaleString()}` },
+    { title: 'Outstanding Dues', value: `₹${kpi.outstandingDues.toLocaleString()}` },
+    { title: 'Collection Rate',  value: `${kpi.collectionRate.toFixed(1)}%` },
+    { title: 'Defaulters',       value: kpi.defaulterCount },
+    { title: 'Monthly Revenue',  value: `₹${kpi.monthlyRevenue.toLocaleString()}` },
+    { title: 'Monthly Expenses', value: `₹${kpi.monthlyExpenses.toLocaleString()}` },
+  ];
+
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((item) => (
+        <KPIWidget
+          key={item.title}
+          title={item.title}
+          value={item.value}
+          loading={loading}
+        />
+      ))}
+>>>>>>> d852c2e (final)
     </div>
   );
 }

@@ -1,6 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+<<<<<<< HEAD
 import { Button, FormField, Input, SelectField, Textarea } from '@ams/ui';
+=======
+import { Button, FileUpload, FormField, Input, SelectField, TextArea } from '@ams/ui';
+>>>>>>> d852c2e (final)
 import { createExpenseSchema, type CreateExpenseFormValues } from '../../schemas/expense.schema';
 import { useMaintenanceHeads } from '../../hooks/useMaintenanceCharges';
 
@@ -66,6 +70,7 @@ export function ExpenseForm({ onSubmit, onCancel, isPending }: ExpenseFormProps)
         </FormField>
       </div>
       <FormField control={form.control} name="description" label="Description" required>
+<<<<<<< HEAD
         {(field) => (
           <Textarea
             value={field.value as string}
@@ -76,6 +81,9 @@ export function ExpenseForm({ onSubmit, onCancel, isPending }: ExpenseFormProps)
             disabled={isPending}
           />
         )}
+=======
+        {(field) => <TextArea value={field.value as string} onChange={field.onChange} onBlur={field.onBlur} rows={3} placeholder="Describe the expense" disabled={isPending} />}
+>>>>>>> d852c2e (final)
       </FormField>
       <div className="flex justify-end gap-3">
         {onCancel && (

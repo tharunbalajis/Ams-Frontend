@@ -29,6 +29,7 @@ export type {
 } from './expense.types';
 
 export type {
+<<<<<<< HEAD
   HeadType,
   Frequency,
   CalculationBasis,
@@ -36,6 +37,18 @@ export type {
   CreateMaintenanceHeadPayload,
   UpdateMaintenanceHeadPayload,
   GenerateInvoicesPayload,
+=======
+  CollectionRecord,
+  CollectionFiltersParams,
+  Defaulter,
+  AgingBucket,
+} from './collection.types';
+
+export type {
+  MaintenanceChargeType,
+  MaintenanceCharge,
+  GenerateMaintenancePayload,
+>>>>>>> d852c2e (final)
 } from './maintenance.types';
 
 export type {

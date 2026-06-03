@@ -1,5 +1,10 @@
 import { useState } from 'react';
+<<<<<<< HEAD
 import { Breadcrumbs, Button, PageHeader } from '@ams/ui';
+=======
+import { useMutation } from '@tanstack/react-query';
+import { Breadcrumbs, Button, Modal, ModalContent, ModalHeader, ModalTitle, PageHeader } from '@ams/ui';
+>>>>>>> d852c2e (final)
 import { VisitorFilters } from '../components/VisitorFilters';
 import { VisitorForm }    from '../components/VisitorForm';
 import { VisitorTable }   from '../components/VisitorTable';
@@ -55,6 +60,7 @@ export function VisitorLogsPage() {
         onCheckOut={(id) => checkOut(id)}
       />
 
+<<<<<<< HEAD
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-2xl rounded-lg bg-background p-6 shadow-xl">
@@ -67,6 +73,20 @@ export function VisitorLogsPage() {
           </div>
         </div>
       )}
+=======
+      <Modal open={showForm} onOpenChange={setShowForm}>
+        <ModalContent className="max-w-2xl">
+          <ModalHeader>
+            <ModalTitle>Register New Visitor</ModalTitle>
+          </ModalHeader>
+          <VisitorForm
+            onSubmit={(v) => createVisitor(v)}
+            onCancel={() => setShowForm(false)}
+            isPending={creating}
+          />
+        </ModalContent>
+      </Modal>
+>>>>>>> d852c2e (final)
     </div>
   );
 }

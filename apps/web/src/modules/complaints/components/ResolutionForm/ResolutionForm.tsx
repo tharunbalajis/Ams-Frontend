@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Checkbox, FormField, Textarea } from '@ams/ui';
+import { Button, Checkbox, FormField, TextArea } from '@ams/ui';
 import { resolutionSchema, type ResolutionFormValues } from '../../schemas/resolution.schema';
 
 export interface ResolutionFormProps {
@@ -24,7 +24,7 @@ export function ResolutionForm({ onSubmit, onCancel, isPending }: ResolutionForm
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <FormField control={form.control} name="resolutionNotes" label="Resolution Notes" required>
         {(field) => (
-          <Textarea
+          <TextArea
             value={field.value as string}
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -37,7 +37,7 @@ export function ResolutionForm({ onSubmit, onCancel, isPending }: ResolutionForm
 
       <FormField control={form.control} name="rootCause" label="Root Cause">
         {(field) => (
-          <Textarea
+          <TextArea
             value={field.value as string}
             onChange={field.onChange}
             onBlur={field.onBlur}
@@ -50,7 +50,7 @@ export function ResolutionForm({ onSubmit, onCancel, isPending }: ResolutionForm
 
       <FormField control={form.control} name="preventiveMeasure" label="Preventive Measure">
         {(field) => (
-          <Textarea
+          <TextArea
             value={field.value as string}
             onChange={field.onChange}
             onBlur={field.onBlur}

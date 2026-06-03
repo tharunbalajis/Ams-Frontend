@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { residentKeys } from '@/lib';
+import { residentKeys } from '@/lib/index';
 import { STALE_TIME } from '@/constants/query.constants';
 import { residentsApi } from '../api/residents.api';
 import type { ResidentFiltersParams } from '../types/resident.types';

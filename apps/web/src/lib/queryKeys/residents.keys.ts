@@ -1,4 +1,5 @@
 export const residentKeys = {
+<<<<<<< HEAD
   all:      ['residents']                                                              as const,
   lists:    ()           => [...residentKeys.all, 'list']                             as const,
   list:     (params?:    Record<string, unknown>) => [...residentKeys.lists(), params] as const,
@@ -15,4 +16,11 @@ export const residentKeys = {
   lease: {
     detail: (residentId: string) => [...residentKeys.all, 'lease', residentId]        as const,
   },
+=======
+  all:     ['residents'] as const,
+  lists:   () => [...residentKeys.all, 'list']          as const,
+  list:    (params?: unknown) => [...residentKeys.lists(), params]  as const,
+  details: () => [...residentKeys.all, 'detail']        as const,
+  detail:  (id: string) => [...residentKeys.details(), id] as const,
+>>>>>>> d852c2e (final)
 };

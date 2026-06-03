@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FileUpload, FormField, Input, SelectField, Textarea } from '@ams/ui';
+import { Button, FileUpload, FormField, Input, SelectField, TextArea } from '@ams/ui';
 import { createComplaintSchema, type CreateComplaintFormValues } from '../../schemas/complaint.schema';
 import {
   COMPLAINT_CATEGORY_OPTIONS,
@@ -96,7 +96,7 @@ export function ComplaintForm({ onSubmit, onCancel, isPending }: ComplaintFormPr
 
       <FormField control={form.control} name="description" label="Description" required>
         {(field) => (
-          <Textarea
+          <TextArea
             value={field.value as string}
             onChange={field.onChange}
             onBlur={field.onBlur}

@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Drawer, DrawerContent, DrawerHeader, DrawerTitle, FormField, Input, SelectField, Textarea } from '@ams/ui';
+import { Button, Drawer, DrawerContent, DrawerHeader, DrawerTitle, FormField, Input, TextArea } from '@ams/ui';
 import { assignmentSchema, type AssignmentFormValues } from '../../schemas/assignment.schema';
 import { formatDate } from '@/utils/formatDate';
 import type { Assignment } from '../../types/assignment.types';
@@ -66,7 +66,7 @@ export function AssignmentDrawer({ open, onOpenChange, assignment, onSubmit, isP
 
             <FormField control={form.control} name="notes" label="Notes">
               {(field) => (
-                <Textarea
+                <TextArea
                   value={field.value as string}
                   onChange={field.onChange}
                   rows={3}

@@ -1,4 +1,4 @@
-import { LineChart } from '@ams/ui';
+import { LineChart, LoadingState } from '@ams/ui';
 import type { TrendPoint } from '../../types/analytics.types';
 
 export interface RevenueTrendChartProps {
@@ -7,6 +7,7 @@ export interface RevenueTrendChartProps {
 }
 
 export function RevenueTrendChart({ data, loading }: RevenueTrendChartProps) {
+<<<<<<< HEAD
   if (loading) return <div className="h-48 animate-pulse rounded-lg bg-muted" />;
   return (
     <LineChart
@@ -14,6 +15,14 @@ export function RevenueTrendChart({ data, loading }: RevenueTrendChartProps) {
       series={[{ dataKey: 'value', name: 'Revenue (₹)' }]}
       xAxisKey="period"
       height={200}
+=======
+  if (loading) return <LoadingState />;
+  return (
+    <LineChart
+      data={data.map((d) => ({ name: d.period, value: d.value }))}
+      xAxisKey="name"
+      series={[{ dataKey: 'value', name: 'Revenue' }]}
+>>>>>>> d852c2e (final)
     />
   );
 }

@@ -1,7 +1,12 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
+<<<<<<< HEAD
 import { authKeys } from '@/lib';
+=======
+import { useSession } from '@/hooks/useSession';
+import { authKeys } from '@/lib/index';
+>>>>>>> d852c2e (final)
 import { STALE_TIME } from '@/constants/query.constants';
 import { tokenManager } from '@/lib/auth/tokenManager';
 import { authApiService } from '../api/auth.api';

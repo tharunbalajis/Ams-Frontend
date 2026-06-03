@@ -1,1 +1,11 @@
 node_modules
+<<<<<<< HEAD
+=======
+.turbo
+.next
+dist
+build
+coverage
+.env
+.env.local
+>>>>>>> d852c2e (final)

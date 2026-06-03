@@ -1,4 +1,5 @@
 export const visitorKeys = {
+<<<<<<< HEAD
   all:      ['visitors']                                                                  as const,
   lists:    ()           => [...visitorKeys.all, 'list']                                 as const,
   list:     (params?:    Record<string, unknown>) => [...visitorKeys.lists(), params]     as const,
@@ -17,4 +18,12 @@ export const visitorKeys = {
     detail: (id: string) => ['sos', 'detail', id]                                        as const,
   },
   dashboard: () => [...visitorKeys.all, 'dashboard']                                     as const,
+=======
+  all:     ['visitors'] as const,
+  lists:   () => [...visitorKeys.all, 'list']             as const,
+  list:    (params?: unknown) => [...visitorKeys.lists(), params]   as const,
+  details: () => [...visitorKeys.all, 'detail']           as const,
+  detail:  (id: string) => [...visitorKeys.details(), id] as const,
+  active:  () => [...visitorKeys.all, 'active']           as const,
+>>>>>>> d852c2e (final)
 };

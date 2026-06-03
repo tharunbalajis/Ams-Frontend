@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { unitKeys } from '@/lib';
+import { unitKeys } from '@/lib/index';
 import { STALE_TIME } from '@/constants/query.constants';
 import { unitsApi } from '../api/units.api';
 

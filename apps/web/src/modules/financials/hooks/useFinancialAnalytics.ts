@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { financialKeys } from '@/lib';
+import { financialKeys } from '@/lib/index';
 import { STALE_TIME } from '@/constants/query.constants';
 import { analyticsApi } from '../api/analytics.api';
 

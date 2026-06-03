@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import { Badge, DataTable, StatusBadge } from '@ams/ui';
+import { Badge, DataTable } from '@ams/ui';
 import { formatDate } from '@/utils/formatDate';
 import type { Pet } from '../../types/pet.types';
 import type { ID } from '@/types/common.types';

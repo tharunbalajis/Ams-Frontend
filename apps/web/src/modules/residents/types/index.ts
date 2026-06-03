@@ -33,6 +33,5 @@ export type {
 } from './lease.types';
 
 export type {
-  ResidentProfile,
   ResidentDocument,
 } from './residentProfile.types';

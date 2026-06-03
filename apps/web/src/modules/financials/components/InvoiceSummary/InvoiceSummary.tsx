@@ -1,7 +1,7 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@ams/ui';
 import { formatDate } from '@/utils/formatDate';
 import { INVOICE_STATUS_COLOR } from '../../constants/invoice.constants';
-import type { Invoice, InvoiceStatus } from '../../types/invoice.types';
+import type { Invoice } from '../../types/invoice.types';
 
 export interface InvoiceSummaryProps {
   invoice:          Invoice;

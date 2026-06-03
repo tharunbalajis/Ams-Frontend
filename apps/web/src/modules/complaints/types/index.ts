@@ -21,5 +21,4 @@ export type {
 export type {
   CategoryStat,
   PriorityStat,
-  ComplaintAnalytics,
 } from './analytics.types';

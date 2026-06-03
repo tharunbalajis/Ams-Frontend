@@ -3,7 +3,10 @@ import { useNavigate }           from 'react-router-dom';
 import { Breadcrumbs, Button, PageHeader } from '@ams/ui';
 import { FinancialOverview }     from '../components/FinancialOverview';
 import { useFinancialAnalytics } from '../hooks/useFinancialAnalytics';
+<<<<<<< HEAD
 import { FINANCIAL_ROUTES }      from '../constants/invoice.constants';
+=======
+>>>>>>> d852c2e (final)
 
 const EMPTY_ANALYTICS = {
   dashboard:        { totalRevenue: 0, totalExpenses: 0, netSurplus: 0, outstandingDues: 0, collectionRate: 0, pendingInvoices: 0, overdueInvoices: 0 },

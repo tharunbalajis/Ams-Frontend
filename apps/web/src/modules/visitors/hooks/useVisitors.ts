@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { visitorKeys } from '@/lib';
+import { visitorKeys } from '@/lib/index';
 import { STALE_TIME } from '@/constants/query.constants';
 import { visitorsApi } from '../api/visitors.api';
 import type { VisitorFiltersParams } from '../types/visitor.types';

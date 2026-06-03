@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { visitorKeys } from '@/lib';
+=======
+import { useQuery } from '@tanstack/react-query';
+import { visitorKeys } from '@/lib/index';
+>>>>>>> d852c2e (final)
 import { STALE_TIME } from '@/constants/query.constants';
 import { visitorsApi } from '../api/visitors.api';
 import { toast } from '@/utils/toast';

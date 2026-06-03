@@ -9,6 +9,7 @@ export interface OccupancyDataPoint {
   occupied: number;
   vacant:   number;
   total:    number;
+  [key: string]: string | number;
 }
 
 export interface CollectionDataPoint {
@@ -16,6 +17,7 @@ export interface CollectionDataPoint {
   collected: number;
   pending:   number;
   overdue:   number;
+  [key: string]: string | number;
 }
 
 export interface AnalyticsSummary {

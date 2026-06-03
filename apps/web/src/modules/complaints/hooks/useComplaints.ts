@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { complaintKeys } from '@/lib';
+import { complaintKeys } from '@/lib/index';
 import { STALE_TIME } from '@/constants/query.constants';
 import { complaintsApi } from '../api/complaints.api';
 import type { ComplaintFiltersParams } from '../types/complaint.types';

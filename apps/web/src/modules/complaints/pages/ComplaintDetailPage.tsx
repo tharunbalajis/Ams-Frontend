@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { Breadcrumbs, Button, Dialog, DialogContent, DialogHeader, DialogTitle, ErrorState, LoadingState, PageHeader, Tabs, TabsContent, TabsList, TabsTrigger } from '@ams/ui';
+import { Breadcrumbs, Button, Modal, ModalContent, ModalHeader, ModalTitle, ErrorState, LoadingState, PageHeader, Tabs, TabsContent, TabsList, TabsTrigger } from '@ams/ui';
 import { ComplaintStatusBadge } from '../components/ComplaintStatusBadge';
 import { ComplaintTimeline }    from '../components/ComplaintTimeline';
 import { AssignmentDrawer }     from '../components/AssignmentDrawer';
@@ -13,7 +13,7 @@ import { useComplaintAssignments }  from '../hooks/useComplaintAssignments';
 import { complaintsApi }            from '../api/complaints.api';
 import { assignmentsApi }           from '../api/assignments.api';
 import { queryClient }              from '@/lib/queryClient';
-import { complaintKeys }            from '@/lib';
+import { complaintKeys }            from '@/lib/index';
 import { COMPLAINT_ROUTES }         from '../constants/complaint.constants';
 import type { ResolutionFormValues } from '../schemas/resolution.schema';
 import type { AssignmentFormValues } from '../schemas/assignment.schema';
@@ -108,18 +108,18 @@ export function ComplaintDetailPage() {
         isPending={assigning}
       />
 
-      <Dialog open={resolveOpen} onOpenChange={setResolveOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Resolve Complaint</DialogTitle>
-          </DialogHeader>
+      <Modal open={resolveOpen} onOpenChange={setResolveOpen}>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Resolve Complaint</ModalTitle>
+          </ModalHeader>
           <ResolutionForm
             onSubmit={(v) => resolve(v)}
             onCancel={() => setResolveOpen(false)}
             isPending={resolving}
           />
-        </DialogContent>
-      </Dialog>
+        </ModalContent>
+      </Modal>
     </div>
   );
 }
