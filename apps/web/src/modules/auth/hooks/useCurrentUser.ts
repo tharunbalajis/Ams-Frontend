@@ -1,26 +1,23 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
-import { useSession } from '@/hooks/useSession';
 import { authKeys } from '@/lib';
 import { STALE_TIME } from '@/constants/query.constants';
-import { currentUserApi } from '../api/currentUser.api';
+import { tokenManager } from '@/lib/auth/tokenManager';
+import { authApiService } from '../api/auth.api';
 
 export function useCurrentUser() {
-  const { setUser }       = useAuth();
-  const { isTokenPresent } = useSession();
+  const { setUser } = useAuth();
 
   const query = useQuery({
-    queryKey: authKeys.me(),
-    queryFn:  () => currentUserApi.getMe(),
-    enabled:  isTokenPresent(),
+    queryKey:  authKeys.me(),
+    queryFn:   () => authApiService.me(),
     staleTime: STALE_TIME.LONG,
+    enabled:   tokenManager.hasSession(),
   });
 
   useEffect(() => {
-    if (query.data?.data) {
-      setUser(query.data.data);
-    }
+    if (query.data?.data) setUser(query.data.data);
   }, [query.data, setUser]);
 
   return query;

@@ -1,8 +1,8 @@
 import type { ID, Nullable, Timestamp } from '@/types/common.types';
 
-export type ResidentType   = 'owner' | 'tenant';
-export type ResidentStatus = 'active' | 'inactive' | 'pending' | 'suspended';
-export type ResidentGender = 'male' | 'female' | 'other';
+export type ResidentType   = 'OWNER' | 'TENANT';
+export type ResidentStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING' | 'SUSPENDED';
+export type ResidentGender = 'MALE' | 'FEMALE' | 'OTHER';
 
 export interface EmergencyContact {
   name:         string;
@@ -25,7 +25,7 @@ export interface Resident {
   unitId:           ID;
   unitNumber:       string;
   status:           ResidentStatus;
-  emergencyContact: EmergencyContact;
+  emergencyContact: Nullable<EmergencyContact>;
   idProof:          Nullable<string>;
   createdAt:        Timestamp;
   updatedAt:        Timestamp;
@@ -42,10 +42,10 @@ export interface CreateResidentPayload {
   lastName:         string;
   email:            string;
   phone:            string;
+  unitId:           ID;
   dateOfBirth?:     string;
   gender?:          ResidentGender;
-  unitId:           ID;
-  emergencyContact: EmergencyContact;
+  emergencyContact?: EmergencyContact;
 }
 
 export type UpdateResidentPayload = Partial<CreateResidentPayload>;
@@ -56,7 +56,7 @@ export interface ResidentFiltersParams {
   status?:   ResidentStatus;
   unitId?:   ID;
   page?:     number;
-  pageSize?: number;
+  limit?:    number;
   sortBy?:   string;
   sortDir?:  'asc' | 'desc';
 }

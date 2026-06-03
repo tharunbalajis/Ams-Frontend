@@ -12,8 +12,11 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
 
   if (isLoading) {
-    // Loading state — implement LoadingScreen in Phase 2
-    return <div className="flex h-screen items-center justify-center" />;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

@@ -44,19 +44,21 @@ export function ResidentProfile({ resident, vehicles, pets, lease }: ResidentPro
       </Card>
 
       {/* Emergency Contact */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Emergency Contact</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
-            <ProfileField label="Name"         value={resident.emergencyContact.name} />
-            <ProfileField label="Relationship" value={resident.emergencyContact.relationship} />
-            <ProfileField label="Phone"        value={formatPhone(resident.emergencyContact.phone)} />
-            <ProfileField label="Email"        value={resident.emergencyContact.email ?? '—'} />
-          </dl>
-        </CardContent>
-      </Card>
+      {resident.emergencyContact && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Emergency Contact</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+              <ProfileField label="Name"         value={resident.emergencyContact.name} />
+              <ProfileField label="Relationship" value={resident.emergencyContact.relationship} />
+              <ProfileField label="Phone"        value={formatPhone(resident.emergencyContact.phone)} />
+              <ProfileField label="Email"        value={resident.emergencyContact.email ?? '—'} />
+            </dl>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Lease Information */}
       <LeaseSection lease={lease} residentId={resident.id} />

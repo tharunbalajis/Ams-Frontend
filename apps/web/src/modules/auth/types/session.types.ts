@@ -11,5 +11,4 @@ export interface SessionState {
 export interface SessionStorage {
   accessToken:  string;
   refreshToken: string;
-  expiresAt:    number;
 }

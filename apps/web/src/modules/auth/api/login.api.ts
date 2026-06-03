@@ -1,8 +1,7 @@
-import type { AxiosResponse } from 'axios';
-import { authApi } from '@/api/auth.api';
-import type { LoginPayload, LoginResponse } from '../types/login.types';
+import { authApiService } from './auth.api';
+import type { LoginPayload, LoginResponse } from '@/types/auth.types';
 
 export const loginApi = {
-  login: (payload: LoginPayload): Promise<AxiosResponse<LoginResponse>> =>
-    authApi.login(payload) as Promise<AxiosResponse<LoginResponse>>,
+  login: (payload: LoginPayload): Promise<LoginResponse> =>
+    authApiService.login(payload),
 };

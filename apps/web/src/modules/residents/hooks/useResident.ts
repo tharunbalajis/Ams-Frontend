@@ -5,9 +5,9 @@ import { residentsApi } from '../api/residents.api';
 
 export function useResident(id: string) {
   return useQuery({
-    queryKey: residentKeys.detail(id),
-    queryFn:  () => residentsApi.getById(id).then((r) => r.data),
+    queryKey:  residentKeys.detail(id),
+    queryFn:   () => residentsApi.getById(id),
     staleTime: STALE_TIME.DEFAULT,
-    enabled:  !!id,
+    enabled:   !!id,
   });
 }

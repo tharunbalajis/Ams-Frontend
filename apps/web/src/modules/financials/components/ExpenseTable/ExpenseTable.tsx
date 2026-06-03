@@ -11,17 +11,14 @@ export interface ExpenseTableProps {
   pagination:   PaginationState;
   onPageChange: (page: number) => void;
   onApprove?:   (id: string) => void;
+  onReject?:    (id: string) => void;
 }
 
-export function ExpenseTable({ data, loading, pagination, onPageChange, onApprove }: ExpenseTableProps) {
+export function ExpenseTable({ data, loading, pagination, onPageChange, onApprove, onReject }: ExpenseTableProps) {
   const columns: ColumnDef<ExpenseListItem>[] = [
     { accessorKey: 'expenseNumber', header: 'Expense #' },
-    {
-      accessorKey: 'category',
-      header:      'Category',
-      cell:        ({ getValue }) => <span className="capitalize">{(getValue() as string).replace('_', ' ')}</span>,
-    },
-    { accessorKey: 'vendor', header: 'Vendor' },
+    { accessorKey: 'headName',      header: 'Head' },
+    { accessorKey: 'vendor',        header: 'Vendor' },
     {
       accessorKey: 'expenseDate',
       header:      'Date',
@@ -49,11 +46,23 @@ export function ExpenseTable({ data, loading, pagination, onPageChange, onApprov
     {
       id:     'actions',
       header: 'Actions',
-      cell:   ({ row }) => (
-        onApprove && row.original.status === 'pending_approval'
-          ? <Button variant="ghost" size="sm" onClick={() => onApprove(row.original.id)}>Approve</Button>
-          : null
-      ),
+      cell:   ({ row }) => {
+        if (row.original.status !== 'PENDING_APPROVAL') return null;
+        return (
+          <div className="flex gap-1">
+            {onApprove && (
+              <Button variant="ghost" size="sm" onClick={() => onApprove(row.original.id)}>
+                Approve
+              </Button>
+            )}
+            {onReject && (
+              <Button variant="ghost" size="sm" onClick={() => onReject(row.original.id)}>
+                Reject
+              </Button>
+            )}
+          </div>
+        );
+      },
     },
   ];
 

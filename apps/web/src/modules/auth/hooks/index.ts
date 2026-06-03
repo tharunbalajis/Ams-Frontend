@@ -1,5 +1,11 @@
 export { useLogin }          from './useLogin';
 export { useLogout }         from './useLogout';
 export { useCurrentUser }    from './useCurrentUser';
-export { useForgotPassword } from './useForgotPassword';
-export { useResetPassword }  from './useResetPassword';
+export {
+  useUsers,
+  useUser,
+  useRegisterUser,
+  useUpdateUser,
+  useDeactivateUser,
+  useAuditLogs,
+} from './useUsers';

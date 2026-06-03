@@ -1,21 +1,17 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Button, PageHeader, LoadingState, ErrorState, Tabs, TabsContent, TabsList, TabsTrigger } from '@ams/ui';
-import { UnitProfile }       from '../components/UnitProfile';
-import { OccupancyCard }     from '../components/OccupancyCard';
-import { OccupancyTable }    from '../components/OccupancyTable';
-import { OwnershipSection }  from '../components/OwnershipSection';
-import { useUnit }           from '../hooks/useUnit';
-import { useOccupancy }      from '../hooks/useOccupancy';
-import { useOwnership }      from '../hooks/useOwnership';
-import { UNIT_ROUTES }       from '../constants/unit.constants';
+import { UnitProfile }      from '../components/UnitProfile';
+import { OwnershipSection } from '../components/OwnershipSection';
+import { useUnit }          from '../hooks/useUnit';
+import { useOwnership }     from '../hooks/useOwnership';
+import { UNIT_ROUTES }      from '../constants/unit.constants';
 
 export function UnitDetailPage() {
   const { id = '' } = useParams<{ id: string }>();
   const navigate     = useNavigate();
 
-  const { data: unit,      isLoading: loadingUnit,      isError: errorUnit }      = useUnit(id);
-  const { data: occupancy, isLoading: loadingOccupancy }                          = useOccupancy(id);
-  const { data: ownership, isLoading: loadingOwnership }                          = useOwnership(id);
+  const { data: unit,      isLoading: loadingUnit,      isError: errorUnit }  = useUnit(id);
+  const { data: ownership, isLoading: loadingOwnership }                       = useOwnership(id);
 
   if (loadingUnit) return <LoadingState />;
   if (errorUnit || !unit?.data) return <ErrorState />;
@@ -26,7 +22,7 @@ export function UnitDetailPage() {
     <div className="space-y-6">
       <PageHeader
         title={`Unit ${u.unitNumber}`}
-        description={`Block ${u.block} · Floor ${u.floor} · ${u.type.toUpperCase()}`}
+        description={`Block ${u.block} · Floor ${u.floor} · ${u.type}`}
         breadcrumbs={
           <Breadcrumbs items={[
             { label: 'Dashboard', href: '/dashboard' },
@@ -47,26 +43,11 @@ export function UnitDetailPage() {
       <Tabs defaultValue="overview">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="occupancy">Occupancy</TabsTrigger>
           <TabsTrigger value="ownership">Ownership</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-4">
-          <UnitProfile
-            unit={u}
-            occupancy={occupancy?.data}
-            ownership={ownership?.data}
-          />
-        </TabsContent>
-
-        <TabsContent value="occupancy" className="mt-4 space-y-6">
-          {occupancy?.data && (
-            <OccupancyCard
-              occupancy={occupancy.data}
-              onEdit={() => void navigate(UNIT_ROUTES.OCCUPANCY.replace(':id', id))}
-            />
-          )}
-          <OccupancyTable data={[]} loading={loadingOccupancy} />
+          <UnitProfile unit={u} ownership={ownership?.data} />
         </TabsContent>
 
         <TabsContent value="ownership" className="mt-4">

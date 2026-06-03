@@ -7,10 +7,5 @@ export {
 } from './unit.constants';
 
 export {
-  OCCUPANCY_STATUS_OPTIONS,
-  OCCUPANCY_STATUS_COLOR,
-} from './occupancy.constants';
-
-export {
   OWNERSHIP_LABEL,
 } from './ownership.constants';

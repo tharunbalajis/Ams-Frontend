@@ -1,14 +1,18 @@
 import { SearchInput, SelectField } from '@ams/ui';
-import {
-  UNIT_TYPE_OPTIONS,
-  UNIT_STATUS_OPTIONS,
-  OCCUPANCY_STATUS_OPTIONS,
-} from '../../constants';
-import type { UnitFiltersParams } from '../../types/unit.types';
+import { UNIT_TYPE_OPTIONS, UNIT_STATUS_OPTIONS, OWNERSHIP_TYPE_OPTIONS } from '../../constants/unit.constants';
+import type { UnitFiltersParams, OccupancyStatus } from '../../types/unit.types';
+
+const OCCUPANCY_OPTIONS: { label: string; value: OccupancyStatus | '' }[] = [
+  { label: 'All Occupancy',     value: '' },
+  { label: 'Occupied',          value: 'OCCUPIED' },
+  { label: 'Vacant',            value: 'VACANT' },
+  { label: 'Reserved',          value: 'RESERVED' },
+  { label: 'Under Maintenance', value: 'UNDER_MAINTENANCE' },
+];
 
 export interface UnitFiltersProps {
-  filters:   Partial<UnitFiltersParams>;
-  onChange:  (filters: Partial<UnitFiltersParams>) => void;
+  filters:  Partial<UnitFiltersParams>;
+  onChange: (filters: Partial<UnitFiltersParams>) => void;
 }
 
 export function UnitFilters({ filters, onChange }: UnitFiltersProps) {
@@ -33,9 +37,17 @@ export function UnitFilters({ filters, onChange }: UnitFiltersProps) {
       <SelectField
         className="w-44"
         value={filters.occupancyStatus}
-        onValueChange={(v) => onChange({ ...filters, occupancyStatus: v as UnitFiltersParams['occupancyStatus'] })}
-        options={[{ label: 'All Occupancy', value: '' }, ...OCCUPANCY_STATUS_OPTIONS]}
+        onValueChange={(v) => onChange({ ...filters, occupancyStatus: v as OccupancyStatus | undefined })}
+        options={OCCUPANCY_OPTIONS}
         placeholder="Occupancy"
+      />
+
+      <SelectField
+        className="w-40"
+        value={filters.ownershipType}
+        onValueChange={(v) => onChange({ ...filters, ownershipType: v as UnitFiltersParams['ownershipType'] })}
+        options={[{ label: 'All Ownership', value: '' }, ...OWNERSHIP_TYPE_OPTIONS]}
+        placeholder="Ownership"
       />
 
       <SelectField

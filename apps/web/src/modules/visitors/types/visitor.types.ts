@@ -1,15 +1,15 @@
 import type { ID, Nullable, Timestamp } from '@/types/common.types';
 
 export type VisitorType =
-  | 'guest'
-  | 'delivery'
-  | 'service_provider'
-  | 'vendor'
-  | 'maintenance'
-  | 'emergency';
+  | 'GUEST'
+  | 'DELIVERY'
+  | 'SERVICE_PROVIDER'
+  | 'VENDOR'
+  | 'MAINTENANCE'
+  | 'EMERGENCY';
 
-export type VisitorStatus  = 'pending' | 'approved' | 'rejected' | 'blacklisted';
-export type EntryStatus    = 'checked_in' | 'checked_out' | 'expected' | 'overstay' | 'no_show';
+export type VisitorStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'BLACKLISTED';
+export type EntryStatus   = 'CHECKED_IN' | 'CHECKED_OUT' | 'EXPECTED' | 'OVERSTAY' | 'NO_SHOW';
 
 export interface Visitor {
   id:                ID;
@@ -76,20 +76,7 @@ export interface VisitorFiltersParams {
   dateFrom?:    string;
   dateTo?:      string;
   page?:        number;
-  pageSize?:    number;
+  limit?:       number;
   sortBy?:      string;
   sortDir?:     'asc' | 'desc';
-}
-
-export interface PreApprovedVisitor {
-  id:           ID;
-  visitorName:  string;
-  visitorMobile: string;
-  residentId:   ID;
-  residentName: string;
-  unitNumber:   string;
-  approvalDate: string;
-  validUntil:   string;
-  status:       'active' | 'expired' | 'revoked';
-  createdAt:    Timestamp;
 }

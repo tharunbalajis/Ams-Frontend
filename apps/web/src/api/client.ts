@@ -1,16 +1,20 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios';
+import axios, {
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type InternalAxiosRequestConfig,
+} from 'axios';
+import { tokenManager } from '@/lib/auth/tokenManager';
 
-const BASE_URL = import.meta.env.VITE_API_URL ?? import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api';
+const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
 const TIMEOUT  = Number(import.meta.env.VITE_API_TIMEOUT ?? 30_000);
 
-export const TOKEN_KEY         = import.meta.env.VITE_AUTH_TOKEN_KEY ?? 'ams_access_token';
+export const TOKEN_KEY         = import.meta.env.VITE_AUTH_TOKEN_KEY         ?? 'ams_access_token';
 export const REFRESH_TOKEN_KEY = import.meta.env.VITE_AUTH_REFRESH_TOKEN_KEY ?? 'ams_refresh_token';
 
-// Prevent concurrent token refresh calls
 let isRefreshing = false;
 let refreshQueue: Array<{ resolve: (token: string) => void; reject: (err: unknown) => void }> = [];
 
-function drainQueue(error: unknown, token: string | null = null) {
+function drainQueue(error: unknown, token: string | null = null): void {
   refreshQueue.forEach(({ resolve, reject }) => (error ? reject(error) : resolve(token!)));
   refreshQueue = [];
 }
@@ -21,14 +25,14 @@ export const apiClient: AxiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
 });
 
-// Attach Bearer token on every request
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem(TOKEN_KEY);
-  if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+  const token = tokenManager.getAccessToken();
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
-// 401 → queue requests while refreshing, then redirect if no refresh token
 apiClient.interceptors.response.use(
   (res) => res,
   async (error) => {
@@ -48,27 +52,31 @@ apiClient.interceptors.response.use(
     }
 
     original._retry = true;
-    isRefreshing = true;
+    isRefreshing    = true;
 
-    const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+    const refreshToken = tokenManager.getRefreshToken();
+
     if (!refreshToken) {
-      localStorage.removeItem(TOKEN_KEY);
-      window.location.href = '/login';
+      tokenManager.clearSession();
       isRefreshing = false;
+      window.location.href = '/login';
       return Promise.reject(error);
     }
 
     try {
-      // Token refresh — implement in auth module
-      // const { data } = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken });
-      // localStorage.setItem(TOKEN_KEY, data.accessToken);
-      // drainQueue(null, data.accessToken);
-      // return apiClient(original);
-      throw new Error('refresh_not_implemented');
+      const { data } = await axios.post<{ access_token: string }>(
+        `${BASE_URL}/auth/refresh`,
+        { refresh_token: refreshToken },
+        { headers: { 'Content-Type': 'application/json' } },
+      );
+      const newToken = data.access_token;
+      tokenManager.setAccessToken(newToken);
+      drainQueue(null, newToken);
+      if (original.headers) original.headers.Authorization = `Bearer ${newToken}`;
+      return apiClient(original);
     } catch (refreshError) {
       drainQueue(refreshError, null);
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(REFRESH_TOKEN_KEY);
+      tokenManager.clearSession();
       window.location.href = '/login';
       return Promise.reject(refreshError);
     } finally {

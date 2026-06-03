@@ -1,21 +1,21 @@
 import type { ResidentType, ResidentStatus, ResidentGender } from '../types/resident.types';
 
 export const RESIDENT_TYPE_OPTIONS: { label: string; value: ResidentType }[] = [
-  { label: 'Owner',  value: 'owner' },
-  { label: 'Tenant', value: 'tenant' },
+  { label: 'Owner',  value: 'OWNER' },
+  { label: 'Tenant', value: 'TENANT' },
 ];
 
 export const RESIDENT_STATUS_OPTIONS: { label: string; value: ResidentStatus }[] = [
-  { label: 'Active',    value: 'active' },
-  { label: 'Inactive',  value: 'inactive' },
-  { label: 'Pending',   value: 'pending' },
-  { label: 'Suspended', value: 'suspended' },
+  { label: 'Active',    value: 'ACTIVE' },
+  { label: 'Inactive',  value: 'INACTIVE' },
+  { label: 'Pending',   value: 'PENDING' },
+  { label: 'Suspended', value: 'SUSPENDED' },
 ];
 
 export const RESIDENT_GENDER_OPTIONS: { label: string; value: ResidentGender }[] = [
-  { label: 'Male',   value: 'male' },
-  { label: 'Female', value: 'female' },
-  { label: 'Other',  value: 'other' },
+  { label: 'Male',   value: 'MALE' },
+  { label: 'Female', value: 'FEMALE' },
+  { label: 'Other',  value: 'OTHER' },
 ];
 
 export const RESIDENT_ROUTES = {

@@ -1,11 +1,41 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { STALE_TIME } from '@/constants/query.constants';
 import { maintenanceApi } from '../api/maintenance.api';
+import { financialKeys } from '@/lib/queryKeys/financials.keys';
+import type { CreateMaintenanceHeadPayload, GenerateInvoicesPayload } from '../types/maintenance.types';
 
-export function useMaintenanceCharges(params?: { period?: string; page?: number; pageSize?: number }) {
+export function useMaintenanceHeads(params?: Record<string, unknown>) {
   return useQuery({
-    queryKey:  ['financials', 'maintenance', params],
-    queryFn:   () => maintenanceApi.getAll(params),
+    queryKey:  financialKeys.heads.list(params),
+    queryFn:   () => maintenanceApi.getHeads(params),
     staleTime: STALE_TIME.DEFAULT,
+  });
+}
+
+export function useMaintenanceHead(id: string) {
+  return useQuery({
+    queryKey: financialKeys.heads.detail(id),
+    queryFn:  () => maintenanceApi.getHeadById(id),
+    enabled:  !!id,
+  });
+}
+
+export function useCreateMaintenanceHead() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateMaintenanceHeadPayload) => maintenanceApi.createHead(payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: financialKeys.heads.all() });
+    },
+  });
+}
+
+export function useGenerateInvoices() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: GenerateInvoicesPayload) => maintenanceApi.generateInvoices(payload),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: financialKeys.invoices.all() });
+    },
   });
 }

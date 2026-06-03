@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from '@ams/ui';
 import { formatDate } from '@/utils/formatDate';
 import { ComplaintStatusBadge } from '../ComplaintStatusBadge';
-import { SLABadge }             from '../SLABadge';
 import type { ComplaintListItem } from '../../types/complaint.types';
 import { COMPLAINT_ROUTES } from '../../constants/complaint.constants';
 
@@ -26,14 +25,13 @@ export function ComplaintCard({ complaint }: ComplaintCardProps) {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground capitalize">{complaint.category.replace('_', ' ')}</span>
+          <span className="text-sm text-muted-foreground">{complaint.categoryName}</span>
           <ComplaintStatusBadge status={complaint.status} />
         </div>
         <div className="flex items-center justify-between">
           <p className="text-xs text-muted-foreground">
             {complaint.residentName} · Unit {complaint.unitNumber}
           </p>
-          {complaint.slaBreached && <SLABadge status="breached" breached />}
         </div>
         {complaint.assignedTo && (
           <p className="text-xs text-muted-foreground">Assigned: {complaint.assignedTo}</p>

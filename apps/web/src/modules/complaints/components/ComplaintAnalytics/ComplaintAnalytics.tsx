@@ -1,4 +1,4 @@
-import { BarChart, KPIWidget, PieChart } from '@ams/ui';
+import { KPIWidget, BarChart, PieChart } from '@ams/ui';
 import type { ComplaintAnalytics as ComplaintAnalyticsData } from '../../types/analytics.types';
 
 export interface ComplaintAnalyticsProps {
@@ -8,58 +8,52 @@ export interface ComplaintAnalyticsProps {
 
 export function ComplaintAnalytics({ data, loading }: ComplaintAnalyticsProps) {
   const kpis = [
-    { label: 'Total',         value: data.total,                  description: 'All time' },
-    { label: 'Open',          value: data.open,                   description: 'Awaiting action' },
-    { label: 'Resolved',      value: data.resolved,               description: 'This period' },
-    { label: 'SLA Breaches',  value: data.slaBreaches,            description: 'Critical', variant: 'destructive' as const },
-    { label: 'Avg Resolution',value: `${data.avgResolutionTimeHours.toFixed(1)}h`, description: 'Hours' },
-    { label: 'Escalated',     value: data.escalated,              description: 'Requires attention' },
+    { title: 'Total',          value: data.total },
+    { title: 'Open',           value: data.open },
+    { title: 'In Progress',    value: data.inProgress },
+    { title: 'Resolved',       value: data.resolved },
+    { title: 'Closed',         value: data.closed },
+    { title: 'Avg Resolution', value: `${data.avgResolutionTimeHours.toFixed(1)}h` },
   ];
-
-  const categoryChartData = data.byCategory.map((c) => ({
-    name:  c.category.replace('_', ' '),
-    value: c.count,
-  }));
-
-  const priorityChartData = data.byPriority.map((p) => ({
-    name:  p.priority,
-    value: p.count,
-  }));
-
-  const trendData = data.resolutionTrend.map((t) => ({
-    date:  t.date,
-    value: t.count,
-  }));
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {kpis.map((kpi) => (
-          <KPIWidget
-            key={kpi.label}
-            title={kpi.label}
-            value={kpi.value}
-            description={kpi.description}
-            loading={loading}
-          />
+          <KPIWidget key={kpi.title} title={kpi.title} value={kpi.value} loading={loading} />
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div>
-          <h3 className="mb-3 text-sm font-semibold">Complaints by Category</h3>
-          <PieChart data={categoryChartData} loading={loading} />
+      {data.byCategory.length > 0 && (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div>
+            <h3 className="mb-3 text-sm font-semibold">By Category</h3>
+            <PieChart
+              data={data.byCategory.map((c) => ({ name: c.category, value: c.count }))}
+              height={200}
+            />
+          </div>
+          <div>
+            <h3 className="mb-3 text-sm font-semibold">By Priority</h3>
+            <BarChart
+              data={data.byPriority.map((p) => ({ priority: p.priority, count: p.count }))}
+              series={[{ dataKey: 'count', name: 'Complaints' }]}
+              xAxisKey="priority"
+              height={200}
+            />
+          </div>
         </div>
-        <div>
-          <h3 className="mb-3 text-sm font-semibold">Complaints by Priority</h3>
-          <BarChart data={priorityChartData} xKey="name" yKey="value" loading={loading} />
-        </div>
-      </div>
+      )}
 
-      {trendData.length > 0 && (
+      {data.resolutionTrend.length > 0 && (
         <div>
           <h3 className="mb-3 text-sm font-semibold">Resolution Trend</h3>
-          <BarChart data={trendData} xKey="date" yKey="value" loading={loading} />
+          <BarChart
+            data={data.resolutionTrend.map((t) => ({ date: t.date, count: t.count }))}
+            series={[{ dataKey: 'count', name: 'Resolved' }]}
+            xAxisKey="date"
+            height={200}
+          />
         </div>
       )}
     </div>

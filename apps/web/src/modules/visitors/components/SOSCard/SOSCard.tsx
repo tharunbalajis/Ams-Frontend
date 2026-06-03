@@ -13,12 +13,12 @@ export function SOSCard({ alert, onAcknowledge, onResolve }: SOSCardProps) {
   const statusVariant = SOS_STATUS_COLOR[alert.status] as 'destructive' | 'warning' | 'success' | 'secondary';
 
   return (
-    <Card className={alert.status === 'active' ? 'border-destructive' : undefined}>
+    <Card className={alert.status === 'ACTIVE' ? 'border-destructive' : undefined}>
       <CardHeader className="flex flex-row items-start justify-between">
         <div className="flex items-center gap-2">
           <span className="text-2xl">{SOS_TYPE_ICON[alert.type]}</span>
           <div>
-            <CardTitle className="capitalize">{alert.type} Alert</CardTitle>
+            <CardTitle className="capitalize">{alert.type.replace('_', ' ')} Alert</CardTitle>
             <p className="text-sm text-muted-foreground">{alert.location}</p>
           </div>
         </div>
@@ -65,9 +65,9 @@ export function SOSCard({ alert, onAcknowledge, onResolve }: SOSCardProps) {
           </div>
         )}
 
-        {(onAcknowledge || onResolve) && alert.status !== 'resolved' && alert.status !== 'false_alarm' && (
+        {(onAcknowledge || onResolve) && alert.status !== 'RESOLVED' && alert.status !== 'FALSE_ALARM' && (
           <div className="flex gap-3 pt-2">
-            {alert.status === 'active' && onAcknowledge && (
+            {alert.status === 'ACTIVE' && onAcknowledge && (
               <Button variant="outline" onClick={onAcknowledge}>Acknowledge</Button>
             )}
             {onResolve && (

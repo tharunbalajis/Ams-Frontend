@@ -13,15 +13,21 @@ export interface ApiError {
 export interface PaginationMeta {
   total:           number;
   page:            number;
-  pageSize:        number;
+  limit:           number;
   totalPages:      number;
   hasNextPage:     boolean;
   hasPreviousPage: boolean;
 }
 
 export interface ApiListResponse<T = unknown> {
-  data:    T[];
-  meta:    PaginationMeta;
+  data:     T[];
+  meta:     PaginationMeta;
   message?: string;
-  success: boolean;
+  success:  boolean;
+}
+
+export interface PlainArrayResponse<T = unknown> {
+  data:     T[];
+  message?: string;
+  success:  boolean;
 }

@@ -25,12 +25,6 @@ export type { OTPVerificationProps } from './OTPVerification';
 export { PreApprovedVisitorTable }  from './PreApprovedVisitorTable';
 export type { PreApprovedVisitorTableProps } from './PreApprovedVisitorTable';
 
-export { AttendanceTable }          from './AttendanceTable';
-export type { AttendanceTableProps } from './AttendanceTable';
-
-export { AttendanceFilters }        from './AttendanceFilters';
-export type { AttendanceFiltersProps } from './AttendanceFilters';
-
 export { SOSCard }                  from './SOSCard';
 export type { SOSCardProps }        from './SOSCard';
 

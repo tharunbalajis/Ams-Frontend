@@ -8,11 +8,6 @@ export {
 } from './visitor.constants';
 
 export {
-  ATTENDANCE_STATUS_OPTIONS,
-  ATTENDANCE_STATUS_COLOR,
-} from './attendance.constants';
-
-export {
   VERIFICATION_METHOD_OPTIONS,
   VERIFICATION_STATUS_COLOR,
   OTP_EXPIRY_MINUTES,

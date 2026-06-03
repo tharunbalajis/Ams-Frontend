@@ -26,7 +26,7 @@ export function VisitorDetailCard({ visitor, onCheckIn, onCheckOut }: VisitorDet
       <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <p className="text-sm text-muted-foreground">Type</p>
-          <p className="font-medium capitalize">{visitor.type.replace('_', ' ')}</p>
+          <p className="font-medium">{visitor.type.replace(/_/g, ' ')}</p>
         </div>
         <div>
           <p className="text-sm text-muted-foreground">Purpose</p>
@@ -75,10 +75,10 @@ export function VisitorDetailCard({ visitor, onCheckIn, onCheckOut }: VisitorDet
 
       {(onCheckIn || onCheckOut) && (
         <div className="flex gap-3 border-t px-6 py-4">
-          {visitor.entryStatus === 'expected' && onCheckIn && (
+          {visitor.entryStatus === 'EXPECTED' && onCheckIn && (
             <Button onClick={onCheckIn}>Check In</Button>
           )}
-          {visitor.entryStatus === 'checked_in' && onCheckOut && (
+          {visitor.entryStatus === 'CHECKED_IN' && onCheckOut && (
             <Button variant="outline" onClick={onCheckOut}>Check Out</Button>
           )}
         </div>

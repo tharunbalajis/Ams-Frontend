@@ -1,6 +1,21 @@
-export { useVisitors }             from './useVisitors';
-export { useVisitor }              from './useVisitor';
-export { usePreApprovedVisitors }  from './usePreApprovedVisitors';
-export { useAttendance }           from './useAttendance';
-export { useSOS, useSOSActive }    from './useSOS';
-export { useVisitorLogs }          from './useVisitorLogs';
+export { useVisitors }            from './useVisitors';
+export {
+  useVisitor,
+  useCreateVisitor,
+  useUpdateVisitor,
+  useCheckInVisitor,
+  useCheckOutVisitor,
+} from './useVisitor';
+export { useVisitorLogs, useVisitorDashboard }  from './useVisitorLogs';
+export {
+  usePreApprovedVisitors,
+  useCreateInvite,
+  useRevokeInvite,
+} from './usePreApprovedVisitors';
+export {
+  useSOS,
+  useSOSActive,
+  useRaiseSOS,
+  useAcknowledgeSOS,
+  useResolveSOS,
+} from './useSOS';

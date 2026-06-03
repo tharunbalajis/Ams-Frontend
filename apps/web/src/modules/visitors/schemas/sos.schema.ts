@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 export const createSOSSchema = z.object({
-  type:        z.enum(['medical', 'fire', 'security', 'intrusion', 'other']),
+  type:        z.enum(['MEDICAL', 'FIRE', 'SECURITY', 'INTRUSION', 'OTHER']),
   location:    z.string().min(1),
   description: z.string().optional(),
 });
 
 export const resolveSOSSchema = z.object({
-  status:           z.enum(['resolved', 'false_alarm']),
-  resolutionNotes:  z.string().optional(),
+  status:          z.enum(['ACKNOWLEDGED', 'RESOLVED', 'FALSE_ALARM']),
+  resolutionNotes: z.string().optional(),
 });
 
 export type CreateSOSFormValues  = z.infer<typeof createSOSSchema>;

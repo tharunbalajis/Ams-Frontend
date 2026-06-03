@@ -1,9 +1,11 @@
 import type { VehicleType } from '../types/vehicle.types';
 
 export const VEHICLE_TYPE_OPTIONS: { label: string; value: VehicleType }[] = [
-  { label: 'Car',        value: 'car' },
-  { label: 'Motorcycle', value: 'motorcycle' },
-  { label: 'Truck',      value: 'truck' },
-  { label: 'Van',        value: 'van' },
-  { label: 'Other',      value: 'other' },
+  { label: 'Car',        value: 'CAR' },
+  { label: 'Motorcycle', value: 'MOTORCYCLE' },
+  { label: 'Scooter',    value: 'SCOOTER' },
+  { label: 'Truck',      value: 'TRUCK' },
+  { label: 'Van',        value: 'VAN' },
+  { label: 'Bicycle',    value: 'BICYCLE' },
+  { label: 'Other',      value: 'OTHER' },
 ];

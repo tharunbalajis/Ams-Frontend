@@ -1,15 +1,13 @@
 import { Badge, Card, CardContent, CardHeader, CardTitle, StatusBadge } from '@ams/ui';
-import type { Unit } from '../../types/unit.types';
-import type { OccupancyRecord } from '../../types/occupancy.types';
+import type { Unit }      from '../../types/unit.types';
 import type { Ownership } from '../../types/ownership.types';
 
 export interface UnitProfileProps {
   unit:       Unit;
-  occupancy?: OccupancyRecord;
   ownership?: Ownership;
 }
 
-export function UnitProfile({ unit, occupancy, ownership }: UnitProfileProps) {
+export function UnitProfile({ unit, ownership }: UnitProfileProps) {
   return (
     <div className="space-y-6">
       <Card>
@@ -31,7 +29,7 @@ export function UnitProfile({ unit, occupancy, ownership }: UnitProfileProps) {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Type</p>
-            <p className="font-semibold uppercase">{unit.type}</p>
+            <p className="font-semibold">{unit.type}</p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Square Feet</p>
@@ -39,7 +37,7 @@ export function UnitProfile({ unit, occupancy, ownership }: UnitProfileProps) {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Ownership</p>
-            <p className="font-semibold capitalize">{unit.ownershipType}</p>
+            <p className="font-semibold">{unit.ownershipType}</p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Occupancy</p>
@@ -51,30 +49,6 @@ export function UnitProfile({ unit, occupancy, ownership }: UnitProfileProps) {
           </div>
         </CardContent>
       </Card>
-
-      {occupancy && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Current Occupancy</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <p className="text-sm text-muted-foreground">Status</p>
-              <StatusBadge status={occupancy.status} />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Since</p>
-              <p className="font-semibold">{occupancy.startDate}</p>
-            </div>
-            {occupancy.notes && (
-              <div className="col-span-2">
-                <p className="text-sm text-muted-foreground">Notes</p>
-                <p>{occupancy.notes}</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
 
       {ownership && (
         <Card>

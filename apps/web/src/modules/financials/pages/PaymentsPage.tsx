@@ -4,7 +4,6 @@ import { PaymentTable }      from '../components/PaymentTable';
 import { FinancialFilters }  from '../components/FinancialFilters';
 import { usePayments }       from '../hooks/usePayments';
 import { usePagination }     from '@/hooks/usePagination';
-import { useDebounce }       from '@/hooks/useDebounce';
 import { FINANCIAL_ROUTES }  from '../constants/invoice.constants';
 import { PAYMENT_METHOD_OPTIONS, PAYMENT_STATUS_OPTIONS } from '../constants/payment.constants';
 import type { PaymentFiltersParams } from '../types/payment.types';
@@ -12,16 +11,21 @@ import type { PaymentFiltersParams } from '../types/payment.types';
 export function PaymentsPage() {
   const { page, pageSize, setPage, reset } = usePagination(1, 20);
   const [filters, setFilters] = useState<Partial<PaymentFiltersParams>>({});
-  const debouncedSearch = useDebounce(filters.search, 300);
 
-  const { data, isLoading } = usePayments({ ...filters, search: debouncedSearch, page, pageSize } as never);
+  const { data, isLoading } = usePayments({ ...filters, page, limit: pageSize });
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Payments"
         description="All payment transactions and receipts"
-        breadcrumbs={<Breadcrumbs items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Financials', href: FINANCIAL_ROUTES.DASHBOARD }, { label: 'Payments' }]} />}
+        breadcrumbs={
+          <Breadcrumbs items={[
+            { label: 'Dashboard',  href: '/dashboard' },
+            { label: 'Financials', href: FINANCIAL_ROUTES.DASHBOARD },
+            { label: 'Payments' },
+          ]} />
+        }
       />
 
       <FinancialFilters

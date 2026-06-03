@@ -7,11 +7,5 @@ export type { CreatePaymentFormValues } from './payment.schema';
 export { createExpenseSchema, updateExpenseSchema } from './expense.schema';
 export type { CreateExpenseFormValues, UpdateExpenseFormValues } from './expense.schema';
 
-export { collectionFiltersSchema } from './collection.schema';
-export type { CollectionFiltersFormValues } from './collection.schema';
-
-export { generateMaintenanceSchema } from './maintenance.schema';
-export type { GenerateMaintenanceFormValues } from './maintenance.schema';
-
-export { createBudgetSchema } from './budget.schema';
-export type { CreateBudgetFormValues } from './budget.schema';
+export { createMaintenanceHeadSchema, generateInvoicesSchema } from './maintenance.schema';
+export type { CreateMaintenanceHeadFormValues, GenerateInvoicesFormValues } from './maintenance.schema';

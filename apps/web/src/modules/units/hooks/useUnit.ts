@@ -6,7 +6,7 @@ import { unitsApi } from '../api/units.api';
 export function useUnit(id: string) {
   return useQuery({
     queryKey:  unitKeys.detail(id),
-    queryFn:   () => unitsApi.getById(id).then((r) => r.data),
+    queryFn:   () => unitsApi.getById(id),
     staleTime: STALE_TIME.DEFAULT,
     enabled:   !!id,
   });

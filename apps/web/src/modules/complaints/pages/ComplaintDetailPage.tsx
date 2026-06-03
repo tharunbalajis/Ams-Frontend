@@ -5,15 +5,11 @@ import { Breadcrumbs, Button, Dialog, DialogContent, DialogHeader, DialogTitle, 
 import { ComplaintStatusBadge } from '../components/ComplaintStatusBadge';
 import { ComplaintTimeline }    from '../components/ComplaintTimeline';
 import { AssignmentDrawer }     from '../components/AssignmentDrawer';
-import { EscalationPanel }      from '../components/EscalationPanel';
 import { ResolutionForm }       from '../components/ResolutionForm';
-import { SLAIndicator }         from '../components/SLAIndicator';
 import { StatusStepper }        from '../components/StatusStepper';
 import { useComplaint }             from '../hooks/useComplaint';
 import { useComplaintTimeline }     from '../hooks/useComplaintTimeline';
 import { useComplaintAssignments }  from '../hooks/useComplaintAssignments';
-import { useEscalations }           from '../hooks/useEscalations';
-import { useSLA }                   from '../hooks/useSLA';
 import { complaintsApi }            from '../api/complaints.api';
 import { assignmentsApi }           from '../api/assignments.api';
 import { queryClient }              from '@/lib/queryClient';
@@ -27,11 +23,9 @@ export function ComplaintDetailPage() {
   const [assignOpen,  setAssignOpen]  = useState(false);
   const [resolveOpen, setResolveOpen] = useState(false);
 
-  const { data,         isLoading,      isError }   = useComplaint(id);
-  const { data: tl,     isLoading: tlLoading }      = useComplaintTimeline(id);
-  const { data: assigns }                            = useComplaintAssignments(id);
-  const { data: escals }                             = useEscalations(id);
-  const { data: sla }                                = useSLA(id);
+  const { data,      isLoading, isError } = useComplaint(id);
+  const { data: tl,  isLoading: tlLoading } = useComplaintTimeline(id);
+  const { data: assigns }                   = useComplaintAssignments(id);
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: complaintKeys.detail(id) });
@@ -40,7 +34,7 @@ export function ComplaintDetailPage() {
 
   const { mutate: resolve, isPending: resolving } = useMutation({
     mutationFn: (values: ResolutionFormValues) =>
-      complaintsApi.updateStatus(id, values.closeAfterResolve ? 'closed' : 'resolved', values.resolutionNotes),
+      complaintsApi.updateStatus(id, values.closeAfterResolve ? 'CLOSED' : 'RESOLVED', values.resolutionNotes),
     onSuccess: () => { invalidate(); setResolveOpen(false); },
   });
 
@@ -59,11 +53,11 @@ export function ComplaintDetailPage() {
     <div className="space-y-6">
       <PageHeader
         title={complaint.title}
-        description={`${complaint.category.replace('_', ' ')} · Unit ${complaint.unitNumber}`}
+        description={`${complaint.categoryName} · Unit ${complaint.unitNumber}`}
         breadcrumbs={
           <Breadcrumbs items={[
-            { label: 'Dashboard',   href: '/dashboard' },
-            { label: 'Complaints',  href: COMPLAINT_ROUTES.LIST },
+            { label: 'Dashboard',  href: '/dashboard' },
+            { label: 'Complaints', href: COMPLAINT_ROUTES.LIST },
             { label: complaint.title.slice(0, 30) },
           ]} />
         }
@@ -71,7 +65,7 @@ export function ComplaintDetailPage() {
           <div className="flex gap-2">
             <ComplaintStatusBadge priority={complaint.priority} />
             <ComplaintStatusBadge status={complaint.status} />
-            {complaint.status !== 'resolved' && complaint.status !== 'closed' && (
+            {complaint.status !== 'RESOLVED' && complaint.status !== 'CLOSED' && (
               <>
                 <Button variant="outline" onClick={() => setAssignOpen(true)}>Assign</Button>
                 <Button onClick={() => setResolveOpen(true)}>Resolve</Button>
@@ -83,13 +77,10 @@ export function ComplaintDetailPage() {
 
       <StatusStepper currentStatus={complaint.status} />
 
-      {sla?.data && <SLAIndicator sla={sla.data} />}
-
       <Tabs defaultValue="details">
         <TabsList>
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
-          <TabsTrigger value="escalations">Escalations</TabsTrigger>
         </TabsList>
 
         <TabsContent value="details" className="mt-4 grid gap-6 lg:grid-cols-3">
@@ -106,10 +97,6 @@ export function ComplaintDetailPage() {
 
         <TabsContent value="timeline" className="mt-4">
           <ComplaintTimeline events={tl?.data ?? []} loading={tlLoading} />
-        </TabsContent>
-
-        <TabsContent value="escalations" className="mt-4">
-          <EscalationPanel escalations={escals?.data ?? []} />
         </TabsContent>
       </Tabs>
 

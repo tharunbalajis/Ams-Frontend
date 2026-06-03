@@ -7,7 +7,7 @@ const lineItemSchema = z.object({
 });
 
 export const createInvoiceSchema = z.object({
-  type:        z.enum(['maintenance', 'special_assessment', 'penalty', 'late_fee', 'miscellaneous']),
+  type:        z.enum(['MAINTENANCE', 'SPECIAL_ASSESSMENT', 'PENALTY', 'LATE_FEE', 'MISCELLANEOUS']),
   residentId:  z.string().min(1),
   invoiceDate: z.string().min(1),
   dueDate:     z.string().min(1),
@@ -15,8 +15,9 @@ export const createInvoiceSchema = z.object({
   remarks:     z.string().optional(),
 });
 
-export const updateInvoiceSchema = createInvoiceSchema.partial().extend({
-  status: z.enum(['draft', 'pending', 'partially_paid', 'paid', 'overdue', 'cancelled']).optional(),
+export const updateInvoiceSchema = z.object({
+  dueDate: z.string().min(1).optional(),
+  remarks: z.string().optional(),
 });
 
 export type CreateInvoiceFormValues = z.infer<typeof createInvoiceSchema>;

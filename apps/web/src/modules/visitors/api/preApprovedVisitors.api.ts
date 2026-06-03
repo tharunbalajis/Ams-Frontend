@@ -1,18 +1,18 @@
 import apiClient from '@/api/client';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
-import type { PreApprovedVisitor } from '../types/visitor.types';
+import type { Invite, CreateInvitePayload } from '../types/invite.types';
 
-const BASE = '/visitors/pre-approved';
+const BASE = '/visitors/invites';
 
 export const preApprovedVisitorsApi = {
   getAll: (params?: Record<string, unknown>) =>
-    apiClient.get<ApiListResponse<PreApprovedVisitor>>(BASE, { params }).then((r) => r.data),
+    apiClient.get<ApiListResponse<Invite>>(BASE, { params }).then((r) => r.data),
 
-  create: (payload: { visitorName: string; visitorMobile: string; residentId: string; validUntil: string }) =>
-    apiClient.post<ApiResponse<PreApprovedVisitor>>(BASE, payload).then((r) => r.data),
+  create: (payload: CreateInvitePayload) =>
+    apiClient.post<ApiResponse<Invite>>(BASE, payload).then((r) => r.data),
 
   revoke: (id: string) =>
-    apiClient.patch<ApiResponse<PreApprovedVisitor>>(`${BASE}/${id}/revoke`).then((r) => r.data),
+    apiClient.patch<ApiResponse<Invite>>(`${BASE}/${id}/revoke`).then((r) => r.data),
 
   remove: (id: string) =>
     apiClient.delete(`${BASE}/${id}`),

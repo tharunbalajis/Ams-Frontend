@@ -1,6 +1,13 @@
-export { useUnits }      from './useUnits';
-export { useUnit }       from './useUnit';
-export { useCreateUnit } from './useCreateUnit';
-export { useUpdateUnit } from './useUpdateUnit';
-export { useOccupancy }  from './useOccupancy';
-export { useOwnership }  from './useOwnership';
+export {
+  useUnits,
+  useUnit,
+  useBlocks,
+  useCreateUnit,
+  useUpdateUnit,
+} from './useUnits';
+export {
+  useOwnership,
+  useOwnershipHistory,
+  useCreateOwnership,
+  useUpdateOwnership,
+} from './useOwnership';

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/api/client';
+import { tokenManager } from '@/lib/auth/tokenManager';
 
 export interface SessionTokens {
   accessToken:  string;
@@ -7,20 +7,16 @@ export interface SessionTokens {
 }
 
 export function useSession() {
-  const getAccessToken  = useCallback(() => localStorage.getItem(TOKEN_KEY),         []);
-  const getRefreshToken = useCallback(() => localStorage.getItem(REFRESH_TOKEN_KEY), []);
+  const getAccessToken  = useCallback(() => tokenManager.getAccessToken(),  []);
+  const getRefreshToken = useCallback(() => tokenManager.getRefreshToken(), []);
 
   const setTokens = useCallback((tokens: SessionTokens) => {
-    localStorage.setItem(TOKEN_KEY,         tokens.accessToken);
-    localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
+    tokenManager.setAccessToken(tokens.accessToken);
+    if (tokens.refreshToken) tokenManager.setRefreshToken(tokens.refreshToken);
   }, []);
 
-  const clearTokens = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-  }, []);
-
-  const isTokenPresent = useCallback(() => !!localStorage.getItem(TOKEN_KEY), []);
+  const clearTokens    = useCallback(() => tokenManager.clearSession(),  []);
+  const isTokenPresent = useCallback(() => tokenManager.hasSession(),    []);
 
   return { getAccessToken, getRefreshToken, setTokens, clearTokens, isTokenPresent };
 }

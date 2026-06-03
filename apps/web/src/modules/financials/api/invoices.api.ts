@@ -1,5 +1,4 @@
-import type { AxiosResponse } from 'axios';
-import { financialsApi as globalApi } from '@/api/financials.api';
+import apiClient from '@/api/client';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
 import type {
   Invoice,
@@ -7,18 +6,27 @@ import type {
   CreateInvoicePayload,
   UpdateInvoicePayload,
   InvoiceFiltersParams,
+  InvoicePaymentRecord,
 } from '../types/invoice.types';
 
+const BASE = '/financials/invoices';
+
 export const invoicesApi = {
-  getAll: (params?: InvoiceFiltersParams): Promise<AxiosResponse<ApiListResponse<InvoiceListItem>>> =>
-    globalApi.getInvoices(params) as Promise<AxiosResponse<ApiListResponse<InvoiceListItem>>>,
+  getAll: (params?: InvoiceFiltersParams) =>
+    apiClient.get<ApiListResponse<InvoiceListItem>>(BASE, { params }).then((r) => r.data),
 
-  getById: (id: string): Promise<AxiosResponse<ApiResponse<Invoice>>> =>
-    globalApi.getInvoiceById(id) as Promise<AxiosResponse<ApiResponse<Invoice>>>,
+  getById: (id: string) =>
+    apiClient.get<ApiResponse<Invoice>>(`${BASE}/${id}`).then((r) => r.data),
 
-  create: (payload: CreateInvoicePayload): Promise<AxiosResponse<ApiResponse<Invoice>>> =>
-    globalApi.createInvoice(payload) as Promise<AxiosResponse<ApiResponse<Invoice>>>,
+  create: (payload: CreateInvoicePayload) =>
+    apiClient.post<ApiResponse<Invoice>>(BASE, payload).then((r) => r.data),
 
-  update: (id: string, payload: UpdateInvoicePayload): Promise<AxiosResponse<ApiResponse<Invoice>>> =>
-    globalApi.updateInvoice(id, payload) as Promise<AxiosResponse<ApiResponse<Invoice>>>,
+  update: (id: string, payload: UpdateInvoicePayload) =>
+    apiClient.patch<ApiResponse<Invoice>>(`${BASE}/${id}`, payload).then((r) => r.data),
+
+  cancel: (id: string) =>
+    apiClient.patch<ApiResponse<Invoice>>(`${BASE}/${id}/cancel`).then((r) => r.data),
+
+  getPayments: (id: string) =>
+    apiClient.get<ApiResponse<InvoicePaymentRecord>>(`${BASE}/${id}/payments`).then((r) => r.data),
 };

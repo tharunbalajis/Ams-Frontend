@@ -1,9 +1,14 @@
-export { useComplaints }           from './useComplaints';
-export { useComplaint }            from './useComplaint';
-export { useCreateComplaint }      from './useCreateComplaint';
-export { useUpdateComplaint }      from './useUpdateComplaint';
-export { useComplaintTimeline }    from './useComplaintTimeline';
-export { useComplaintAssignments } from './useComplaintAssignments';
-export { useSLA }                  from './useSLA';
-export { useEscalations }          from './useEscalations';
-export { useComplaintAnalytics }   from './useComplaintAnalytics';
+export { useComplaints }          from './useComplaints';
+export {
+  useComplaint,
+  useCreateComplaint,
+  useUpdateComplaint,
+  useUpdateComplaintStatus,
+  useCategories,
+} from './useComplaint';
+export { useComplaintTimeline }   from './useComplaintTimeline';
+export {
+  useComplaintAssignments,
+  useAssignComplaint,
+} from './useComplaintAssignments';
+export { useComplaintAnalytics }  from './useComplaintAnalytics';

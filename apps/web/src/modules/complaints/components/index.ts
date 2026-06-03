@@ -19,17 +19,8 @@ export type { ComplaintStatusBadgeProps } from './ComplaintStatusBadge';
 export { AssignmentDrawer }      from './AssignmentDrawer';
 export type { AssignmentDrawerProps } from './AssignmentDrawer';
 
-export { EscalationPanel }       from './EscalationPanel';
-export type { EscalationPanelProps } from './EscalationPanel';
-
 export { ResolutionForm }        from './ResolutionForm';
 export type { ResolutionFormProps } from './ResolutionForm';
-
-export { SLAIndicator }          from './SLAIndicator';
-export type { SLAIndicatorProps } from './SLAIndicator';
-
-export { SLABadge }              from './SLABadge';
-export type { SLABadgeProps }    from './SLABadge';
 
 export { StatusStepper }         from './StatusStepper';
 export type { StatusStepperProps } from './StatusStepper';

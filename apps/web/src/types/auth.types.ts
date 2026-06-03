@@ -4,18 +4,16 @@ export interface AuthUser {
   id:         string;
   email:      string;
   name:       string;
-  firstName:  string;
-  lastName:   string;
   role:       Role;
-  avatar?:    string;
-  phone?:     string;
+  societyId:  string;
   isActive:   boolean;
+  phone?:     string;
+  avatar?:    string;
 }
 
 export interface AuthTokens {
-  accessToken:  string;
-  refreshToken: string;
-  expiresIn:    number;
+  accessToken: string;
+  tokenType:   'bearer';
 }
 
 export interface AuthState {
@@ -31,15 +29,7 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-  user:   AuthUser;
-  tokens: AuthTokens;
-}
-
-export interface ForgotPasswordPayload {
-  email: string;
-}
-
-export interface ResetPasswordPayload {
-  token:    string;
-  password: string;
+  access_token: string;
+  token_type:   'bearer';
+  user:         AuthUser;
 }

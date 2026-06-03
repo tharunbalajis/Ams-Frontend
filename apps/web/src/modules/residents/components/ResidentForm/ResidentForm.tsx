@@ -23,7 +23,7 @@ export function ResidentForm({ mode, resident, residentId }: ResidentFormProps) 
   const form = useForm<CreateResidentFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      type:      resident?.type      ?? 'tenant',
+      type:      resident?.type      ?? 'TENANT',
       firstName: resident?.firstName ?? '',
       lastName:  resident?.lastName  ?? '',
       email:     resident?.email     ?? '',

@@ -1,17 +1,16 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { Badge, Button, DataTable } from '@ams/ui';
 import { formatDate } from '@/utils/formatDate';
-import type { PreApprovedVisitor } from '../../types/visitor.types';
+import type { Invite } from '../../types/invite.types';
 
 export interface PreApprovedVisitorTableProps {
-  data:      PreApprovedVisitor[];
+  data:      Invite[];
   loading?:  boolean;
   onRevoke?: (id: string) => void;
-  onDelete?: (id: string) => void;
 }
 
-export function PreApprovedVisitorTable({ data, loading, onRevoke, onDelete }: PreApprovedVisitorTableProps) {
-  const columns: ColumnDef<PreApprovedVisitor>[] = [
+export function PreApprovedVisitorTable({ data, loading, onRevoke }: PreApprovedVisitorTableProps) {
+  const columns: ColumnDef<Invite>[] = [
     {
       accessorKey: 'visitorName',
       header:      'Visitor',
@@ -33,8 +32,8 @@ export function PreApprovedVisitorTable({ data, loading, onRevoke, onDelete }: P
       ),
     },
     {
-      accessorKey: 'approvalDate',
-      header:      'Approved On',
+      accessorKey: 'validFrom',
+      header:      'Valid From',
       cell:        ({ getValue }) => formatDate(getValue() as string),
     },
     {
@@ -46,12 +45,12 @@ export function PreApprovedVisitorTable({ data, loading, onRevoke, onDelete }: P
       accessorKey: 'status',
       header:      'Status',
       cell:        ({ getValue }) => {
-        const s = getValue() as PreApprovedVisitor['status'];
-        return (
-          <Badge variant={s === 'active' ? 'success' : s === 'expired' ? 'secondary' : 'destructive'}>
-            {s.charAt(0).toUpperCase() + s.slice(1)}
-          </Badge>
-        );
+        const s = getValue() as string;
+        const variant =
+          s === 'ACTIVE' ? 'success' :
+          s === 'EXPIRED' ? 'secondary' :
+          'destructive';
+        return <Badge variant={variant}>{s}</Badge>;
       },
     },
     {
@@ -59,14 +58,9 @@ export function PreApprovedVisitorTable({ data, loading, onRevoke, onDelete }: P
       header: 'Actions',
       cell:   ({ row }) => (
         <div className="flex gap-2">
-          {row.original.status === 'active' && onRevoke && (
+          {row.original.status === 'ACTIVE' && onRevoke && (
             <Button variant="ghost" size="sm" onClick={() => onRevoke(row.original.id)}>
               Revoke
-            </Button>
-          )}
-          {onDelete && (
-            <Button variant="ghost" size="sm" onClick={() => onDelete(row.original.id)}>
-              Delete
             </Button>
           )}
         </div>
@@ -79,7 +73,7 @@ export function PreApprovedVisitorTable({ data, loading, onRevoke, onDelete }: P
       columns={columns}
       data={data}
       loading={loading}
-      emptyState={<p className="text-muted-foreground">No pre-approved visitors found.</p>}
+      emptyState={<p className="text-muted-foreground">No invites found.</p>}
     />
   );
 }

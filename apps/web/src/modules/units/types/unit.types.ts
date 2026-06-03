@@ -1,9 +1,9 @@
 import type { ID, Nullable, Timestamp } from '@/types/common.types';
 
-export type UnitType        = 'studio' | '1bhk' | '2bhk' | '3bhk' | '4bhk' | 'penthouse' | 'commercial';
-export type UnitStatus      = 'active' | 'inactive' | 'under_maintenance';
-export type OccupancyStatus = 'occupied' | 'vacant' | 'reserved' | 'under_maintenance';
-export type OwnershipType   = 'owned' | 'rented' | 'leased';
+export type UnitType        = 'STUDIO' | '1BHK' | '2BHK' | '3BHK' | '4BHK' | 'PENTHOUSE' | 'DUPLEX' | 'COMMERCIAL';
+export type UnitStatus      = 'ACTIVE' | 'INACTIVE' | 'UNDER_MAINTENANCE';
+export type OccupancyStatus = 'OCCUPIED' | 'VACANT' | 'RESERVED' | 'UNDER_MAINTENANCE';
+export type OwnershipType   = 'OWNED' | 'RENTED' | 'LEASED';
 
 export interface Unit {
   id:              ID;
@@ -39,15 +39,15 @@ export interface CreateUnitPayload {
 export type UpdateUnitPayload = Partial<CreateUnitPayload>;
 
 export interface UnitFiltersParams {
-  search?:         string;
-  block?:          string;
-  floor?:          number;
-  type?:           UnitType;
-  status?:         UnitStatus;
+  search?:          string;
+  block?:           string;
+  floor?:           number;
+  type?:            UnitType;
+  status?:          UnitStatus;
   occupancyStatus?: OccupancyStatus;
-  ownershipType?:  OwnershipType;
-  page?:           number;
-  pageSize?:       number;
-  sortBy?:         string;
-  sortDir?:        'asc' | 'desc';
+  ownershipType?:   OwnershipType;
+  page?:            number;
+  limit?:           number;
+  sortBy?:          string;
+  sortDir?:         'asc' | 'desc';
 }

@@ -1,22 +1,22 @@
 import type { Priority } from '../types/complaint.types';
 
 export const PRIORITY_OPTIONS: { label: string; value: Priority }[] = [
-  { label: 'Low',      value: 'low' },
-  { label: 'Medium',   value: 'medium' },
-  { label: 'High',     value: 'high' },
-  { label: 'Critical', value: 'critical' },
+  { label: 'Low',      value: 'LOW' },
+  { label: 'Medium',   value: 'MEDIUM' },
+  { label: 'High',     value: 'HIGH' },
+  { label: 'Critical', value: 'CRITICAL' },
 ];
 
 export const PRIORITY_COLOR: Record<Priority, string> = {
-  low:      'secondary',
-  medium:   'warning',
-  high:     'destructive',
-  critical: 'destructive',
+  LOW:      'secondary',
+  MEDIUM:   'warning',
+  HIGH:     'destructive',
+  CRITICAL: 'destructive',
 };
 
 export const PRIORITY_WEIGHT: Record<Priority, number> = {
-  low:      1,
-  medium:   2,
-  high:     3,
-  critical: 4,
+  LOW:      1,
+  MEDIUM:   2,
+  HIGH:     3,
+  CRITICAL: 4,
 };

@@ -4,3 +4,4 @@ export * from './formatPhone';
 export * from './downloadFile';
 export * from './storage';
 export * from './validators';
+export * from './toast';

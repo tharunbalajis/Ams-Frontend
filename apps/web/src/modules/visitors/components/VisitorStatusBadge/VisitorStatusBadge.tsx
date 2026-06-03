@@ -7,33 +7,33 @@ export interface VisitorStatusBadgeProps {
 }
 
 const ENTRY_VARIANT: Record<EntryStatus, 'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning'> = {
-  expected:    'secondary',
-  checked_in:  'success',
-  checked_out: 'outline',
-  overstay:    'destructive',
-  no_show:     'warning',
+  EXPECTED:    'secondary',
+  CHECKED_IN:  'success',
+  CHECKED_OUT: 'outline',
+  OVERSTAY:    'destructive',
+  NO_SHOW:     'warning',
 };
 
 const VISITOR_VARIANT: Record<VisitorStatus, 'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning'> = {
-  pending:     'warning',
-  approved:    'success',
-  rejected:    'destructive',
-  blacklisted: 'destructive',
+  PENDING:     'warning',
+  APPROVED:    'success',
+  REJECTED:    'destructive',
+  BLACKLISTED: 'destructive',
 };
 
 const ENTRY_LABEL: Record<EntryStatus, string> = {
-  expected:    'Expected',
-  checked_in:  'Checked In',
-  checked_out: 'Checked Out',
-  overstay:    'Overstay',
-  no_show:     'No Show',
+  EXPECTED:    'Expected',
+  CHECKED_IN:  'Checked In',
+  CHECKED_OUT: 'Checked Out',
+  OVERSTAY:    'Overstay',
+  NO_SHOW:     'No Show',
 };
 
 const VISITOR_LABEL: Record<VisitorStatus, string> = {
-  pending:     'Pending',
-  approved:    'Approved',
-  rejected:    'Rejected',
-  blacklisted: 'Blacklisted',
+  PENDING:     'Pending',
+  APPROVED:    'Approved',
+  REJECTED:    'Rejected',
+  BLACKLISTED: 'Blacklisted',
 };
 
 export function VisitorStatusBadge({ entryStatus, visitorStatus }: VisitorStatusBadgeProps) {

@@ -1,7 +1,7 @@
 import type { ID, Nullable, Timestamp } from '@/types/common.types';
 
-export type SOSAlertType   = 'medical' | 'fire' | 'security' | 'intrusion' | 'other';
-export type SOSAlertStatus = 'active' | 'acknowledged' | 'resolved' | 'false_alarm';
+export type SOSAlertType   = 'MEDICAL' | 'FIRE' | 'SECURITY' | 'INTRUSION' | 'OTHER';
+export type SOSAlertStatus = 'ACTIVE' | 'ACKNOWLEDGED' | 'RESOLVED' | 'FALSE_ALARM';
 
 export interface SOSAlert {
   id:              ID;
@@ -21,8 +21,8 @@ export interface SOSAlert {
 }
 
 export interface CreateSOSAlertPayload {
-  type:        SOSAlertType;
-  location:    string;
+  type:         SOSAlertType;
+  location:     string;
   description?: string;
 }
 

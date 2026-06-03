@@ -1,8 +1,8 @@
 export type {
-  ComplaintCategory,
-  ComplaintType,
   Priority,
   ComplaintStatus,
+  ComplaintCategory,
+  ComplaintMedia,
   Complaint,
   ComplaintListItem,
   CreateComplaintPayload,
@@ -17,19 +17,6 @@ export type {
   CreateAssignmentPayload,
   UpdateAssignmentPayload,
 } from './assignment.types';
-
-export type {
-  EscalationLevel,
-  EscalationStatus,
-  Escalation,
-  CreateEscalationPayload,
-} from './escalation.types';
-
-export type {
-  SLAStatus,
-  SLA,
-  SLAPolicy,
-} from './sla.types';
 
 export type {
   CategoryStat,

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { SelectField } from '@ams/ui';
-import { floorApi } from '../../api/floor.api';
+import { unitsApi } from '../../api/units.api';
+import { unitKeys } from '@/lib/queryKeys/units.keys';
 
 export interface BlockSelectorProps {
   value?:        string;
@@ -11,8 +12,8 @@ export interface BlockSelectorProps {
 
 export function BlockSelector({ value, onValueChange, disabled, placeholder = 'Select block' }: BlockSelectorProps) {
   const { data, isLoading } = useQuery({
-    queryKey: ['units', 'blocks'],
-    queryFn:  () => floorApi.getBlocks(),
+    queryKey: unitKeys.blocks(),
+    queryFn:  () => unitsApi.getBlocks(),
   });
 
   const options = (data?.data ?? []).map((b) => ({ label: b.label, value: b.id }));

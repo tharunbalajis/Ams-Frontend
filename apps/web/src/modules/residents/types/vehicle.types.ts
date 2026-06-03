@@ -1,6 +1,6 @@
 import type { ID, Timestamp } from '@/types/common.types';
 
-export type VehicleType = 'car' | 'motorcycle' | 'truck' | 'van' | 'other';
+export type VehicleType = 'CAR' | 'MOTORCYCLE' | 'SCOOTER' | 'TRUCK' | 'VAN' | 'BICYCLE' | 'OTHER';
 
 export interface Vehicle {
   id:            ID;

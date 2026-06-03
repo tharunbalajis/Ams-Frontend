@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button, ServerTable } from '@ams/ui';
 import { formatDate } from '@/utils/formatDate';
 import { ComplaintStatusBadge } from '../ComplaintStatusBadge';
-import { SLABadge }             from '../SLABadge';
 import type { ComplaintListItem } from '../../types/complaint.types';
 import type { PaginationState } from '@ams/ui';
 import { COMPLAINT_ROUTES } from '../../constants/complaint.constants';
@@ -32,11 +31,9 @@ export function ComplaintTable({ data, loading, pagination, onPageChange }: Comp
       ),
     },
     {
-      accessorKey: 'category',
+      accessorKey: 'categoryName',
       header:      'Category',
-      cell:        ({ getValue }) => (
-        <span className="capitalize">{(getValue() as string).replace('_', ' ')}</span>
-      ),
+      cell:        ({ getValue }) => <span>{getValue() as string}</span>,
     },
     {
       accessorKey: 'priority',
@@ -66,15 +63,6 @@ export function ComplaintTable({ data, loading, pagination, onPageChange }: Comp
       accessorKey: 'assignedTo',
       header:      'Assigned To',
       cell:        ({ getValue }) => (getValue() as string | null) ?? '—',
-    },
-    {
-      accessorKey: 'slaBreached',
-      header:      'SLA',
-      cell:        ({ getValue }) => (
-        (getValue() as boolean)
-          ? <SLABadge status="breached" breached />
-          : <SLABadge status="on_track" />
-      ),
     },
     {
       accessorKey: 'complaintDate',

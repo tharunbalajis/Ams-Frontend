@@ -7,7 +7,7 @@ import type { VisitorFiltersParams } from '../types/visitor.types';
 export function useVisitors(params?: VisitorFiltersParams) {
   return useQuery({
     queryKey:  visitorKeys.list(params),
-    queryFn:   () => visitorsApi.getAll(params).then((r) => r.data),
+    queryFn:   () => visitorsApi.getAll(params),
     staleTime: STALE_TIME.DEFAULT,
   });
 }

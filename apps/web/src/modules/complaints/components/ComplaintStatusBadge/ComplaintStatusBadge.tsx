@@ -9,13 +9,19 @@ export interface ComplaintStatusBadgeProps {
 }
 
 const STATUS_LABEL: Record<ComplaintStatus, string> = {
-  open:        'Open',
-  assigned:    'Assigned',
-  in_progress: 'In Progress',
-  on_hold:     'On Hold',
-  resolved:    'Resolved',
-  closed:      'Closed',
-  escalated:   'Escalated',
+  OPEN:        'Open',
+  ASSIGNED:    'Assigned',
+  IN_PROGRESS: 'In Progress',
+  ON_HOLD:     'On Hold',
+  RESOLVED:    'Resolved',
+  CLOSED:      'Closed',
+};
+
+const PRIORITY_LABEL: Record<Priority, string> = {
+  LOW:      'Low',
+  MEDIUM:   'Medium',
+  HIGH:     'High',
+  CRITICAL: 'Critical',
 };
 
 export function ComplaintStatusBadge({ status, priority }: ComplaintStatusBadgeProps) {
@@ -26,8 +32,8 @@ export function ComplaintStatusBadge({ status, priority }: ComplaintStatusBadgeP
   if (priority) {
     const variant = PRIORITY_COLOR[priority] as 'default' | 'secondary' | 'destructive' | 'warning';
     return (
-      <Badge variant={variant} className="capitalize">
-        {priority}
+      <Badge variant={variant}>
+        {PRIORITY_LABEL[priority]}
       </Badge>
     );
   }

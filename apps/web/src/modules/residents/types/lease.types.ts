@@ -1,6 +1,6 @@
-import type { ID, Timestamp } from '@/types/common.types';
+import type { ID, Nullable, Timestamp } from '@/types/common.types';
 
-export type LeaseStatus = 'active' | 'expired' | 'pending' | 'cancelled';
+export type LeaseStatus = 'ACTIVE' | 'EXPIRED' | 'PENDING' | 'CANCELLED';
 
 export interface Lease {
   id:            ID;
@@ -10,7 +10,7 @@ export interface Lease {
   endDate:       string;
   monthlyRent:   number;
   depositAmount: number;
-  agreementUrl?: string;
+  agreementUrl?: Nullable<string>;
   status:        LeaseStatus;
   createdAt:     Timestamp;
   updatedAt:     Timestamp;

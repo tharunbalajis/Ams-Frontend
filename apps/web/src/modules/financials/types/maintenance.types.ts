@@ -1,24 +1,37 @@
 import type { ID, Timestamp } from '@/types/common.types';
 
-export type MaintenanceChargeType = 'monthly' | 'special_assessment' | 'late_fee' | 'penalty';
+export type HeadType         = 'MAINTENANCE' | 'UTILITIES' | 'SECURITY' | 'HOUSEKEEPING' | 'ADMIN' | 'OTHER';
+export type Frequency        = 'MONTHLY' | 'QUARTERLY' | 'HALF_YEARLY' | 'YEARLY' | 'ONE_TIME';
+export type CalculationBasis = 'PER_UNIT' | 'PER_SQ_FT' | 'FIXED' | 'PERCENTAGE';
 
-export interface MaintenanceCharge {
-  id:            ID;
-  type:          MaintenanceChargeType;
-  residentId:    ID;
-  residentName:  string;
-  unitNumber:    string;
-  amount:        number;
-  period:        string;
-  dueDate:       string;
-  description:   string;
-  isGenerated:   boolean;
-  generatedAt:   Timestamp;
+export interface MaintenanceHead {
+  id:               ID;
+  name:             string;
+  code:             string;
+  headType:         HeadType;
+  frequency:        Frequency;
+  calculationBasis: CalculationBasis;
+  defaultAmount:    number;
+  isActive:         boolean;
+  description:      string;
+  createdAt:        Timestamp;
+  updatedAt:        Timestamp;
 }
 
-export interface GenerateMaintenancePayload {
-  period:     string;
-  dueDate:    string;
-  chargeType: MaintenanceChargeType;
-  amount?:    number;
+export interface CreateMaintenanceHeadPayload {
+  name:             string;
+  code:             string;
+  headType:         HeadType;
+  frequency:        Frequency;
+  calculationBasis: CalculationBasis;
+  defaultAmount:    number;
+  description?:     string;
+}
+
+export type UpdateMaintenanceHeadPayload = Partial<CreateMaintenanceHeadPayload>;
+
+export interface GenerateInvoicesPayload {
+  headId:  ID;
+  period:  string;
+  dueDate: string;
 }

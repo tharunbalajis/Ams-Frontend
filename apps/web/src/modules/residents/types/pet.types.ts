@@ -1,7 +1,7 @@
 import type { ID, Timestamp } from '@/types/common.types';
 
-export type PetType          = 'dog' | 'cat' | 'bird' | 'other';
-export type VaccinationStatus = 'vaccinated' | 'not_vaccinated' | 'expired';
+export type PetType           = 'DOG' | 'CAT' | 'BIRD' | 'RABBIT' | 'FISH' | 'OTHER';
+export type VaccinationStatus = 'VACCINATED' | 'NOT_VACCINATED' | 'EXPIRED';
 
 export interface Pet {
   id:                ID;

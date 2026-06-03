@@ -4,11 +4,5 @@ export type { CreateComplaintFormValues, UpdateComplaintFormValues } from './com
 export { assignmentSchema } from './assignment.schema';
 export type { AssignmentFormValues } from './assignment.schema';
 
-export { escalationSchema } from './escalation.schema';
-export type { EscalationFormValues } from './escalation.schema';
-
-export { slaPolicySchema } from './sla.schema';
-export type { SLAPolicyFormValues } from './sla.schema';
-
 export { resolutionSchema } from './resolution.schema';
 export type { ResolutionFormValues } from './resolution.schema';

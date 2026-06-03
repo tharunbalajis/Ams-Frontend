@@ -33,15 +33,8 @@ export function UnitTable({ data, loading, pagination, onPageChange }: UnitTable
       header:      'Block / Tower',
       cell:        ({ getValue }) => <Badge variant="outline">{getValue() as string}</Badge>,
     },
-    {
-      accessorKey: 'floor',
-      header:      'Floor',
-    },
-    {
-      accessorKey: 'type',
-      header:      'Type',
-      cell:        ({ getValue }) => <span className="uppercase">{getValue() as string}</span>,
-    },
+    { accessorKey: 'floor',       header: 'Floor' },
+    { accessorKey: 'type',        header: 'Type' },
     {
       accessorKey: 'squareFeet',
       header:      'Sq. Ft.',
@@ -50,36 +43,23 @@ export function UnitTable({ data, loading, pagination, onPageChange }: UnitTable
     {
       accessorKey: 'ownershipType',
       header:      'Ownership',
-      cell:        ({ getValue }) => <span className="capitalize">{getValue() as string}</span>,
+      cell:        ({ getValue }) => <span>{(getValue() as string).replace(/_/g, ' ')}</span>,
     },
     {
       accessorKey: 'occupancyStatus',
       header:      'Occupancy',
-      cell:        ({ getValue }) => (
-        <StatusBadge status={getValue() as 'occupied' | 'vacant' | 'reserved' | 'under_maintenance'} />
-      ),
+      cell:        ({ getValue }) => <StatusBadge status={getValue() as string} />,
     },
-    {
-      accessorKey: 'residentCount',
-      header:      'Residents',
-    },
+    { accessorKey: 'residentCount', header: 'Residents' },
     {
       id:     'actions',
       header: 'Actions',
       cell:   ({ row }) => (
         <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => void navigate(UNIT_ROUTES.DETAIL.replace(':id', row.original.id))}
-          >
+          <Button variant="ghost" size="sm" onClick={() => void navigate(UNIT_ROUTES.DETAIL.replace(':id', row.original.id))}>
             View
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => void navigate(UNIT_ROUTES.EDIT.replace(':id', row.original.id))}
-          >
+          <Button variant="ghost" size="sm" onClick={() => void navigate(UNIT_ROUTES.EDIT.replace(':id', row.original.id))}>
             Edit
           </Button>
         </div>
@@ -94,9 +74,7 @@ export function UnitTable({ data, loading, pagination, onPageChange }: UnitTable
       loading={loading}
       pagination={pagination}
       onPageChange={onPageChange}
-      emptyState={
-        <p className="text-muted-foreground">No units found. Try adjusting your filters.</p>
-      }
+      emptyState={<p className="text-muted-foreground">No units found. Try adjusting your filters.</p>}
     />
   );
 }

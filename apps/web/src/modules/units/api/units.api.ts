@@ -1,6 +1,5 @@
-import type { AxiosResponse } from 'axios';
-import { unitsApi as globalApi } from '@/api/units.api';
-import type { ApiResponse, ApiListResponse } from '@/types/api.types';
+import apiClient from '@/api/client';
+import type { ApiResponse, ApiListResponse, PlainArrayResponse } from '@/types/api.types';
 import type {
   Unit,
   UnitListItem,
@@ -8,20 +7,26 @@ import type {
   UpdateUnitPayload,
   UnitFiltersParams,
 } from '../types/unit.types';
+import type { Block } from '../types/block.types';
+
+const BASE = '/units';
 
 export const unitsApi = {
-  getAll: (params?: UnitFiltersParams): Promise<AxiosResponse<ApiListResponse<UnitListItem>>> =>
-    globalApi.getAll(params) as Promise<AxiosResponse<ApiListResponse<UnitListItem>>>,
+  getAll: (params?: UnitFiltersParams) =>
+    apiClient.get<ApiListResponse<UnitListItem>>(BASE, { params }).then((r) => r.data),
 
-  getById: (id: string): Promise<AxiosResponse<ApiResponse<Unit>>> =>
-    globalApi.getById(id) as Promise<AxiosResponse<ApiResponse<Unit>>>,
+  getById: (id: string) =>
+    apiClient.get<ApiResponse<Unit>>(`${BASE}/${id}`).then((r) => r.data),
 
-  create: (payload: CreateUnitPayload): Promise<AxiosResponse<ApiResponse<Unit>>> =>
-    globalApi.create(payload) as Promise<AxiosResponse<ApiResponse<Unit>>>,
+  create: (payload: CreateUnitPayload) =>
+    apiClient.post<ApiResponse<Unit>>(BASE, payload).then((r) => r.data),
 
-  update: (id: string, payload: UpdateUnitPayload): Promise<AxiosResponse<ApiResponse<Unit>>> =>
-    globalApi.update(id, payload) as Promise<AxiosResponse<ApiResponse<Unit>>>,
+  update: (id: string, payload: UpdateUnitPayload) =>
+    apiClient.patch<ApiResponse<Unit>>(`${BASE}/${id}`, payload).then((r) => r.data),
 
-  remove: (id: string): Promise<AxiosResponse<void>> =>
-    globalApi.remove(id) as Promise<AxiosResponse<void>>,
+  remove: (id: string) =>
+    apiClient.delete(`${BASE}/${id}`).then((r) => r.data),
+
+  getBlocks: () =>
+    apiClient.get<PlainArrayResponse<Block>>(`${BASE}/blocks`).then((r) => r.data),
 };

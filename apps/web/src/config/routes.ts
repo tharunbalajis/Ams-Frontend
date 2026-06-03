@@ -1,6 +1,5 @@
-// Re-export from router — single source of truth
 export { ROUTES, buildRoute } from '@/app/router/routeConfig';
 export type { RouteKey, RoutePath } from '@/app/router/routeConfig';
 
-export const PUBLIC_ROUTES = ['/login', '/forgot-password', '/reset-password'] as const;
+export const PUBLIC_ROUTES  = ['/login'] as const;
 export const DEFAULT_REDIRECT = '/dashboard';

@@ -10,8 +10,8 @@ export function ComplaintDashboardPage() {
   const { data, isLoading } = useComplaintAnalytics(dateRange);
 
   const emptyAnalytics = {
-    total: 0, open: 0, resolved: 0, closed: 0,
-    escalated: 0, slaBreaches: 0, avgResolutionTimeHours: 0,
+    total: 0, open: 0, assigned: 0, inProgress: 0,
+    resolved: 0, closed: 0, avgResolutionTimeHours: 0,
     byCategory: [], byPriority: [], resolutionTrend: [],
   };
 
@@ -19,11 +19,11 @@ export function ComplaintDashboardPage() {
     <div className="space-y-6">
       <PageHeader
         title="Complaint Analytics"
-        description="Insights into complaint trends, SLA performance, and resolution metrics"
+        description="Insights into complaint trends and resolution metrics"
         breadcrumbs={
           <Breadcrumbs items={[
-            { label: 'Dashboard',   href: '/dashboard' },
-            { label: 'Complaints',  href: COMPLAINT_ROUTES.LIST },
+            { label: 'Dashboard',  href: '/dashboard' },
+            { label: 'Complaints', href: COMPLAINT_ROUTES.LIST },
             { label: 'Analytics' },
           ]} />
         }

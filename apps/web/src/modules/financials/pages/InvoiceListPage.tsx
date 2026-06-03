@@ -1,40 +1,46 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Breadcrumbs, Button, Dialog, DialogContent, DialogHeader, DialogTitle, PageHeader } from '@ams/ui';
-import { useMutation } from '@tanstack/react-query';
-import { InvoiceTable }   from '../components/InvoiceTable';
-import { InvoiceForm }    from '../components/InvoiceForm';
+import { Breadcrumbs, Button, PageHeader } from '@ams/ui';
+import { InvoiceTable }    from '../components/InvoiceTable';
+import { InvoiceForm }     from '../components/InvoiceForm';
 import { FinancialFilters } from '../components/FinancialFilters';
-import { useInvoices }    from '../hooks/useInvoices';
-import { invoicesApi }    from '../api/invoices.api';
-import { queryClient }    from '@/lib/queryClient';
-import { financialKeys }  from '@/lib';
-import { usePagination }  from '@/hooks/usePagination';
-import { useDebounce }    from '@/hooks/useDebounce';
-import { FINANCIAL_ROUTES, INVOICE_STATUS_OPTIONS, INVOICE_TYPE_OPTIONS } from '../constants/invoice.constants';
-import type { InvoiceFiltersParams } from '../types/invoice.types';
+import { useInvoices, useCreateInvoice } from '../hooks/useInvoices';
+import { usePagination }   from '@/hooks/usePagination';
+import { useDebounce }     from '@/hooks/useDebounce';
+import {
+  FINANCIAL_ROUTES,
+  INVOICE_STATUS_OPTIONS,
+  INVOICE_TYPE_OPTIONS,
+} from '../constants/invoice.constants';
+import type { InvoiceFiltersParams }   from '../types/invoice.types';
 import type { CreateInvoiceFormValues } from '../schemas/invoice.schema';
 
 export function InvoiceListPage() {
   const navigate = useNavigate();
   const { page, pageSize, setPage, reset } = usePagination(1, 20);
-  const [filters, setFilters] = useState<Partial<InvoiceFiltersParams>>({});
+  const [filters,  setFilters]  = useState<Partial<InvoiceFiltersParams>>({});
   const [showForm, setShowForm] = useState(false);
   const debouncedSearch = useDebounce(filters.search, 300);
 
-  const { data, isLoading } = useInvoices({ ...filters, search: debouncedSearch, page, pageSize });
+  const { data, isLoading } = useInvoices({ ...filters, search: debouncedSearch, page, limit: pageSize });
+  const { mutate: createInvoice, isPending } = useCreateInvoice();
 
-  const { mutate: createInvoice, isPending } = useMutation({
-    mutationFn: (values: CreateInvoiceFormValues) => invoicesApi.create(values),
-    onSuccess:  () => { queryClient.invalidateQueries({ queryKey: financialKeys.invoices.lists() }); setShowForm(false); },
-  });
+  const handleCreate = (values: CreateInvoiceFormValues) => {
+    createInvoice(values, { onSuccess: () => setShowForm(false) });
+  };
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Invoices"
         description="Manage maintenance and other resident invoices"
-        breadcrumbs={<Breadcrumbs items={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Financials', href: FINANCIAL_ROUTES.DASHBOARD }, { label: 'Invoices' }]} />}
+        breadcrumbs={
+          <Breadcrumbs items={[
+            { label: 'Dashboard',  href: '/dashboard' },
+            { label: 'Financials', href: FINANCIAL_ROUTES.DASHBOARD },
+            { label: 'Invoices' },
+          ]} />
+        }
         actions={<Button onClick={() => setShowForm(true)}>Generate Invoice</Button>}
       />
 
@@ -54,12 +60,18 @@ export function InvoiceListPage() {
         onRecordPayment={(id) => void navigate(FINANCIAL_ROUTES.INVOICE_DETAIL.replace(':id', id))}
       />
 
-      <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader><DialogTitle>Generate Invoice</DialogTitle></DialogHeader>
-          <InvoiceForm onSubmit={(v) => createInvoice(v)} onCancel={() => setShowForm(false)} isPending={isPending} />
-        </DialogContent>
-      </Dialog>
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-2xl rounded-lg bg-background p-6 shadow-xl">
+            <h2 className="mb-4 text-lg font-semibold">Generate Invoice</h2>
+            <InvoiceForm
+              onSubmit={handleCreate}
+              onCancel={() => setShowForm(false)}
+              isPending={isPending}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

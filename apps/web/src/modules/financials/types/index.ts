@@ -7,6 +7,7 @@ export type {
   CreateInvoicePayload,
   UpdateInvoicePayload,
   InvoiceFiltersParams,
+  InvoicePaymentRecord,
 } from './invoice.types';
 
 export type {
@@ -19,7 +20,6 @@ export type {
 } from './payment.types';
 
 export type {
-  ExpenseCategory,
   ExpenseStatus,
   Expense,
   ExpenseListItem,
@@ -29,27 +29,18 @@ export type {
 } from './expense.types';
 
 export type {
-  CollectionRecord,
-  CollectionSummary,
-  CollectionFiltersParams,
-  Defaulter,
-  AgingBucket,
-} from './collection.types';
-
-export type {
-  MaintenanceChargeType,
-  MaintenanceCharge,
-  GenerateMaintenancePayload,
+  HeadType,
+  Frequency,
+  CalculationBasis,
+  MaintenanceHead,
+  CreateMaintenanceHeadPayload,
+  UpdateMaintenanceHeadPayload,
+  GenerateInvoicesPayload,
 } from './maintenance.types';
 
 export type {
-  BudgetStatus,
-  BudgetLineItem,
-  Budget,
-} from './budget.types';
-
-export type {
-  FinancialKPI,
+  FinancialDashboard,
   TrendPoint,
+  ExpenseBreakdown,
   FinancialAnalytics,
 } from './analytics.types';

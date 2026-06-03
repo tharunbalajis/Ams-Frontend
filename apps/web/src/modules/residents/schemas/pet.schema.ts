@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 export const petSchema = z.object({
-  name:              z.string(),
-  type:              z.enum(['dog', 'cat', 'bird', 'other']),
-  breed:             z.string(),
-  vaccinationStatus: z.enum(['vaccinated', 'not_vaccinated', 'expired']),
+  name:              z.string().min(1),
+  type:              z.enum(['DOG', 'CAT', 'BIRD', 'RABBIT', 'FISH', 'OTHER']),
+  breed:             z.string().min(1),
+  vaccinationStatus: z.enum(['VACCINATED', 'NOT_VACCINATED', 'EXPIRED']),
   vaccineExpiry:     z.string().optional(),
 });
 

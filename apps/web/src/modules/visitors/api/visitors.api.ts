@@ -1,5 +1,4 @@
-import type { AxiosResponse } from 'axios';
-import { visitorsApi as globalApi } from '@/api/visitors.api';
+import apiClient from '@/api/client';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
 import type {
   Visitor,
@@ -8,26 +7,49 @@ import type {
   UpdateVisitorPayload,
   VisitorFiltersParams,
 } from '../types/visitor.types';
+import type { Invite, CreateInvitePayload } from '../types/invite.types';
+
+const BASE = '/visitors';
 
 export const visitorsApi = {
-  getAll: (params?: VisitorFiltersParams): Promise<AxiosResponse<ApiListResponse<VisitorListItem>>> =>
-    globalApi.getAll(params) as Promise<AxiosResponse<ApiListResponse<VisitorListItem>>>,
+  getAll: (params?: VisitorFiltersParams) =>
+    apiClient.get<ApiListResponse<VisitorListItem>>(BASE, { params }).then((r) => r.data),
 
-  getById: (id: string): Promise<AxiosResponse<ApiResponse<Visitor>>> =>
-    globalApi.getById(id) as Promise<AxiosResponse<ApiResponse<Visitor>>>,
+  getById: (id: string) =>
+    apiClient.get<ApiResponse<Visitor>>(`${BASE}/${id}`).then((r) => r.data),
 
-  create: (payload: CreateVisitorPayload): Promise<AxiosResponse<ApiResponse<Visitor>>> =>
-    globalApi.create(payload) as Promise<AxiosResponse<ApiResponse<Visitor>>>,
+  create: (payload: CreateVisitorPayload) =>
+    apiClient.post<ApiResponse<Visitor>>(BASE, payload).then((r) => r.data),
 
-  update: (id: string, payload: UpdateVisitorPayload): Promise<AxiosResponse<ApiResponse<Visitor>>> =>
-    globalApi.update(id, payload) as Promise<AxiosResponse<ApiResponse<Visitor>>>,
+  update: (id: string, payload: UpdateVisitorPayload) =>
+    apiClient.patch<ApiResponse<Visitor>>(`${BASE}/${id}`, payload).then((r) => r.data),
 
-  remove: (id: string): Promise<AxiosResponse<void>> =>
-    globalApi.remove(id) as Promise<AxiosResponse<void>>,
+  remove: (id: string) =>
+    apiClient.delete(`${BASE}/${id}`).then((r) => r.data),
 
-  checkIn: (id: string): Promise<AxiosResponse<ApiResponse<Visitor>>> =>
-    globalApi.checkIn(id) as Promise<AxiosResponse<ApiResponse<Visitor>>>,
+  checkIn: (id: string, gateNumber?: string) =>
+    apiClient.patch<ApiResponse<Visitor>>(`${BASE}/${id}/check-in`, { gateNumber }).then((r) => r.data),
 
-  checkOut: (id: string): Promise<AxiosResponse<ApiResponse<Visitor>>> =>
-    globalApi.checkOut(id) as Promise<AxiosResponse<ApiResponse<Visitor>>>,
+  checkOut: (id: string) =>
+    apiClient.patch<ApiResponse<Visitor>>(`${BASE}/${id}/check-out`).then((r) => r.data),
+
+  getDashboard: (params?: { dateFrom?: string; dateTo?: string }) =>
+    apiClient
+      .get<ApiResponse<{ total: number; checkedIn: number; expected: number; overstay: number }>>(
+        `${BASE}/dashboard`,
+        { params },
+      )
+      .then((r) => r.data),
+
+  getInvites: (params?: Record<string, unknown>) =>
+    apiClient.get<ApiListResponse<Invite>>(`${BASE}/invites`, { params }).then((r) => r.data),
+
+  getInviteById: (id: string) =>
+    apiClient.get<ApiResponse<Invite>>(`${BASE}/invites/${id}`).then((r) => r.data),
+
+  createInvite: (payload: CreateInvitePayload) =>
+    apiClient.post<ApiResponse<Invite>>(`${BASE}/invites`, payload).then((r) => r.data),
+
+  revokeInvite: (id: string) =>
+    apiClient.patch<ApiResponse<Invite>>(`${BASE}/invites/${id}/revoke`).then((r) => r.data),
 };

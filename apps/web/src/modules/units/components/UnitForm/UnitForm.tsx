@@ -1,10 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FormField, Input, SelectField, Textarea } from '@ams/ui';
+import { Button, FormField, Input, SelectField, TextArea } from '@ams/ui';
 import { createUnitSchema, type CreateUnitFormValues } from '../../schemas/unit.schema';
-import { UNIT_TYPE_OPTIONS, UNIT_STATUS_OPTIONS, OWNERSHIP_TYPE_OPTIONS } from '../../constants/unit.constants';
+import { UNIT_TYPE_OPTIONS, OWNERSHIP_TYPE_OPTIONS } from '../../constants/unit.constants';
 import { BlockSelector } from '../BlockSelector';
-import { FloorSelector } from '../FloorSelector';
 import type { Unit } from '../../types/unit.types';
 
 export interface UnitFormProps {
@@ -21,14 +20,12 @@ export function UnitForm({ unit, onSubmit, onCancel, isPending }: UnitFormProps)
       unitNumber:    unit?.unitNumber    ?? '',
       block:         unit?.block         ?? '',
       floor:         unit?.floor         ?? 0,
-      type:          unit?.type          ?? undefined,
+      type:          unit?.type          ?? undefined as never,
       squareFeet:    unit?.squareFeet    ?? 0,
-      ownershipType: unit?.ownershipType ?? undefined,
+      ownershipType: unit?.ownershipType ?? undefined as never,
       description:   unit?.description   ?? '',
     },
   });
-
-  const selectedBlock = form.watch('block');
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
@@ -57,10 +54,13 @@ export function UnitForm({ unit, onSubmit, onCancel, isPending }: UnitFormProps)
 
         <FormField control={form.control} name="floor" label="Floor" required>
           {(field) => (
-            <FloorSelector
-              blockId={selectedBlock}
+            <Input
+              type="number"
+              min={0}
               value={field.value as number}
-              onValueChange={(v) => field.onChange(v)}
+              onChange={(e) => field.onChange(Number((e.target as HTMLInputElement).value))}
+              onBlur={field.onBlur}
+              placeholder="0"
               disabled={isPending}
             />
           )}
@@ -107,7 +107,7 @@ export function UnitForm({ unit, onSubmit, onCancel, isPending }: UnitFormProps)
 
       <FormField control={form.control} name="description" label="Description">
         {(field) => (
-          <Textarea
+          <TextArea
             value={field.value as string}
             onChange={field.onChange}
             onBlur={field.onBlur}

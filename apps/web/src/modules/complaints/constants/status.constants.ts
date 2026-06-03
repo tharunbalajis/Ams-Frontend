@@ -1,39 +1,37 @@
 import type { ComplaintStatus } from '../types/complaint.types';
 
 export const STATUS_OPTIONS: { label: string; value: ComplaintStatus }[] = [
-  { label: 'Open',        value: 'open' },
-  { label: 'Assigned',    value: 'assigned' },
-  { label: 'In Progress', value: 'in_progress' },
-  { label: 'On Hold',     value: 'on_hold' },
-  { label: 'Resolved',    value: 'resolved' },
-  { label: 'Closed',      value: 'closed' },
-  { label: 'Escalated',   value: 'escalated' },
+  { label: 'Open',        value: 'OPEN' },
+  { label: 'Assigned',    value: 'ASSIGNED' },
+  { label: 'In Progress', value: 'IN_PROGRESS' },
+  { label: 'On Hold',     value: 'ON_HOLD' },
+  { label: 'Resolved',    value: 'RESOLVED' },
+  { label: 'Closed',      value: 'CLOSED' },
 ];
 
 export const STATUS_COLOR: Record<ComplaintStatus, string> = {
-  open:        'secondary',
-  assigned:    'outline',
-  in_progress: 'warning',
-  on_hold:     'secondary',
-  resolved:    'success',
-  closed:      'outline',
-  escalated:   'destructive',
+  OPEN:        'secondary',
+  ASSIGNED:    'outline',
+  IN_PROGRESS: 'warning',
+  ON_HOLD:     'secondary',
+  RESOLVED:    'success',
+  CLOSED:      'outline',
 };
 
 export const STATUS_FLOW: ComplaintStatus[] = [
-  'open',
-  'assigned',
-  'in_progress',
-  'on_hold',
-  'resolved',
-  'closed',
+  'OPEN',
+  'ASSIGNED',
+  'IN_PROGRESS',
+  'ON_HOLD',
+  'RESOLVED',
+  'CLOSED',
 ];
 
 export const KANBAN_COLUMNS: { id: ComplaintStatus; label: string }[] = [
-  { id: 'open',        label: 'Open' },
-  { id: 'assigned',    label: 'Assigned' },
-  { id: 'in_progress', label: 'In Progress' },
-  { id: 'on_hold',     label: 'On Hold' },
-  { id: 'resolved',    label: 'Resolved' },
-  { id: 'closed',      label: 'Closed' },
+  { id: 'OPEN',        label: 'Open' },
+  { id: 'ASSIGNED',    label: 'Assigned' },
+  { id: 'IN_PROGRESS', label: 'In Progress' },
+  { id: 'ON_HOLD',     label: 'On Hold' },
+  { id: 'RESOLVED',    label: 'Resolved' },
+  { id: 'CLOSED',      label: 'Closed' },
 ];

@@ -11,12 +11,6 @@ export type {
 } from './unit.types';
 
 export type {
-  OccupancyRecord,
-  UpdateOccupancyPayload,
-  OccupancyHistory,
-} from './occupancy.types';
-
-export type {
   OwnerInfo,
   Ownership,
   CreateOwnershipPayload,
@@ -25,6 +19,5 @@ export type {
 } from './ownership.types';
 
 export type {
-  Floor,
   Block,
-} from './floor.types';
+} from './block.types';

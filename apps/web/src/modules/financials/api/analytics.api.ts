@@ -1,9 +1,8 @@
-import type { AxiosResponse } from 'axios';
-import { financialsApi as globalApi } from '@/api/financials.api';
+import apiClient from '@/api/client';
 import type { ApiResponse } from '@/types/api.types';
 import type { FinancialAnalytics } from '../types/analytics.types';
 
 export const analyticsApi = {
-  getSummary: (params?: { dateFrom?: string; dateTo?: string }): Promise<AxiosResponse<ApiResponse<FinancialAnalytics>>> =>
-    globalApi.getSummary(params) as Promise<AxiosResponse<ApiResponse<FinancialAnalytics>>>,
+  getDashboard: (params?: { dateFrom?: string; dateTo?: string }) =>
+    apiClient.get<ApiResponse<FinancialAnalytics>>('/financials/dashboard', { params }).then((r) => r.data),
 };

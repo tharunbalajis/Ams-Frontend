@@ -7,15 +7,18 @@ export type {
   CreateVisitorPayload,
   UpdateVisitorPayload,
   VisitorFiltersParams,
-  PreApprovedVisitor,
 } from './visitor.types';
 
 export type {
-  AttendanceStatus,
-  AttendanceRecord,
-  AttendanceFiltersParams,
-  MarkAttendancePayload,
-} from './attendance.types';
+  InviteStatus,
+  Invite,
+  CreateInvitePayload,
+} from './invite.types';
+
+export type {
+  PassStatus,
+  VisitorPass,
+} from './pass.types';
 
 export type {
   VerificationMethod,

@@ -21,7 +21,7 @@ export function SOSAlertTable({ data, loading, onView, onAcknowledge }: SOSAlert
         return (
           <span className="flex items-center gap-1">
             <span>{SOS_TYPE_ICON[t]}</span>
-            <span className="capitalize">{t}</span>
+            <span className="capitalize">{t.replace('_', ' ')}</span>
           </span>
         );
       },
@@ -56,7 +56,7 @@ export function SOSAlertTable({ data, loading, onView, onAcknowledge }: SOSAlert
           {onView && (
             <Button variant="ghost" size="sm" onClick={() => onView(row.original.id)}>View</Button>
           )}
-          {onAcknowledge && row.original.status === 'active' && (
+          {onAcknowledge && row.original.status === 'ACTIVE' && (
             <Button variant="ghost" size="sm" onClick={() => onAcknowledge(row.original.id)}>Acknowledge</Button>
           )}
         </div>

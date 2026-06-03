@@ -1,31 +1,31 @@
 import type { SOSAlertType, SOSAlertStatus } from '../types/sos.types';
 
 export const SOS_ALERT_TYPE_OPTIONS: { label: string; value: SOSAlertType }[] = [
-  { label: 'Medical',   value: 'medical' },
-  { label: 'Fire',      value: 'fire' },
-  { label: 'Security',  value: 'security' },
-  { label: 'Intrusion', value: 'intrusion' },
-  { label: 'Other',     value: 'other' },
+  { label: 'Medical',   value: 'MEDICAL' },
+  { label: 'Fire',      value: 'FIRE' },
+  { label: 'Security',  value: 'SECURITY' },
+  { label: 'Intrusion', value: 'INTRUSION' },
+  { label: 'Other',     value: 'OTHER' },
 ];
 
 export const SOS_ALERT_STATUS_OPTIONS: { label: string; value: SOSAlertStatus }[] = [
-  { label: 'Active',       value: 'active' },
-  { label: 'Acknowledged', value: 'acknowledged' },
-  { label: 'Resolved',     value: 'resolved' },
-  { label: 'False Alarm',  value: 'false_alarm' },
+  { label: 'Active',       value: 'ACTIVE' },
+  { label: 'Acknowledged', value: 'ACKNOWLEDGED' },
+  { label: 'Resolved',     value: 'RESOLVED' },
+  { label: 'False Alarm',  value: 'FALSE_ALARM' },
 ];
 
 export const SOS_STATUS_COLOR: Record<SOSAlertStatus, string> = {
-  active:       'destructive',
-  acknowledged: 'warning',
-  resolved:     'success',
-  false_alarm:  'secondary',
+  ACTIVE:       'destructive',
+  ACKNOWLEDGED: 'warning',
+  RESOLVED:     'success',
+  FALSE_ALARM:  'secondary',
 };
 
 export const SOS_TYPE_ICON: Record<SOSAlertType, string> = {
-  medical:   '🚑',
-  fire:      '🔥',
-  security:  '🚨',
-  intrusion: '🚪',
-  other:     '⚠️',
+  MEDICAL:   '🚑',
+  FIRE:      '🔥',
+  SECURITY:  '🚨',
+  INTRUSION: '🚪',
+  OTHER:     '⚠️',
 };

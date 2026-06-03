@@ -13,10 +13,10 @@ export interface PriorityStat {
 export interface ComplaintAnalytics {
   total:                  number;
   open:                   number;
+  assigned:               number;
+  inProgress:             number;
   resolved:               number;
   closed:                 number;
-  escalated:              number;
-  slaBreaches:            number;
   avgResolutionTimeHours: number;
   byCategory:             CategoryStat[];
   byPriority:             PriorityStat[];

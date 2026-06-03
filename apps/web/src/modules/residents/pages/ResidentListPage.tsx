@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { useState }       from 'react';
+import { useNavigate }    from 'react-router-dom';
 import { Breadcrumbs, Button, PageHeader } from '@ams/ui';
 import { ResidentFilters } from '../components/ResidentFilters';
 import { ResidentTable }   from '../components/ResidentTable';
@@ -6,7 +7,6 @@ import { useResidents }    from '../hooks/useResidents';
 import { usePagination }   from '@/hooks/usePagination';
 import { useDebounce }     from '@/hooks/useDebounce';
 import { RESIDENT_ROUTES } from '../constants/resident.constants';
-import { useState }        from 'react';
 import type { ResidentFiltersParams } from '../types/resident.types';
 
 export function ResidentListPage() {
@@ -15,12 +15,7 @@ export function ResidentListPage() {
   const [filters, setFilters] = useState<Partial<ResidentFiltersParams>>({});
   const debouncedSearch = useDebounce(filters.search, 300);
 
-  const { data, isLoading } = useResidents({
-    ...filters,
-    search: debouncedSearch,
-    page,
-    pageSize,
-  });
+  const { data, isLoading } = useResidents({ ...filters, search: debouncedSearch, page, limit: pageSize });
 
   const handleFiltersChange = (next: Partial<ResidentFiltersParams>) => {
     setFilters(next);

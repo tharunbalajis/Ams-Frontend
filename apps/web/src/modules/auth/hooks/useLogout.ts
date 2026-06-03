@@ -1,22 +1,21 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useSession } from '@/hooks/useSession';
 import { queryClient } from '@/lib/queryClient';
+import { tokenManager } from '@/lib/auth/tokenManager';
 import { ROUTES } from '@/config/routes';
-import { logoutApi } from '../api/logout.api';
+import { authApiService } from '../api/auth.api';
 
 export function useLogout() {
-  const navigate          = useNavigate();
-  const { logout }        = useAuth();
-  const { clearTokens }   = useSession();
+  const navigate               = useNavigate();
+  const { setUser, setTokens } = useAuth();
 
   return useMutation({
-    mutationFn: () => logoutApi.logout(),
-    onSettled: async () => {
-      // Always clear session even if API call fails
-      clearTokens();
-      await logout();
+    mutationFn: () => authApiService.logout(),
+    onSettled: () => {
+      tokenManager.clearSession();
+      setUser(null);
+      setTokens(null);
       queryClient.clear();
       void navigate(ROUTES.LOGIN);
     },

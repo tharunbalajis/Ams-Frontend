@@ -6,8 +6,8 @@ import type { ResidentFiltersParams } from '../types/resident.types';
 
 export function useResidents(params?: ResidentFiltersParams) {
   return useQuery({
-    queryKey: residentKeys.list(params),
-    queryFn:  () => residentsApi.getAll(params).then((r) => r.data),
+    queryKey:  residentKeys.list(params),
+    queryFn:   () => residentsApi.getAll(params),
     staleTime: STALE_TIME.DEFAULT,
   });
 }

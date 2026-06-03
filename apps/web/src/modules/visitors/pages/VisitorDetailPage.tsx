@@ -1,29 +1,16 @@
-import { useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useParams }           from 'react-router-dom';
 import { Breadcrumbs, ErrorState, LoadingState, PageHeader } from '@ams/ui';
-import { VisitorDetailCard }        from '../components/VisitorDetailCard';
-import { VisitorTimeline }          from '../components/VisitorTimeline';
-import { SecurityVerificationCard } from '../components/SecurityVerificationCard';
-import { useVisitor }               from '../hooks/useVisitor';
-import { visitorsApi }              from '../api/visitors.api';
-import { securityApi }              from '../api/security.api';
-import { queryClient }              from '@/lib/queryClient';
-import { VISITOR_ROUTES }           from '../constants/visitor.constants';
+import { VisitorDetailCard }   from '../components/VisitorDetailCard';
+import { VisitorTimeline }     from '../components/VisitorTimeline';
+import { useVisitor, useCheckInVisitor, useCheckOutVisitor } from '../hooks/useVisitor';
+import { VISITOR_ROUTES }      from '../constants/visitor.constants';
 
 export function VisitorDetailPage() {
   const { id = '' } = useParams<{ id: string }>();
 
-  const { data, isLoading, isError } = useVisitor(id);
-
-  const { mutate: checkIn }  = useMutation({
-    mutationFn: () => visitorsApi.checkIn(id),
-    onSuccess:  () => queryClient.invalidateQueries({ queryKey: ['visitors', 'detail', id] }),
-  });
-
-  const { mutate: checkOut } = useMutation({
-    mutationFn: () => visitorsApi.checkOut(id),
-    onSuccess:  () => queryClient.invalidateQueries({ queryKey: ['visitors', 'detail', id] }),
-  });
+  const { data, isLoading, isError }  = useVisitor(id);
+  const { mutate: checkIn }  = useCheckInVisitor();
+  const { mutate: checkOut } = useCheckOutVisitor();
 
   if (isLoading) return <LoadingState />;
   if (isError || !data?.data) return <ErrorState />;
@@ -48,8 +35,8 @@ export function VisitorDetailPage() {
         <div className="lg:col-span-2 space-y-6">
           <VisitorDetailCard
             visitor={visitor}
-            onCheckIn={() => checkIn()}
-            onCheckOut={() => checkOut()}
+            onCheckIn={() => checkIn({ id })}
+            onCheckOut={() => checkOut(id)}
           />
         </div>
         <div>

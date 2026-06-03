@@ -1,8 +1,7 @@
-import type { AxiosResponse } from 'axios';
-import { authApi } from '@/api/auth.api';
-import type { AuthUser } from '../types/auth.types';
+import { authApiService } from './auth.api';
+import type { ApiResponse } from '@/types/api.types';
+import type { AuthUser } from '@/types/auth.types';
 
 export const currentUserApi = {
-  getMe: (): Promise<AxiosResponse<AuthUser>> =>
-    authApi.me() as Promise<AxiosResponse<AuthUser>>,
+  getMe: (): Promise<ApiResponse<AuthUser>> => authApiService.me(),
 };

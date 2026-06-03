@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 export const vehicleSchema = z.object({
-  vehicleNumber: z.string(),
-  type:          z.enum(['car', 'motorcycle', 'truck', 'van', 'other']),
-  brand:         z.string(),
-  model:         z.string(),
+  vehicleNumber: z.string().min(1),
+  type:          z.enum(['CAR', 'MOTORCYCLE', 'SCOOTER', 'TRUCK', 'VAN', 'BICYCLE', 'OTHER']),
+  brand:         z.string().min(1),
+  model:         z.string().min(1),
   color:         z.string().optional(),
   parkingSlot:   z.string().optional(),
 });

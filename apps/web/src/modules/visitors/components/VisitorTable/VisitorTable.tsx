@@ -32,21 +32,15 @@ export function VisitorTable({ data, loading, pagination, onPageChange, onCheckI
         </button>
       ),
     },
-    {
-      accessorKey: 'mobile',
-      header:      'Mobile',
-    },
+    { accessorKey: 'mobile',        header: 'Mobile' },
     {
       accessorKey: 'type',
       header:      'Type',
       cell:        ({ getValue }) => (
-        <span className="capitalize">{(getValue() as string).replace('_', ' ')}</span>
+        <span className="capitalize">{(getValue() as string).replace(/_/g, ' ')}</span>
       ),
     },
-    {
-      accessorKey: 'purposeOfVisit',
-      header:      'Purpose',
-    },
+    { accessorKey: 'purposeOfVisit', header: 'Purpose' },
     {
       accessorKey: 'residentName',
       header:      'Resident',
@@ -95,12 +89,12 @@ export function VisitorTable({ data, loading, pagination, onPageChange, onCheckI
           >
             View
           </Button>
-          {row.original.entryStatus === 'expected' && onCheckIn && (
+          {row.original.entryStatus === 'EXPECTED' && onCheckIn && (
             <Button variant="ghost" size="sm" onClick={() => onCheckIn(row.original.id)}>
               Check In
             </Button>
           )}
-          {row.original.entryStatus === 'checked_in' && onCheckOut && (
+          {row.original.entryStatus === 'CHECKED_IN' && onCheckOut && (
             <Button variant="ghost" size="sm" onClick={() => onCheckOut(row.original.id)}>
               Check Out
             </Button>
@@ -117,9 +111,7 @@ export function VisitorTable({ data, loading, pagination, onPageChange, onCheckI
       loading={loading}
       pagination={pagination}
       onPageChange={onPageChange}
-      emptyState={
-        <p className="text-muted-foreground">No visitor logs found. Try adjusting your filters.</p>
-      }
+      emptyState={<p className="text-muted-foreground">No visitor logs found.</p>}
     />
   );
 }

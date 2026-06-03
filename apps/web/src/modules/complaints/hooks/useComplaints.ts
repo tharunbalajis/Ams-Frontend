@@ -7,7 +7,7 @@ import type { ComplaintFiltersParams } from '../types/complaint.types';
 export function useComplaints(params?: ComplaintFiltersParams) {
   return useQuery({
     queryKey:  complaintKeys.list(params),
-    queryFn:   () => complaintsApi.getAll(params).then((r) => r.data),
+    queryFn:   () => complaintsApi.getAll(params),
     staleTime: STALE_TIME.DEFAULT,
   });
 }

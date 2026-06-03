@@ -1,17 +1,10 @@
 import type { ID, Nullable, Timestamp } from '@/types/common.types';
 
-export type InvoiceStatus =
-  | 'draft'
-  | 'pending'
-  | 'partially_paid'
-  | 'paid'
-  | 'overdue'
-  | 'cancelled';
-
-export type InvoiceType = 'maintenance' | 'special_assessment' | 'penalty' | 'late_fee' | 'miscellaneous';
+export type InvoiceStatus = 'DRAFT' | 'PENDING' | 'PARTIALLY_PAID' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+export type InvoiceType   = 'MAINTENANCE' | 'SPECIAL_ASSESSMENT' | 'PENALTY' | 'LATE_FEE' | 'MISCELLANEOUS';
 
 export interface InvoiceLineItem {
-  id:          ID;
+  id?:         ID;
   description: string;
   amount:      number;
   taxRate:     number;
@@ -20,25 +13,25 @@ export interface InvoiceLineItem {
 }
 
 export interface Invoice {
-  id:             ID;
-  invoiceNumber:  string;
-  type:           InvoiceType;
-  status:         InvoiceStatus;
-  residentId:     ID;
-  residentName:   string;
-  unitNumber:     string;
-  invoiceDate:    string;
-  dueDate:        string;
-  subtotal:       number;
-  taxAmount:      number;
-  totalAmount:    number;
-  paidAmount:     number;
-  balanceDue:     number;
-  lineItems:      InvoiceLineItem[];
-  remarks:        Nullable<string>;
-  generatedBy:    string;
-  createdAt:      Timestamp;
-  updatedAt:      Timestamp;
+  id:            ID;
+  invoiceNumber: string;
+  type:          InvoiceType;
+  status:        InvoiceStatus;
+  residentId:    ID;
+  residentName:  string;
+  unitNumber:    string;
+  invoiceDate:   string;
+  dueDate:       string;
+  subtotal:      number;
+  taxAmount:     number;
+  totalAmount:   number;
+  paidAmount:    number;
+  balanceDue:    number;
+  lineItems:     InvoiceLineItem[];
+  remarks:       Nullable<string>;
+  generatedBy:   string;
+  createdAt:     Timestamp;
+  updatedAt:     Timestamp;
 }
 
 export type InvoiceListItem = Pick<
@@ -65,7 +58,7 @@ export interface CreateInvoicePayload {
   remarks?:    string;
 }
 
-export type UpdateInvoicePayload = Partial<CreateInvoicePayload & { status: InvoiceStatus }>;
+export type UpdateInvoicePayload = Partial<Pick<CreateInvoicePayload, 'dueDate' | 'remarks'>>;
 
 export interface InvoiceFiltersParams {
   search?:     string;
@@ -75,7 +68,22 @@ export interface InvoiceFiltersParams {
   dateFrom?:   string;
   dateTo?:     string;
   page?:       number;
-  pageSize?:   number;
+  limit?:      number;
   sortBy?:     string;
   sortDir?:    'asc' | 'desc';
+}
+
+export interface InvoicePaymentRecord {
+  invoiceId:     ID;
+  invoiceNumber: string;
+  totalAmount:   number;
+  paidAmount:    number;
+  balanceDue:    number;
+  payments:      {
+    id:             ID;
+    paymentDate:    string;
+    amount:         number;
+    method:         string;
+    transactionRef: Nullable<string>;
+  }[];
 }

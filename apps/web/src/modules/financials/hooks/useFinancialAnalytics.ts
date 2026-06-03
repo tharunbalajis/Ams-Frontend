@@ -5,8 +5,8 @@ import { analyticsApi } from '../api/analytics.api';
 
 export function useFinancialAnalytics(params?: { dateFrom?: string; dateTo?: string }) {
   return useQuery({
-    queryKey:  [...financialKeys.summary(), params],
-    queryFn:   () => analyticsApi.getSummary(params).then((r) => r.data),
+    queryKey:  [...financialKeys.dashboard(), params],
+    queryFn:   () => analyticsApi.getDashboard(params),
     staleTime: STALE_TIME.DEFAULT,
   });
 }
