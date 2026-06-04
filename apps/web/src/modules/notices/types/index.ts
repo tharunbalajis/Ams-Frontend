@@ -1,3 +1,1 @@
-// Notices module types — implement in Phase 2
-
-export type {};
+export * from './notice.types';

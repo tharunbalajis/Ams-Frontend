@@ -1,16 +1,43 @@
 import apiClient from './client';
 
-// Notices API — placeholder definitions
-// Aligns with backend: modules/notices
-// Implement in Phase 2
+export type NoticeType = 'GENERAL' | 'EMERGENCY' | 'MAINTENANCE';
+
+export interface Notice {
+  id:          string;
+  title:       string;
+  description: string;
+  created_by:  string;
+  notice_type: NoticeType;
+  created_at:  string;
+  updated_at:  string;
+}
+
+export interface CreateNoticeDto {
+  title:        string;
+  description:  string;
+  created_by:   string;
+  notice_type?: NoticeType;
+}
+
+export type UpdateNoticeDto = Partial<CreateNoticeDto>;
+
+export interface NoticeFilters {
+  notice_type?: NoticeType;
+  page?:        number;
+  limit?:       number;
+}
 
 const BASE = '/notices';
 
 export const noticesApi = {
-  getAll: (params?: unknown) => apiClient.get(BASE, { params }),
-  getById: (id: string) => apiClient.get(`${BASE}/${id}`),
-  create: (payload: unknown) => apiClient.post(BASE, payload),
-  update: (id: string, payload: unknown) => apiClient.patch(`${BASE}/${id}`, payload),
-  remove: (id: string) => apiClient.delete(`${BASE}/${id}`),
-  publish: (id: string) => apiClient.post(`${BASE}/${id}/publish`),
+  getAll:  (params?: NoticeFilters) =>
+    apiClient.get<Notice[]>(BASE, { params }).then((r) => r.data),
+  getById: (id: string) =>
+    apiClient.get<Notice>(`${BASE}/${id}`).then((r) => r.data),
+  create:  (data: CreateNoticeDto) =>
+    apiClient.post<Notice>(BASE, data).then((r) => r.data),
+  update:  (id: string, data: UpdateNoticeDto) =>
+    apiClient.put<Notice>(`${BASE}/${id}`, data).then((r) => r.data),
+  remove:  (id: string) =>
+    apiClient.delete(`${BASE}/${id}`).then((r) => r.data),
 };

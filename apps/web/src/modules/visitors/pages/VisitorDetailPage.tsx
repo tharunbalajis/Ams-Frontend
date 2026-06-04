@@ -1,18 +1,9 @@
 import { useParams }           from 'react-router-dom';
 import { Breadcrumbs, ErrorState, LoadingState, PageHeader } from '@ams/ui';
-<<<<<<< HEAD
 import { VisitorDetailCard }   from '../components/VisitorDetailCard';
 import { VisitorTimeline }     from '../components/VisitorTimeline';
 import { useVisitor, useCheckInVisitor, useCheckOutVisitor } from '../hooks/useVisitor';
 import { VISITOR_ROUTES }      from '../constants/visitor.constants';
-=======
-import { VisitorDetailCard } from '../components/VisitorDetailCard';
-import { VisitorTimeline }   from '../components/VisitorTimeline';
-import { useVisitor }        from '../hooks/useVisitor';
-import { visitorsApi }       from '../api/visitors.api';
-import { queryClient }       from '@/lib/queryClient';
-import { VISITOR_ROUTES }           from '../constants/visitor.constants';
->>>>>>> d852c2e (final)
 
 export function VisitorDetailPage() {
   const { id = '' } = useParams<{ id: string }>();

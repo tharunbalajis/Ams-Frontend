@@ -1,12 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FileUpload, FormField, Input, SelectField, TextArea } from '@ams/ui';
+import { Button, FormField, Input, SelectField, TextArea } from '@ams/ui';
 import { createComplaintSchema, type CreateComplaintFormValues } from '../../schemas/complaint.schema';
-import {
-  COMPLAINT_CATEGORY_OPTIONS,
-  COMPLAINT_TYPE_OPTIONS,
-  PRIORITY_OPTIONS,
-} from '../../constants';
+import { COMPLAINT_CATEGORY_OPTIONS, PRIORITY_OPTIONS } from '../../constants';
 
 export interface ComplaintFormProps {
   onSubmit:   (values: CreateComplaintFormValues) => void;
@@ -18,15 +14,11 @@ export function ComplaintForm({ onSubmit, onCancel, isPending }: ComplaintFormPr
   const form = useForm<CreateComplaintFormValues>({
     resolver:      zodResolver(createComplaintSchema),
     defaultValues: {
-      title:         '',
-      category:      undefined,
-      type:          'general',
-      priority:      'medium',
-      description:   '',
-      residentId:    '',
-      complaintDate: new Date().toISOString().split('T')[0],
-      attachments:   [],
-      tags:          [],
+      title:       '',
+      categoryId:  '',
+      priority:    'MEDIUM',
+      description: '',
+      residentId:  '',
     },
   });
 
@@ -44,26 +36,14 @@ export function ComplaintForm({ onSubmit, onCancel, isPending }: ComplaintFormPr
         )}
       </FormField>
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <FormField control={form.control} name="category" label="Category" required>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <FormField control={form.control} name="categoryId" label="Category" required>
           {(field) => (
             <SelectField
               value={field.value as string}
               onValueChange={field.onChange}
               options={COMPLAINT_CATEGORY_OPTIONS}
               placeholder="Select category"
-              disabled={isPending}
-            />
-          )}
-        </FormField>
-
-        <FormField control={form.control} name="type" label="Type" required>
-          {(field) => (
-            <SelectField
-              value={field.value as string}
-              onValueChange={field.onChange}
-              options={COMPLAINT_TYPE_OPTIONS}
-              placeholder="Select type"
               disabled={isPending}
             />
           )}
@@ -82,13 +62,13 @@ export function ComplaintForm({ onSubmit, onCancel, isPending }: ComplaintFormPr
         </FormField>
       </div>
 
-      <FormField control={form.control} name="complaintDate" label="Complaint Date" required>
+      <FormField control={form.control} name="residentId" label="Resident ID" required>
         {(field) => (
           <Input
-            type="date"
             value={field.value as string}
             onChange={field.onChange}
             onBlur={field.onBlur}
+            placeholder="Resident ID"
             disabled={isPending}
           />
         )}
@@ -106,16 +86,6 @@ export function ComplaintForm({ onSubmit, onCancel, isPending }: ComplaintFormPr
           />
         )}
       </FormField>
-
-      <div>
-        <p className="mb-1.5 text-sm font-medium">Attachments</p>
-        <FileUpload accept="image/*,.pdf,.doc,.docx" maxSize={10 * 1024 * 1024} multiple>
-          <div className="flex flex-col items-center gap-1 text-muted-foreground">
-            <p className="text-sm"><span className="font-medium text-primary">Upload files</span> or drag and drop</p>
-            <p className="text-xs">Images, PDF, DOC — max 10MB each</p>
-          </div>
-        </FileUpload>
-      </div>
 
       <div className="flex justify-end gap-3">
         {onCancel && (

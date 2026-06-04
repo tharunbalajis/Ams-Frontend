@@ -1,3 +1,2 @@
-// Notices module components — implement in Phase 2
-
-export {};
+export { NoticeTable } from './NoticeTable';
+export { NoticeForm }  from './NoticeForm';

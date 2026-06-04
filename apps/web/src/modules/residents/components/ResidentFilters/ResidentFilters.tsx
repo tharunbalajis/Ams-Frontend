@@ -19,16 +19,16 @@ export function ResidentFilters({ filters, onChange }: ResidentFiltersProps) {
       />
       <SelectField
         className="w-40"
-        value={filters.type}
-        onValueChange={(v) => onChange({ ...filters, type: v as ResidentFiltersParams['type'] })}
-        options={[{ label: 'All Types', value: '' }, ...RESIDENT_TYPE_OPTIONS]}
+        value={filters.type ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, type: v === 'all' ? undefined : v as ResidentFiltersParams['type'] })}
+        options={[{ label: 'All Types', value: 'all' }, ...RESIDENT_TYPE_OPTIONS]}
         placeholder="Type"
       />
       <SelectField
         className="w-40"
-        value={filters.status}
-        onValueChange={(v) => onChange({ ...filters, status: v as ResidentFiltersParams['status'] })}
-        options={[{ label: 'All Statuses', value: '' }, ...RESIDENT_STATUS_OPTIONS]}
+        value={filters.status ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, status: v === 'all' ? undefined : v as ResidentFiltersParams['status'] })}
+        options={[{ label: 'All Statuses', value: 'all' }, ...RESIDENT_STATUS_OPTIONS]}
         placeholder="Status"
       />
     </div>

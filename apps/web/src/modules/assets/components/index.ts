@@ -1,3 +1,2 @@
-// Assets module components — implement in Phase 2
-
-export {};
+export { AssetTable } from './AssetTable';
+export { AssetForm }  from './AssetForm';

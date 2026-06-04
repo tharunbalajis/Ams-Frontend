@@ -19,9 +19,9 @@ export function PetForm({ pet, onSubmit, onCancel, isPending }: PetFormProps) {
     resolver: zodResolver(petSchema),
     defaultValues: {
       name:              pet?.name              ?? '',
-      type:              pet?.type              ?? 'dog',
+      type:              pet?.type              ?? 'DOG',
       breed:             pet?.breed             ?? '',
-      vaccinationStatus: pet?.vaccinationStatus ?? 'not_vaccinated',
+      vaccinationStatus: pet?.vaccinationStatus ?? 'NOT_VACCINATED',
       vaccineExpiry:     pet?.vaccineExpiry      ?? '',
     },
   });

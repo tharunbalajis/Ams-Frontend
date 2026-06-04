@@ -67,7 +67,7 @@ export function InvoiceSummary({ invoice, onRecordPayment, onCancel }: InvoiceSu
 
         {(onRecordPayment || onCancel) && invoice.balanceDue > 0 && (
           <div className="flex justify-end gap-3">
-            {onCancel && invoice.status === 'pending' && (
+            {onCancel && invoice.status === 'PENDING' && (
               <Button variant="outline" onClick={onCancel}>Cancel Invoice</Button>
             )}
             {onRecordPayment && (

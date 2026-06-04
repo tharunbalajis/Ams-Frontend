@@ -4,7 +4,7 @@ export const unitKeys = {
   lists: () =>
     [...unitKeys.all, 'list'] as const,
 
-  list: (params?: Record<string, unknown>) =>
+  list: (params?: unknown) =>
     [...unitKeys.lists(), params] as const,
 
   details: () =>
@@ -21,4 +21,12 @@ export const unitKeys = {
 
   analytics: () =>
     [...unitKeys.all, 'analytics'] as const,
+
+  blocks: () =>
+    [...unitKeys.all, 'blocks'] as const,
+
+  ownership: {
+    all:    (unitId: string) => [...unitKeys.detail(unitId), 'ownership']          as const,
+    detail: (unitId: string) => [...unitKeys.detail(unitId), 'ownership', 'current'] as const,
+  },
 };

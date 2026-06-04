@@ -1,3 +1,2 @@
-// Compliance module components — implement in Phase 2
-
-export {};
+export { ComplianceTable } from './ComplianceTable';
+export { ComplianceForm }  from './ComplianceForm';

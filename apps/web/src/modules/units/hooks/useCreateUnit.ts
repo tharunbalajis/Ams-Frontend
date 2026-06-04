@@ -1,11 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import { unitKeys } from '@/lib';
-=======
-import { queryClient } from '@/lib/queryClient';
-import { unitKeys } from '@/lib/index';
->>>>>>> d852c2e (final)
 import { unitsApi } from '../api/units.api';
 import { UNIT_ROUTES } from '../constants/unit.constants';
 import { toast } from '@/utils/toast';

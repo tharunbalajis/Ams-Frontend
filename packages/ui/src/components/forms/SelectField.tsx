@@ -43,7 +43,7 @@ const SelectField = React.forwardRef<HTMLButtonElement, SelectFieldProps>(
           sideOffset={4}
         >
           <SelectPrimitive.Viewport className="p-1">
-            {options.map((opt) => (
+            {options.filter((opt) => opt.value !== '').map((opt) => (
               <SelectPrimitive.Item
                 key={opt.value}
                 value={opt.value}

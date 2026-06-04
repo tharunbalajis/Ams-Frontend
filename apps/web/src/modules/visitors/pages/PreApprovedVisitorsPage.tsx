@@ -1,9 +1,4 @@
 import { useState } from 'react';
-<<<<<<< HEAD
-=======
-import { useMutation } from '@tanstack/react-query';
-import { Breadcrumbs, Button, Modal, ModalContent, ModalHeader, ModalTitle, PageHeader } from '@ams/ui';
->>>>>>> d852c2e (final)
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -87,38 +82,6 @@ export function PreApprovedVisitorsPage() {
         loading={isLoading}
         onRevoke={(id) => revokeInvite(id)}
       />
-<<<<<<< HEAD
-=======
-
-      <Modal open={showForm} onOpenChange={setShowForm}>
-        <ModalContent>
-          <ModalHeader>
-            <ModalTitle>Add Pre-Approved Visitor</ModalTitle>
-          </ModalHeader>
-          <form onSubmit={form.handleSubmit((v) => addPreApproved(v))} className="space-y-4" noValidate>
-            <FormField control={form.control} name="visitorName" label="Visitor Name" required>
-              {(field) => (
-                <Input value={field.value as string} onChange={field.onChange} onBlur={field.onBlur} placeholder="Full name" disabled={isPending} />
-              )}
-            </FormField>
-            <FormField control={form.control} name="visitorMobile" label="Mobile" required>
-              {(field) => (
-                <Input type="tel" value={field.value as string} onChange={field.onChange} onBlur={field.onBlur} placeholder="+91 XXXXX XXXXX" disabled={isPending} />
-              )}
-            </FormField>
-            <FormField control={form.control} name="validUntil" label="Valid Until" required>
-              {(field) => (
-                <Input type="date" value={field.value as string} onChange={field.onChange} onBlur={field.onBlur} disabled={isPending} />
-              )}
-            </FormField>
-            <div className="flex justify-end gap-3">
-              <FormButton type="button" variant="outline" onClick={() => setShowForm(false)} disabled={isPending}>Cancel</FormButton>
-              <FormButton type="submit" loading={isPending}>Add Approval</FormButton>
-            </div>
-          </form>
-        </ModalContent>
-      </Modal>
->>>>>>> d852c2e (final)
     </div>
   );
 }

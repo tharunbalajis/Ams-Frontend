@@ -1,0 +1,1 @@
+export { OccupancyTable } from './OccupancyTable';

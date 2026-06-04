@@ -11,7 +11,7 @@ export const financialKeys = {
     lists: () =>
       [...financialKeys.invoices.all(), 'list'] as const,
 
-    list: (params?: Record<string, unknown>) =>
+    list: (params?: unknown) =>
       [...financialKeys.invoices.lists(), params] as const,
 
     details: () =>
@@ -19,6 +19,9 @@ export const financialKeys = {
 
     detail: (id: string) =>
       [...financialKeys.invoices.details(), id] as const,
+
+    payments: (invoiceId: string) =>
+      [...financialKeys.invoices.detail(invoiceId), 'payments'] as const,
   },
 
   payments: {
@@ -28,7 +31,7 @@ export const financialKeys = {
     lists: () =>
       [...financialKeys.payments.all(), 'list'] as const,
 
-    list: (params?: Record<string, unknown>) =>
+    list: (params?: unknown) =>
       [...financialKeys.payments.lists(), params] as const,
 
     details: () =>
@@ -45,7 +48,7 @@ export const financialKeys = {
     lists: () =>
       [...financialKeys.expenses.all(), 'list'] as const,
 
-    list: (params?: Record<string, unknown>) =>
+    list: (params?: unknown) =>
       [...financialKeys.expenses.lists(), params] as const,
 
     details: () =>
@@ -53,5 +56,22 @@ export const financialKeys = {
 
     detail: (id: string) =>
       [...financialKeys.expenses.details(), id] as const,
+  },
+
+  heads: {
+    all: () =>
+      [...financialKeys.all, 'heads'] as const,
+
+    lists: () =>
+      [...financialKeys.heads.all(), 'list'] as const,
+
+    list: (params?: unknown) =>
+      [...financialKeys.heads.lists(), params] as const,
+
+    details: () =>
+      [...financialKeys.heads.all(), 'detail'] as const,
+
+    detail: (id: string) =>
+      [...financialKeys.heads.details(), id] as const,
   },
 };

@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { complaintKeys } from '@/lib';
-=======
-import { useQuery } from '@tanstack/react-query';
-import { complaintKeys } from '@/lib/index';
->>>>>>> d852c2e (final)
 import { STALE_TIME } from '@/constants/query.constants';
 import { complaintsApi } from '../api/complaints.api';
 import { toast } from '@/utils/toast';

@@ -10,6 +10,6 @@ export const residentsApi = {
   getAll: (params?: unknown) => apiClient.get(BASE, { params }),
   getById: (id: string) => apiClient.get(`${BASE}/${id}`),
   create: (payload: unknown) => apiClient.post(BASE, payload),
-  update: (id: string, payload: unknown) => apiClient.patch(`${BASE}/${id}`, payload),
+  update: (id: string, payload: unknown) => apiClient.put(`${BASE}/${id}`, payload),
   remove: (id: string) => apiClient.delete(`${BASE}/${id}`),
 };

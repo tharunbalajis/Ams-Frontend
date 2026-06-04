@@ -1,3 +1,2 @@
-// Amenities module components — implement in Phase 2
-
-export {};
+export { AmenityTable } from './AmenityTable';
+export { AmenityForm }  from './AmenityForm';

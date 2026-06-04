@@ -3,12 +3,10 @@ import type { Role } from '@/config/roles';
 export interface AuthUser {
   id:         string;
   email:      string;
-  name:       string;
+  full_name:  string;
   role:       Role;
-  societyId:  string;
-  isActive:   boolean;
-  phone?:     string;
-  avatar?:    string;
+  society_id: number;
+  is_active?: boolean;
 }
 
 export interface AuthTokens {
@@ -29,9 +27,8 @@ export interface LoginPayload {
 }
 
 /**
- * Raw shape returned by the backend POST /auth/login.
- * Fields are snake_case and the user object uses full_name / society_id.
- * Use LoginResponse (the mapped shape) everywhere in UI code.
+ * Raw shape returned by POST /auth/login.
+ * Fields match the backend exactly.
  */
 export interface LoginResponseRaw {
   access_token:  string;
@@ -43,13 +40,12 @@ export interface LoginResponseRaw {
     full_name:  string;
     email:      string;
     role:       Role;
-    society_id: string;
+    society_id: number;
   };
 }
 
 /**
- * Normalised login response — camelCase, matches AuthUser shape.
- * Produced by mapLoginResponse() after calling the API.
+ * Normalised login response used in the UI.
  */
 export interface LoginResponse {
   access_token:  string;
@@ -60,8 +56,7 @@ export interface LoginResponse {
 }
 
 /**
- * Maps the raw backend login response to the normalised LoginResponse.
- * Converts full_name → name and society_id → societyId.
+ * Maps the raw backend login response.
  */
 export function mapLoginResponse(raw: LoginResponseRaw): LoginResponse {
   return {
@@ -70,12 +65,12 @@ export function mapLoginResponse(raw: LoginResponseRaw): LoginResponse {
     token_type:    raw.token_type,
     expires_in:    raw.expires_in,
     user: {
-      id:        raw.user.id,
-      email:     raw.user.email,
-      name:      raw.user.full_name,
-      role:      raw.user.role,
-      societyId: raw.user.society_id,
-      isActive:  true,
+      id:         raw.user.id,
+      email:      raw.user.email,
+      full_name:  raw.user.full_name,
+      role:       raw.user.role,
+      society_id: raw.user.society_id,
+      is_active:  true,
     },
   };
 }

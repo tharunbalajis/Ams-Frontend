@@ -5,7 +5,7 @@ import { useSOSActive, useSOS, useAcknowledgeSOS, useResolveSOS } from '../hooks
 import { VISITOR_ROUTES }   from '../constants/visitor.constants';
 
 export function SOSDashboardPage() {
-  const { data: activeAlerts } = useSOSActive();
+  const { data: activeAlerts, isLoading: loadingActive } = useSOSActive();
   const { data: allAlerts,    isLoading: loadingAll }    = useSOS();
 
   const { mutate: acknowledge } = useAcknowledgeSOS();

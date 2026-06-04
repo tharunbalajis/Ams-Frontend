@@ -1,3 +1,1 @@
-// Amenities module pages — implement in Phase 2
-
-export {};
+export { AmenitiesPage } from './AmenitiesPage';

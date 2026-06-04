@@ -1,3 +1,2 @@
-// Staff module components — implement in Phase 2
-
-export {};
+export { StaffTable } from './StaffTable';
+export { StaffForm }  from './StaffForm';

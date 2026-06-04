@@ -24,38 +24,26 @@ export function ComplaintFilters({ filters, onChange }: ComplaintFiltersProps) {
 
       <SelectField
         className="w-44"
-        value={filters.category}
-        onValueChange={(v) => onChange({ ...filters, category: v as ComplaintFiltersParams['category'] })}
-        options={[{ label: 'All Categories', value: '' }, ...COMPLAINT_CATEGORY_OPTIONS]}
+        value={filters.categoryId ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, categoryId: v === 'all' ? undefined : v })}
+        options={[{ label: 'All Categories', value: 'all' }, ...COMPLAINT_CATEGORY_OPTIONS]}
         placeholder="Category"
       />
 
       <SelectField
         className="w-36"
-        value={filters.priority}
-        onValueChange={(v) => onChange({ ...filters, priority: v as ComplaintFiltersParams['priority'] })}
-        options={[{ label: 'All Priority', value: '' }, ...PRIORITY_OPTIONS]}
+        value={filters.priority ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, priority: v === 'all' ? undefined : v as ComplaintFiltersParams['priority'] })}
+        options={[{ label: 'All Priority', value: 'all' }, ...PRIORITY_OPTIONS]}
         placeholder="Priority"
       />
 
       <SelectField
         className="w-40"
-        value={filters.status}
-        onValueChange={(v) => onChange({ ...filters, status: v as ComplaintFiltersParams['status'] })}
-        options={[{ label: 'All Status', value: '' }, ...STATUS_OPTIONS]}
+        value={filters.status ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, status: v === 'all' ? undefined : v as ComplaintFiltersParams['status'] })}
+        options={[{ label: 'All Status', value: 'all' }, ...STATUS_OPTIONS]}
         placeholder="Status"
-      />
-
-      <SelectField
-        className="w-40"
-        value={filters.slaBreached !== undefined ? String(filters.slaBreached) : ''}
-        onValueChange={(v) => onChange({ ...filters, slaBreached: v === '' ? undefined : v === 'true' })}
-        options={[
-          { label: 'All SLA',       value: '' },
-          { label: 'SLA Breached',  value: 'true' },
-          { label: 'SLA On Track',  value: 'false' },
-        ]}
-        placeholder="SLA"
       />
     </div>
   );

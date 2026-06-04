@@ -1,3 +1,4 @@
-// Amenities module constants — implement in Phase 2
+export const AMENITY_ROUTES = {
+  LIST: '/amenities',
+} as const;
 
-export {};

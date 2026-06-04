@@ -1,5 +1,4 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { authKeys } from '@/lib';
 import { STALE_TIME } from '@/constants/query.constants';
 import { authApiService, type RegisterUserPayload, type UpdateUserPayload } from '../api/auth.api';
 import { toast } from '@/utils/toast';

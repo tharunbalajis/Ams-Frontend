@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-<<<<<<< HEAD
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -13,21 +12,6 @@ import { PaymentHistory } from '../components/PaymentHistory';
 import { useInvoice }     from '../hooks/useInvoices';
 import { usePayments, useRecordPayment } from '../hooks/usePayments';
 import { FINANCIAL_ROUTES }    from '../constants/invoice.constants';
-=======
-import { useMutation } from '@tanstack/react-query';
-import { Breadcrumbs, Card, CardContent, CardHeader, CardTitle, Modal, ModalContent, ModalHeader, ModalTitle, ErrorState, LoadingState, PageHeader } from '@ams/ui';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, FormField, Input, SelectField } from '@ams/ui';
-import { InvoiceSummary }   from '../components/InvoiceSummary';
-import { PaymentHistory }   from '../components/PaymentHistory';
-import { useInvoice }       from '../hooks/useInvoice';
-import { usePayments }      from '../hooks/usePayments';
-import { paymentsApi }      from '../api/payments.api';
-import { queryClient }      from '@/lib/queryClient';
-import { financialKeys }    from '@/lib/index';
-import { FINANCIAL_ROUTES } from '../constants/invoice.constants';
->>>>>>> d852c2e (final)
 import { PAYMENT_METHOD_OPTIONS } from '../constants/payment.constants';
 import { createPaymentSchema, type CreatePaymentFormValues } from '../schemas/payment.schema';
 
@@ -79,7 +63,6 @@ export function InvoiceDetailPage() {
         </Card>
       </div>
 
-<<<<<<< HEAD
       {payOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-md rounded-lg bg-background p-6 shadow-xl">
@@ -119,28 +102,6 @@ export function InvoiceDetailPage() {
           </div>
         </div>
       )}
-=======
-      <Modal open={payOpen} onOpenChange={setPayOpen}>
-        <ModalContent>
-          <ModalHeader><ModalTitle>Record Payment</ModalTitle></ModalHeader>
-          <form onSubmit={form.handleSubmit((v) => recordPayment(v))} className="space-y-4" noValidate>
-            <FormField control={form.control} name="paymentDate" label="Payment Date" required>
-              {(f) => <Input type="date" value={f.value as string} onChange={f.onChange} disabled={isPending} />}
-            </FormField>
-            <FormField control={form.control} name="method" label="Payment Method" required>
-              {(f) => <SelectField value={f.value as string} onValueChange={f.onChange} options={PAYMENT_METHOD_OPTIONS} placeholder="Select method" disabled={isPending} />}
-            </FormField>
-            <FormField control={form.control} name="amount" label="Amount (₹)" required>
-              {(f) => <Input type="number" min={0} max={invoice.balanceDue} value={f.value as number} onChange={(e) => f.onChange(Number((e.target as HTMLInputElement).value))} disabled={isPending} />}
-            </FormField>
-            <div className="flex justify-end gap-3">
-              <Button type="button" variant="outline" onClick={() => setPayOpen(false)}>Cancel</Button>
-              <Button type="submit" loading={isPending}>Record Payment</Button>
-            </div>
-          </form>
-        </ModalContent>
-      </Modal>
->>>>>>> d852c2e (final)
     </div>
   );
 }

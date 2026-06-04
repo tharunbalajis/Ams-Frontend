@@ -8,11 +8,11 @@ import {
 } from 'react';
 import type { AuthUser, AuthState, AuthTokens, LoginPayload, LoginResponse } from '@/types/auth.types';
 import { tokenManager } from '@/lib/auth/tokenManager';
-import { isTokenExpired } from '@/lib/auth/jwt';
 import { authApiService } from '@/modules/auth/api/auth.api';
 import { queryClient } from '@/lib/queryClient';
-import { authKeys } from '@/lib';
 import { toast } from '@/utils/toast';
+
+const USER_KEY = 'ams_user';
 
 interface AuthContextValue extends AuthState {
   login:          (payload: LoginPayload) => Promise<void>;
@@ -25,54 +25,55 @@ interface AuthContextValue extends AuthState {
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user,      setUserState]   = useState<AuthUser | null>(null);
-  const [tokens,    setTokensState] = useState<AuthTokens | null>(null);
-  const [isLoading, setIsLoading]   = useState(true);
+  const [user,      setUserState]   = useState<AuthUser | null>(() => {
+    try {
+      const stored = localStorage.getItem(USER_KEY);
+      return stored ? (JSON.parse(stored) as AuthUser) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [tokens,    setTokensState] = useState<AuthTokens | null>(() => {
+    const at = tokenManager.getAccessToken();
+    return at ? { accessToken: at, tokenType: 'bearer' } : null;
+  });
+  const [isLoading, setIsLoading]   = useState(false);
 
-  const setUser   = useCallback((u: AuthUser | null)   => setUserState(u),   []);
+  const setUser = useCallback((u: AuthUser | null) => {
+    setUserState(u);
+    if (u) {
+      localStorage.setItem(USER_KEY, JSON.stringify(u));
+    } else {
+      localStorage.removeItem(USER_KEY);
+    }
+  }, []);
+
   const setTokens = useCallback((t: AuthTokens | null) => setTokensState(t), []);
 
-  // On app boot: try to restore session from stored access token.
-  // Calls GET /auth/me (Bug 4: this endpoint is now added to the backend).
+  // On first mount: just verify the token is still present (no API call).
+  // GET /auth/me does NOT exist in the backend — rehydrate from localStorage only.
   useEffect(() => {
-    const restore = async () => {
-      const accessToken = tokenManager.getAccessToken();
-      if (!accessToken || isTokenExpired(accessToken)) {
-        setIsLoading(false);
-        return;
-      }
-      try {
-        const res = await authApiService.me();
-        setUserState(res.data);
-        setTokensState({ accessToken, tokenType: 'bearer' });
-        queryClient.setQueryData(authKeys.me(), res);
-      } catch {
-        tokenManager.clearSession();
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    void restore();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!tokenManager.hasSession()) {
+      setUserState(null);
+      setTokensState(null);
+      localStorage.removeItem(USER_KEY);
+    }
   }, []);
 
   const login = useCallback(async (payload: LoginPayload) => {
     setIsLoading(true);
     try {
-      // authApiService.login() now returns the normalised LoginResponse
-      // (Bug 3 fix: full_name→name, society_id→societyId already mapped in auth.api.ts).
       const res: LoginResponse = await authApiService.login(payload);
 
-      // Bug 2 fix: persist the refresh token so the silent-refresh flow works.
       tokenManager.setAccessToken(res.access_token);
       tokenManager.setRefreshToken(res.refresh_token);
 
-      setUserState(res.user);
+      setUser(res.user);
       setTokensState({ accessToken: res.access_token, tokenType: 'bearer' });
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [setUser]);
 
   const logout = useCallback(async () => {
     try {
@@ -81,6 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Swallow — always clear locally
     } finally {
       tokenManager.clearSession();
+      localStorage.removeItem(USER_KEY);
       setUserState(null);
       setTokensState(null);
       queryClient.clear();
@@ -94,10 +96,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { access_token } = await authApiService.refresh(refreshToken);
       tokenManager.setAccessToken(access_token);
       setTokensState({ accessToken: access_token, tokenType: 'bearer' });
-      const meRes = await authApiService.me();
-      setUserState(meRes.data);
     } catch {
       tokenManager.clearSession();
+      localStorage.removeItem(USER_KEY);
       setUserState(null);
       setTokensState(null);
       toast.error('Session expired. Please sign in again.');

@@ -18,7 +18,7 @@ export function AssignmentDrawer({ open, onOpenChange, assignment, onSubmit, isP
     resolver:      zodResolver(assignmentSchema),
     defaultValues: {
       assignedToId:           assignment?.assignedToId          ?? '',
-      teamId:                 assignment?.teamId                 ?? '',
+      teamId:                 '',
       expectedResolutionDate: assignment?.expectedResolutionDate ?? '',
       notes:                  assignment?.notes                  ?? '',
     },

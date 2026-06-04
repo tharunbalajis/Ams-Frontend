@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { SelectField } from '@ams/ui';
 import { unitsApi } from '../../api/units.api';
 import { unitKeys } from '@/lib/queryKeys/units.keys';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface BlockSelectorProps {
   value?:        string;
@@ -11,12 +12,16 @@ export interface BlockSelectorProps {
 }
 
 export function BlockSelector({ value, onValueChange, disabled, placeholder = 'Select block' }: BlockSelectorProps) {
+  const { user } = useAuth();
   const { data, isLoading } = useQuery({
     queryKey: unitKeys.blocks(),
-    queryFn:  () => unitsApi.getBlocks(),
+    queryFn:  () => unitsApi.getBlocks({ society_id: user?.society_id }),
   });
 
-  const options = (data?.data ?? []).map((b) => ({ label: b.label, value: b.id }));
+  // block_id is the PK, block_name is the display name
+  const options = (data?.data ?? [])
+    .filter((b) => b.block_id != null)
+    .map((b) => ({ label: b.block_name, value: String(b.block_id) }));
 
   return (
     <SelectField

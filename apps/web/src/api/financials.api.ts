@@ -1,32 +1,28 @@
 import apiClient from './client';
 
-const BASE = '/financials';
-
 export const financialsApi = {
-  getInvoices:        (params?: unknown) => apiClient.get(`${BASE}/invoices`, { params }),
-  getInvoiceById:     (id: string)       => apiClient.get(`${BASE}/invoices/${id}`),
-  createInvoice:      (payload: unknown) => apiClient.post(`${BASE}/invoices`, payload),
-  updateInvoice:      (id: string, payload: unknown) =>
-    apiClient.patch(`${BASE}/invoices/${id}`, payload),
-  getInvoicePayments: (id: string)       => apiClient.get(`${BASE}/invoices/${id}/payments`),
+  // Invoices: /invoices (NOT /financials/invoices)
+  getInvoices:        (params?: unknown) => apiClient.get('/invoices', { params }),
+  getInvoiceById:     (id: string)       => apiClient.get(`/invoices/${id}`),
+  createInvoice:      (payload: unknown) => apiClient.post('/invoices', payload),
+  updateInvoice:      (id: string, payload: unknown) => apiClient.put(`/invoices/${id}`, payload),
+  getInvoicePayments: (id: string)       => apiClient.get(`/invoices/${id}/payments`),
+  recordPayment:      (id: string, payload: unknown) => apiClient.post(`/invoices/${id}/payments`, payload),
 
-  getPayments:        (params?: unknown) => apiClient.get(`${BASE}/payments`, { params }),
-  getPaymentById:     (id: string)       => apiClient.get(`${BASE}/payments/${id}`),
-  createPayment:      (payload: unknown) => apiClient.post(`${BASE}/payments`, payload),
+  // Expenses: /expenses (NOT /financials/expenses)
+  getExpenses:        (params?: unknown) => apiClient.get('/expenses', { params }),
+  getExpenseById:     (id: string)       => apiClient.get(`/expenses/${id}`),
+  createExpense:      (payload: unknown) => apiClient.post('/expenses', payload),
+  updateExpense:      (id: string, payload: unknown) => apiClient.put(`/expenses/${id}`, payload),
+  approveExpense:     (id: string)       => apiClient.put(`/expenses/${id}/approve`, {}),
 
-  getExpenses:        (params?: unknown) => apiClient.get(`${BASE}/expenses`, { params }),
-  getExpenseById:     (id: string)       => apiClient.get(`${BASE}/expenses/${id}`),
-  createExpense:      (payload: unknown) => apiClient.post(`${BASE}/expenses`, payload),
-  updateExpense:      (id: string, payload: unknown) =>
-    apiClient.patch(`${BASE}/expenses/${id}`, payload),
+  // Maintenance heads: /maintenance-heads (NOT /financials/heads)
+  getHeads:           (params?: unknown) => apiClient.get('/maintenance-heads', { params }),
+  getHeadById:        (id: string)       => apiClient.get(`/maintenance-heads/${id}`),
+  createHead:         (payload: unknown) => apiClient.post('/maintenance-heads', payload),
+  updateHead:         (id: string, payload: unknown) => apiClient.put(`/maintenance-heads/${id}`, payload),
+  deleteHead:         (id: string)       => apiClient.delete(`/maintenance-heads/${id}`),
 
-  getHeads:           (params?: unknown) => apiClient.get(`${BASE}/heads`, { params }),
-  getHeadById:        (id: string)       => apiClient.get(`${BASE}/heads/${id}`),
-  createHead:         (payload: unknown) => apiClient.post(`${BASE}/heads`, payload),
-  updateHead:         (id: string, payload: unknown) =>
-    apiClient.patch(`${BASE}/heads/${id}`, payload),
-  generateInvoices:   (payload: unknown) =>
-    apiClient.post(`${BASE}/heads/generate`, payload),
-
-  getDashboard:       (params?: unknown) => apiClient.get(`${BASE}/dashboard`, { params }),
+  // Dashboard: /finance/dashboard
+  getDashboard:       (params?: unknown) => apiClient.get('/finance/dashboard', { params }),
 };

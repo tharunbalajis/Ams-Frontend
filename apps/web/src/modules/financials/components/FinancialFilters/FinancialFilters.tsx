@@ -38,9 +38,9 @@ export function FinancialFilters({
       {typeOptions && (
         <SelectField
           className="w-44"
-          value={filters.type}
-          onValueChange={(v) => onChange({ ...filters, type: v || undefined })}
-          options={[{ label: 'All Types', value: '' }, ...typeOptions]}
+          value={filters.type ?? 'all'}
+          onValueChange={(v) => onChange({ ...filters, type: v === 'all' ? undefined : v })}
+          options={[{ label: 'All Types', value: 'all' }, ...typeOptions]}
           placeholder="Type"
         />
       )}
@@ -48,9 +48,9 @@ export function FinancialFilters({
       {statusOptions && (
         <SelectField
           className="w-40"
-          value={filters.status}
-          onValueChange={(v) => onChange({ ...filters, status: v || undefined })}
-          options={[{ label: 'All Status', value: '' }, ...statusOptions]}
+          value={filters.status ?? 'all'}
+          onValueChange={(v) => onChange({ ...filters, status: v === 'all' ? undefined : v })}
+          options={[{ label: 'All Status', value: 'all' }, ...statusOptions]}
           placeholder="Status"
         />
       )}

@@ -24,25 +24,25 @@ export function VisitorFilters({ filters, onChange }: VisitorFiltersProps) {
 
       <SelectField
         className="w-44"
-        value={filters.type}
-        onValueChange={(v) => onChange({ ...filters, type: v as VisitorFiltersParams['type'] })}
-        options={[{ label: 'All Types', value: '' }, ...VISITOR_TYPE_OPTIONS]}
+        value={filters.type ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, type: v === 'all' ? undefined : v as VisitorFiltersParams['type'] })}
+        options={[{ label: 'All Types', value: 'all' }, ...VISITOR_TYPE_OPTIONS]}
         placeholder="Type"
       />
 
       <SelectField
         className="w-40"
-        value={filters.entryStatus}
-        onValueChange={(v) => onChange({ ...filters, entryStatus: v as VisitorFiltersParams['entryStatus'] })}
-        options={[{ label: 'All Entry', value: '' }, ...ENTRY_STATUS_OPTIONS]}
+        value={filters.entryStatus ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, entryStatus: v === 'all' ? undefined : v as VisitorFiltersParams['entryStatus'] })}
+        options={[{ label: 'All Entry', value: 'all' }, ...ENTRY_STATUS_OPTIONS]}
         placeholder="Entry Status"
       />
 
       <SelectField
         className="w-40"
-        value={filters.status}
-        onValueChange={(v) => onChange({ ...filters, status: v as VisitorFiltersParams['status'] })}
-        options={[{ label: 'All Status', value: '' }, ...VISITOR_STATUS_OPTIONS]}
+        value={filters.status ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, status: v === 'all' ? undefined : v as VisitorFiltersParams['status'] })}
+        options={[{ label: 'All Status', value: 'all' }, ...VISITOR_STATUS_OPTIONS]}
         placeholder="Status"
       />
     </div>

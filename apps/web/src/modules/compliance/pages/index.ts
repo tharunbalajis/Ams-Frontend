@@ -1,3 +1,1 @@
-// Compliance module pages — implement in Phase 2
-
-export {};
+export { CompliancePage } from './CompliancePage';

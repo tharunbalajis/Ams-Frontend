@@ -4,7 +4,7 @@ export const complaintKeys = {
   lists: () =>
     [...complaintKeys.all, 'list'] as const,
 
-  list: (params?: Record<string, unknown>) =>
+  list: (params?: unknown) =>
     [...complaintKeys.lists(), params] as const,
 
   details: () =>

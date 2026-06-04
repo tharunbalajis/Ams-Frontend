@@ -19,7 +19,7 @@ export function VehicleForm({ vehicle, onSubmit, onCancel, isPending }: VehicleF
     resolver: zodResolver(vehicleSchema),
     defaultValues: {
       vehicleNumber: vehicle?.vehicleNumber ?? '',
-      type:          vehicle?.type          ?? 'car',
+      type:          vehicle?.type          ?? 'CAR',
       brand:         vehicle?.brand         ?? '',
       model:         vehicle?.model         ?? '',
       color:         vehicle?.color         ?? '',

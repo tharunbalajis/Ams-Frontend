@@ -11,45 +11,51 @@ import type { Invite, CreateInvitePayload } from '../types/invite.types';
 
 const BASE = '/visitors';
 
+function wrapArray<T>(data: T[]): ApiListResponse<T> {
+  const arr = Array.isArray(data) ? data : [];
+  return {
+    data: arr,
+    meta: { total: arr.length, page: 1, limit: arr.length || 20, totalPages: 1, hasNextPage: false, hasPreviousPage: false },
+    success: true,
+  };
+}
+
 export const visitorsApi = {
   getAll: (params?: VisitorFiltersParams) =>
-    apiClient.get<ApiListResponse<VisitorListItem>>(BASE, { params }).then((r) => r.data),
+    apiClient.get<VisitorListItem[]>(BASE, { params }).then((r) => wrapArray(r.data)),
 
   getById: (id: string) =>
-    apiClient.get<ApiResponse<Visitor>>(`${BASE}/${id}`).then((r) => r.data),
+    apiClient.get<Visitor>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
 
   create: (payload: CreateVisitorPayload) =>
-    apiClient.post<ApiResponse<Visitor>>(BASE, payload).then((r) => r.data),
+    apiClient.post<Visitor>(BASE, payload).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
 
   update: (id: string, payload: UpdateVisitorPayload) =>
-    apiClient.patch<ApiResponse<Visitor>>(`${BASE}/${id}`, payload).then((r) => r.data),
+    apiClient.put<Visitor>(`${BASE}/${id}`, payload).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
 
   remove: (id: string) =>
     apiClient.delete(`${BASE}/${id}`).then((r) => r.data),
 
+  // Backend uses PUT /visitors/:id/checkin (not /check-in)
   checkIn: (id: string, gateNumber?: string) =>
-    apiClient.patch<ApiResponse<Visitor>>(`${BASE}/${id}/check-in`, { gateNumber }).then((r) => r.data),
+    apiClient.put<Visitor>(`${BASE}/${id}/checkin`, { gateNumber }).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
 
+  // Backend uses PUT /visitors/:id/checkout (not /check-out)
   checkOut: (id: string) =>
-    apiClient.patch<ApiResponse<Visitor>>(`${BASE}/${id}/check-out`).then((r) => r.data),
+    apiClient.put<Visitor>(`${BASE}/${id}/checkout`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
 
   getDashboard: (params?: { dateFrom?: string; dateTo?: string }) =>
-    apiClient
-      .get<ApiResponse<{ total: number; checkedIn: number; expected: number; overstay: number }>>(
-        `${BASE}/dashboard`,
-        { params },
-      )
-      .then((r) => r.data),
+    apiClient.get<Record<string, unknown>>(`${BASE}/dashboard`, { params }).then((r) => ({ data: r.data, success: true })),
 
   getInvites: (params?: Record<string, unknown>) =>
-    apiClient.get<ApiListResponse<Invite>>(`${BASE}/invites`, { params }).then((r) => r.data),
+    apiClient.get<Invite[]>(`${BASE}/invites`, { params }).then((r) => wrapArray(r.data)),
 
   getInviteById: (id: string) =>
-    apiClient.get<ApiResponse<Invite>>(`${BASE}/invites/${id}`).then((r) => r.data),
+    apiClient.get<Invite>(`${BASE}/invites/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Invite>),
 
   createInvite: (payload: CreateInvitePayload) =>
-    apiClient.post<ApiResponse<Invite>>(`${BASE}/invites`, payload).then((r) => r.data),
+    apiClient.post<Invite>(`${BASE}/invites`, payload).then((r) => ({ data: r.data, success: true }) as ApiResponse<Invite>),
 
   revokeInvite: (id: string) =>
-    apiClient.patch<ApiResponse<Invite>>(`${BASE}/invites/${id}/revoke`).then((r) => r.data),
+    apiClient.put(`${BASE}/invites/${id}/revoke`, {}).then((r) => ({ data: r.data, success: true })),
 };

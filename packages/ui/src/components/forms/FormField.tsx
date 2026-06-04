@@ -40,7 +40,7 @@ function FormField<
 }: FormFieldProps<TFieldValues, TName, TTransformedValues>) {
   return (
     <Controller
-      control={control as Control<TFieldValues>}
+      control={control as unknown as Control<TFieldValues>}
       name={name}
       render={({ field, fieldState }) => (
         <div className={cn('flex flex-col gap-1.5', className)}>

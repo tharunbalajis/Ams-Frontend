@@ -172,20 +172,19 @@ export function UserManagementPage() {
               {data.data.map((user) => (
                 <div key={user.id} className="flex items-center justify-between py-3">
                   <div className="space-y-1">
-                    <p className="font-medium text-sm">{user.name}</p>
+                    <p className="font-medium text-sm">{user.full_name}</p>
                     <p className="text-xs text-muted-foreground">{user.email}</p>
-                    {user.phone && <p className="text-xs text-muted-foreground">{user.phone}</p>}
                   </div>
                   <div className="flex items-center gap-3">
                     <Badge variant={ROLE_BADGE_VARIANT[user.role] ?? 'outline'}>
                       {ROLE_LABELS[user.role] ?? user.role}
                     </Badge>
-                    {user.isActive ? (
+                    {user.is_active ? (
                       <Badge variant="secondary">Active</Badge>
                     ) : (
                       <Badge variant="outline">Inactive</Badge>
                     )}
-                    {canManage && user.isActive && (
+                    {canManage && user.is_active && (
                       <Button
                         variant="ghost"
                         size="sm"

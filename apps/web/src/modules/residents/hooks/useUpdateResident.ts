@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { residentKeys } from '@/lib';
-=======
-import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '@/lib/queryClient';
-import { residentKeys } from '@/lib/index';
->>>>>>> d852c2e (final)
 import { residentsApi } from '../api/residents.api';
 import { toast } from '@/utils/toast';
 import type { UpdateResidentPayload } from '../types/resident.types';

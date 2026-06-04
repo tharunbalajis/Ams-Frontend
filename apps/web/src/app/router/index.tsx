@@ -7,6 +7,7 @@ import { DashboardLayout } from '@/app/layouts/DashboardLayout';
 import { AuthLayout }      from '@/app/layouts/AuthLayout';
 import { ROLES }           from '@/config/roles';
 import { LoadingState }    from '@ams/ui';
+import { RouteError }      from '@/components/shared/RouteError';
 
 // Auth pages
 const LoginPage          = lazy(() => import('@/modules/auth/pages/LoginPage').then((m)          => ({ default: m.LoginPage })));
@@ -50,6 +51,14 @@ const PaymentsPage           = lazy(() => import('@/modules/financials/pages/Pay
 const ExpensesPage           = lazy(() => import('@/modules/financials/pages/ExpensesPage').then((m)           => ({ default: m.ExpensesPage })));
 const MaintenanceHeadsPage   = lazy(() => import('@/modules/financials/pages/MaintenanceHeadsPage').then((m)   => ({ default: m.MaintenanceHeadsPage })));
 
+// New modules
+const AmenitiesPage  = lazy(() => import('@/modules/amenities/pages/AmenitiesPage').then((m) => ({ default: m.AmenitiesPage })));
+const StaffPage      = lazy(() => import('@/modules/staff/pages/StaffPage').then((m)      => ({ default: m.StaffPage })));
+const AssetsPage     = lazy(() => import('@/modules/assets/pages/AssetsPage').then((m)    => ({ default: m.AssetsPage })));
+const NoticesPage    = lazy(() => import('@/modules/notices/pages/NoticesPage').then((m)  => ({ default: m.NoticesPage })));
+const MeetingsPage   = lazy(() => import('@/modules/meetings/pages/MeetingsPage').then((m) => ({ default: m.MeetingsPage })));
+const CompliancePage = lazy(() => import('@/modules/compliance/pages/CompliancePage').then((m) => ({ default: m.CompliancePage })));
+
 const PageLoader = () => (
   <div className="flex h-64 items-center justify-center">
     <LoadingState variant="spinner" />
@@ -64,23 +73,15 @@ const ADMIN_ROLES     = [ROLES.SUPER_ADMIN, ROLES.ADMIN];
 const FINANCIAL_ROLES = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.ACCOUNTANT];
 const SECURITY_ROLES  = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.SECURITY];
 
-function OutOfScope({ name }: { name: string }) {
-  return (
-    <div className="p-8 text-center text-muted-foreground">
-      <p className="text-base font-medium">{name}</p>
-      <p className="mt-1 text-sm opacity-60">This module is out of scope for this phase.</p>
-    </div>
-  );
-}
-
 export const router = createBrowserRouter([
-  { path: '/', element: <Navigate to={ROUTES.DASHBOARD} replace /> },
+  { path: '/', element: <Navigate to={ROUTES.DASHBOARD} replace />, errorElement: <RouteError /> },
 
   {
     path: '/',
     element: <AuthLayout />,
+    errorElement: <RouteError />,
     children: [
-      { path: ROUTES.LOGIN, element: <S><LoginPage /></S> },
+      { path: ROUTES.LOGIN, element: <S><LoginPage /></S>, errorElement: <RouteError /> },
     ],
   },
 
@@ -91,56 +92,49 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </ProtectedRoute>
     ),
+    errorElement: <RouteError />,
     children: [
-      // Dashboard
-      { path: ROUTES.DASHBOARD, element: <S><DashboardPage /></S> },
+      { path: ROUTES.DASHBOARD, element: <S><DashboardPage /></S>,             errorElement: <RouteError /> },
 
-      // Residents
-      { path: ROUTES.RESIDENTS,        element: <S><ResidentListPage /></S> },
-      { path: ROUTES.RESIDENT_CREATE,  element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><AddResidentPage /></RoleRoute></S> },
-      { path: ROUTES.RESIDENT_DETAIL,  element: <S><ResidentDetailPage /></S> },
-      { path: ROUTES.RESIDENT_EDIT,    element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><EditResidentPage /></RoleRoute></S> },
-      { path: ROUTES.RESIDENT_PROFILE, element: <S><ResidentProfilePage /></S> },
+      { path: ROUTES.RESIDENTS,        element: <S><ResidentListPage /></S>,                                         errorElement: <RouteError /> },
+      { path: ROUTES.RESIDENT_CREATE,  element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><AddResidentPage /></RoleRoute></S>,   errorElement: <RouteError /> },
+      { path: ROUTES.RESIDENT_DETAIL,  element: <S><ResidentDetailPage /></S>,                                       errorElement: <RouteError /> },
+      { path: ROUTES.RESIDENT_EDIT,    element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><EditResidentPage /></RoleRoute></S>,  errorElement: <RouteError /> },
+      { path: ROUTES.RESIDENT_PROFILE, element: <S><ResidentProfilePage /></S>,                                      errorElement: <RouteError /> },
 
-      // Units
-      { path: ROUTES.UNITS,       element: <S><UnitListPage /></S> },
-      { path: ROUTES.UNIT_CREATE, element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><AddUnitPage /></RoleRoute></S> },
-      { path: ROUTES.UNIT_DETAIL, element: <S><UnitDetailPage /></S> },
-      { path: ROUTES.UNIT_EDIT,   element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><EditUnitPage /></RoleRoute></S> },
+      { path: ROUTES.UNITS,       element: <S><UnitListPage /></S>,                                                  errorElement: <RouteError /> },
+      { path: ROUTES.UNIT_CREATE, element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><AddUnitPage /></RoleRoute></S>, errorElement: <RouteError /> },
+      { path: ROUTES.UNIT_DETAIL, element: <S><UnitDetailPage /></S>,                                               errorElement: <RouteError /> },
+      { path: ROUTES.UNIT_EDIT,   element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><EditUnitPage /></RoleRoute></S>, errorElement: <RouteError /> },
 
-      // Visitors
-      { path: ROUTES.VISITORS,         element: <S><VisitorLogsPage /></S> },
-      { path: ROUTES.VISITOR_DETAIL,   element: <S><VisitorDetailPage /></S> },
-      { path: ROUTES.VISITORS_INVITES, element: <S><PreApprovedVisitorsPage /></S> },
-      { path: ROUTES.VISITORS_SOS,     element: <S><RoleRoute allowedRoles={SECURITY_ROLES}><SOSDashboardPage /></RoleRoute></S> },
+      { path: ROUTES.VISITORS,         element: <S><VisitorLogsPage /></S>,                                                         errorElement: <RouteError /> },
+      { path: ROUTES.VISITOR_DETAIL,   element: <S><VisitorDetailPage /></S>,                                                       errorElement: <RouteError /> },
+      { path: ROUTES.VISITORS_INVITES, element: <S><PreApprovedVisitorsPage /></S>,                                                  errorElement: <RouteError /> },
+      { path: ROUTES.VISITORS_SOS,     element: <S><RoleRoute allowedRoles={SECURITY_ROLES}><SOSDashboardPage /></RoleRoute></S>,   errorElement: <RouteError /> },
 
-      // Complaints
-      { path: ROUTES.COMPLAINTS,          element: <S><ComplaintListPage /></S> },
-      { path: ROUTES.COMPLAINT_CREATE,    element: <S><CreateComplaintPage /></S> },
-      { path: ROUTES.COMPLAINT_DETAIL,    element: <S><ComplaintDetailPage /></S> },
-      { path: ROUTES.COMPLAINT_DASHBOARD, element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><ComplaintDashboardPage /></RoleRoute></S> },
-      { path: ROUTES.COMPLAINT_KANBAN,    element: <S><ComplaintKanbanPage /></S> },
+      { path: ROUTES.COMPLAINTS,          element: <S><ComplaintListPage /></S>,                                                       errorElement: <RouteError /> },
+      { path: ROUTES.COMPLAINT_CREATE,    element: <S><CreateComplaintPage /></S>,                                                     errorElement: <RouteError /> },
+      { path: ROUTES.COMPLAINT_DETAIL,    element: <S><ComplaintDetailPage /></S>,                                                     errorElement: <RouteError /> },
+      { path: ROUTES.COMPLAINT_DASHBOARD, element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><ComplaintDashboardPage /></RoleRoute></S>, errorElement: <RouteError /> },
+      { path: ROUTES.COMPLAINT_KANBAN,    element: <S><ComplaintKanbanPage /></S>,                                                     errorElement: <RouteError /> },
 
-      // Financials
-      { path: ROUTES.FINANCIALS,          element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><FinancialDashboardPage /></RoleRoute></S> },
-      { path: ROUTES.FINANCIALS_INVOICES, element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><InvoiceListPage /></RoleRoute></S> },
-      { path: ROUTES.FINANCIALS_INVOICE,  element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><InvoiceDetailPage /></RoleRoute></S> },
-      { path: ROUTES.FINANCIALS_PAYMENTS, element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><PaymentsPage /></RoleRoute></S> },
-      { path: ROUTES.FINANCIALS_EXPENSES, element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><ExpensesPage /></RoleRoute></S> },
-      { path: ROUTES.FINANCIALS_HEADS,    element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><MaintenanceHeadsPage /></RoleRoute></S> },
+      { path: ROUTES.FINANCIALS,          element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><FinancialDashboardPage /></RoleRoute></S>, errorElement: <RouteError /> },
+      { path: ROUTES.FINANCIALS_INVOICES, element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><InvoiceListPage /></RoleRoute></S>,        errorElement: <RouteError /> },
+      { path: ROUTES.FINANCIALS_INVOICE,  element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><InvoiceDetailPage /></RoleRoute></S>,      errorElement: <RouteError /> },
+      { path: ROUTES.FINANCIALS_PAYMENTS, element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><PaymentsPage /></RoleRoute></S>,           errorElement: <RouteError /> },
+      { path: ROUTES.FINANCIALS_EXPENSES, element: <S><RoleRoute allowedRoles={FINANCIAL_ROLES}><ExpensesPage /></RoleRoute></S>,           errorElement: <RouteError /> },
+      { path: ROUTES.FINANCIALS_HEADS,    element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><MaintenanceHeadsPage /></RoleRoute></S>,       errorElement: <RouteError /> },
 
-      // Admin
-      { path: ROUTES.ADMIN_USERS,      element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><UserManagementPage /></RoleRoute></S> },
-      { path: ROUTES.ADMIN_AUDIT_LOGS, element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><AuditLogsPage /></RoleRoute></S> },
+      { path: ROUTES.ADMIN_USERS,      element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><UserManagementPage /></RoleRoute></S>, errorElement: <RouteError /> },
+      { path: ROUTES.ADMIN_AUDIT_LOGS, element: <S><RoleRoute allowedRoles={ADMIN_ROLES}><AuditLogsPage /></RoleRoute></S>,     errorElement: <RouteError /> },
 
-      // Out-of-scope modules
-      { path: ROUTES.AMENITIES,  element: <OutOfScope name="Amenities" /> },
-      { path: ROUTES.STAFF,      element: <OutOfScope name="Staff" /> },
-      { path: ROUTES.ASSETS,     element: <OutOfScope name="Assets" /> },
-      { path: ROUTES.NOTICES,    element: <OutOfScope name="Notices" /> },
-      { path: ROUTES.MEETINGS,   element: <OutOfScope name="Meetings" /> },
-      { path: ROUTES.COMPLIANCE, element: <OutOfScope name="Compliance" /> },
-      { path: ROUTES.SETTINGS,   element: <OutOfScope name="Settings" /> },
+      { path: ROUTES.AMENITIES,  element: <S><AmenitiesPage /></S>,  errorElement: <RouteError /> },
+      { path: ROUTES.STAFF,      element: <S><StaffPage /></S>,      errorElement: <RouteError /> },
+      { path: ROUTES.ASSETS,     element: <S><AssetsPage /></S>,     errorElement: <RouteError /> },
+      { path: ROUTES.NOTICES,    element: <S><NoticesPage /></S>,    errorElement: <RouteError /> },
+      { path: ROUTES.MEETINGS,   element: <S><MeetingsPage /></S>,   errorElement: <RouteError /> },
+      { path: ROUTES.COMPLIANCE, element: <S><CompliancePage /></S>, errorElement: <RouteError /> },
+      { path: ROUTES.SETTINGS,   element: <div className="p-8 text-center text-muted-foreground"><p className="text-base font-medium">Settings</p><p className="mt-1 text-sm opacity-60">Coming soon.</p></div>, errorElement: <RouteError /> },
     ],
   },
 ]);

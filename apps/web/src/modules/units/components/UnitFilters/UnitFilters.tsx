@@ -2,8 +2,8 @@ import { SearchInput, SelectField } from '@ams/ui';
 import { UNIT_TYPE_OPTIONS, UNIT_STATUS_OPTIONS, OWNERSHIP_TYPE_OPTIONS } from '../../constants/unit.constants';
 import type { UnitFiltersParams, OccupancyStatus } from '../../types/unit.types';
 
-const OCCUPANCY_OPTIONS: { label: string; value: OccupancyStatus | '' }[] = [
-  { label: 'All Occupancy',     value: '' },
+const OCCUPANCY_OPTIONS: { label: string; value: OccupancyStatus | 'all' }[] = [
+  { label: 'All Occupancy',     value: 'all' },
   { label: 'Occupied',          value: 'OCCUPIED' },
   { label: 'Vacant',            value: 'VACANT' },
   { label: 'Reserved',          value: 'RESERVED' },
@@ -28,33 +28,33 @@ export function UnitFilters({ filters, onChange }: UnitFiltersProps) {
 
       <SelectField
         className="w-40"
-        value={filters.type}
-        onValueChange={(v) => onChange({ ...filters, type: v as UnitFiltersParams['type'] })}
-        options={[{ label: 'All Types', value: '' }, ...UNIT_TYPE_OPTIONS]}
+        value={filters.type ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, type: v === 'all' ? undefined : v as UnitFiltersParams['type'] })}
+        options={[{ label: 'All Types', value: 'all' }, ...UNIT_TYPE_OPTIONS]}
         placeholder="Type"
       />
 
       <SelectField
         className="w-44"
-        value={filters.occupancyStatus}
-        onValueChange={(v) => onChange({ ...filters, occupancyStatus: v as OccupancyStatus | undefined })}
+        value={filters.occupancyStatus ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, occupancyStatus: v === 'all' ? undefined : v as OccupancyStatus })}
         options={OCCUPANCY_OPTIONS}
         placeholder="Occupancy"
       />
 
       <SelectField
         className="w-40"
-        value={filters.ownershipType}
-        onValueChange={(v) => onChange({ ...filters, ownershipType: v as UnitFiltersParams['ownershipType'] })}
-        options={[{ label: 'All Ownership', value: '' }, ...OWNERSHIP_TYPE_OPTIONS]}
+        value={filters.ownershipType ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, ownershipType: v === 'all' ? undefined : v as UnitFiltersParams['ownershipType'] })}
+        options={[{ label: 'All Ownership', value: 'all' }, ...OWNERSHIP_TYPE_OPTIONS]}
         placeholder="Ownership"
       />
 
       <SelectField
         className="w-40"
-        value={filters.status}
-        onValueChange={(v) => onChange({ ...filters, status: v as UnitFiltersParams['status'] })}
-        options={[{ label: 'All Statuses', value: '' }, ...UNIT_STATUS_OPTIONS]}
+        value={filters.status ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, status: v === 'all' ? undefined : v as UnitFiltersParams['status'] })}
+        options={[{ label: 'All Statuses', value: 'all' }, ...UNIT_STATUS_OPTIONS]}
         placeholder="Status"
       />
     </div>

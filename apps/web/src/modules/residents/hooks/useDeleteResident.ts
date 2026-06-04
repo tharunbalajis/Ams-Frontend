@@ -1,11 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
 import { residentKeys } from '@/lib';
-=======
-import { queryClient } from '@/lib/queryClient';
-import { residentKeys } from '@/lib/index';
->>>>>>> d852c2e (final)
 import { residentsApi } from '../api/residents.api';
 import { RESIDENT_ROUTES } from '../constants/resident.constants';
 import { toast } from '@/utils/toast';

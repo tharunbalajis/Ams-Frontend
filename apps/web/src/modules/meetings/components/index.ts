@@ -1,3 +1,2 @@
-// Meetings module components — implement in Phase 2
-
-export {};
+export { MeetingTable } from './MeetingTable';
+export { MeetingForm }  from './MeetingForm';

@@ -19,7 +19,7 @@ export function UnitListPage() {
     ...filters,
     search: debouncedSearch,
     page,
-    pageSize,
+    limit: pageSize,
   });
 
   const handleFiltersChange = (next: Partial<UnitFiltersParams>) => {
