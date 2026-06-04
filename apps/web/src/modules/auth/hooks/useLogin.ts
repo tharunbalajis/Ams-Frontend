@@ -15,7 +15,10 @@ export function useLogin() {
   return useMutation({
     mutationFn: (payload: LoginPayload) => authApiService.login(payload),
     onSuccess: (data) => {
+      // Bug 1 fix: persist both tokens so the refresh flow works after the
+      // 15-minute access-token window expires.
       tokenManager.setAccessToken(data.access_token);
+      tokenManager.setRefreshToken(data.refresh_token);
       setUser(data.user);
       setTokens({ accessToken: data.access_token, tokenType: 'bearer' });
       void navigate(ROUTES.DASHBOARD);

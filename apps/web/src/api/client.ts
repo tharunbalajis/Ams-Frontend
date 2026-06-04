@@ -5,7 +5,7 @@ import axios, {
 } from 'axios';
 import { tokenManager } from '@/lib/auth/tokenManager';
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = 'http://localhost:4444/v1';
 console.log('BASE  URL', BASE_URL);
 const TIMEOUT  = Number(import.meta.env.VITE_API_TIMEOUT ?? 30_000);
 

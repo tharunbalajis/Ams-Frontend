@@ -1,6 +1,7 @@
 import apiClient from '@/api/client';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
-import type { LoginPayload, LoginResponse, AuthUser } from '@/types/auth.types';
+import type { LoginPayload, LoginResponseRaw, LoginResponse, AuthUser } from '@/types/auth.types';
+import { mapLoginResponse } from '@/types/auth.types';
 
 const BASE = '/auth';
 
@@ -40,14 +41,22 @@ export interface UpdateUserPayload {
 }
 
 export const authApiService = {
-  login: (payload: LoginPayload) =>
-    apiClient.post<LoginResponse>(`${BASE}/login`, payload).then((r) => r.data),
+  /**
+   * POST /auth/login
+   * Returns the raw backend shape mapped to the normalised LoginResponse.
+   */
+  login: (payload: LoginPayload): Promise<LoginResponse> =>
+    apiClient
+      .post<LoginResponseRaw>(`${BASE}/login`, payload)
+      .then((r) => mapLoginResponse(r.data)),
 
   logout: () =>
     apiClient.post<void>(`${BASE}/logout`).then((r) => r.data),
 
   refresh: (refreshToken: string) =>
-    apiClient.post<{ access_token: string }>(`${BASE}/refresh`, { refresh_token: refreshToken }).then((r) => r.data),
+    apiClient
+      .post<{ access_token: string }>(`${BASE}/refresh`, { refresh_token: refreshToken })
+      .then((r) => r.data),
 
   me: () =>
     apiClient.get<ApiResponse<AuthUser>>(`${BASE}/me`).then((r) => r.data),
@@ -61,11 +70,17 @@ export const authApiService = {
   getUserById: (id: string) =>
     apiClient.get<ApiResponse<AuthUser>>(`${BASE}/users/${id}`).then((r) => r.data),
 
+  /**
+   * Bug 5 fix: backend registers this as PUT /users/:id — was incorrectly PATCH.
+   */
   updateUser: (id: string, payload: UpdateUserPayload) =>
-    apiClient.patch<ApiResponse<AuthUser>>(`${BASE}/users/${id}`, payload).then((r) => r.data),
+    apiClient.put<ApiResponse<AuthUser>>(`${BASE}/users/${id}`, payload).then((r) => r.data),
 
+  /**
+   * Bug 5 fix: backend registers this as PUT /users/:id/deactivate — was incorrectly PATCH.
+   */
   deactivateUser: (id: string) =>
-    apiClient.patch<ApiResponse<AuthUser>>(`${BASE}/users/${id}/deactivate`).then((r) => r.data),
+    apiClient.put<ApiResponse<AuthUser>>(`${BASE}/users/${id}/deactivate`).then((r) => r.data),
 
   getAuditLogs: (params?: AuditLogFilters) =>
     apiClient.get<ApiListResponse<AuditLog>>(`${BASE}/audit-logs`, { params }).then((r) => r.data),

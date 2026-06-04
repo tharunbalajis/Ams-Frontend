@@ -22,7 +22,7 @@ interface AuthContextValue extends AuthState {
   setTokens:      (tokens: AuthTokens | null) => void;
 }
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user,      setUserState]   = useState<AuthUser | null>(null);
@@ -32,6 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const setUser   = useCallback((u: AuthUser | null)   => setUserState(u),   []);
   const setTokens = useCallback((t: AuthTokens | null) => setTokensState(t), []);
 
+  // On app boot: try to restore session from stored access token.
+  // Calls GET /auth/me (Bug 4: this endpoint is now added to the backend).
   useEffect(() => {
     const restore = async () => {
       const accessToken = tokenManager.getAccessToken();
@@ -57,8 +59,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (payload: LoginPayload) => {
     setIsLoading(true);
     try {
+      // authApiService.login() now returns the normalised LoginResponse
+      // (Bug 3 fix: full_name→name, society_id→societyId already mapped in auth.api.ts).
       const res: LoginResponse = await authApiService.login(payload);
+
+      // Bug 2 fix: persist the refresh token so the silent-refresh flow works.
       tokenManager.setAccessToken(res.access_token);
+      tokenManager.setRefreshToken(res.refresh_token);
+
       setUserState(res.user);
       setTokensState({ accessToken: res.access_token, tokenType: 'bearer' });
     } finally {
