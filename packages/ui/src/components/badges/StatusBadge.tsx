@@ -1,106 +1,50 @@
-import * as React from 'react';
-import { Badge, type BadgeProps } from './Badge';
+import React from 'react';
 
 export type StatusValue =
-<<<<<<< HEAD
-  | 'active'      | 'inactive'    | 'pending'     | 'approved'    | 'rejected'
-  | 'suspended'   | 'expired'     | 'draft'        | 'published'
-  | 'paid'        | 'unpaid'      | 'overdue'
-  | 'open'        | 'closed'      | 'resolved'     | 'in_progress'
-  // Uppercase variants (AMS backend enum values)
-  | 'ACTIVE'      | 'INACTIVE'    | 'PENDING'      | 'APPROVED'    | 'REJECTED'
-  | 'SUSPENDED'   | 'EXPIRED'     | 'DRAFT'        | 'PUBLISHED'
-  | 'PAID'        | 'UNPAID'      | 'OVERDUE'
-  | 'OPEN'        | 'CLOSED'      | 'RESOLVED'     | 'IN_PROGRESS'
-  // Extra AMS statuses
-  | 'OCCUPIED'         | 'VACANT'       | 'RESERVED'     | 'UNDER_MAINTENANCE'
-  | 'PARTIALLY_PAID'   | 'CANCELLED'    | 'ON_HOLD'      | 'ASSIGNED'
-  | 'DRAFT'            | 'PENDING_APPROVAL' | 'APPROVED'
-  | 'OWNER'            | 'TENANT'
-  | string;
+  | 'active'
+  | 'inactive'
+  | 'pending'
+  | 'approved'
+  | 'rejected'
+  | 'suspended'
+  | 'expired'
+  | 'draft'
+  | 'published'
+  | 'paid'
+  | 'unpaid'
+  | 'overdue';
 
-const STATUS_CONFIG: Record<string, { label: string; variant: BadgeProps['variant'] }> = {
-  // Lowercase originals
-  active:       { label: 'Active',           variant: 'success' },
-  inactive:     { label: 'Inactive',         variant: 'secondary' },
-  pending:      { label: 'Pending',          variant: 'warning' },
-  approved:     { label: 'Approved',         variant: 'success' },
-  rejected:     { label: 'Rejected',         variant: 'destructive' },
-  suspended:    { label: 'Suspended',        variant: 'destructive' },
-  expired:      { label: 'Expired',          variant: 'secondary' },
-  draft:        { label: 'Draft',            variant: 'secondary' },
-  published:    { label: 'Published',        variant: 'success' },
-  paid:         { label: 'Paid',             variant: 'success' },
-  unpaid:       { label: 'Unpaid',           variant: 'warning' },
-  overdue:      { label: 'Overdue',          variant: 'destructive' },
-  open:         { label: 'Open',             variant: 'outline' },
-  closed:       { label: 'Closed',           variant: 'secondary' },
-  resolved:     { label: 'Resolved',         variant: 'success' },
-  in_progress:  { label: 'In Progress',      variant: 'warning' },
-  // Extra
-  occupied:          { label: 'Occupied',         variant: 'success' },
-  vacant:            { label: 'Vacant',            variant: 'secondary' },
-  reserved:          { label: 'Reserved',          variant: 'warning' },
-  under_maintenance: { label: 'Maintenance',       variant: 'warning' },
-  partially_paid:    { label: 'Partial',           variant: 'warning' },
-  cancelled:         { label: 'Cancelled',         variant: 'secondary' },
-  on_hold:           { label: 'On Hold',           variant: 'secondary' },
-  assigned:          { label: 'Assigned',          variant: 'outline' },
-  pending_approval:  { label: 'Pending Approval',  variant: 'warning' },
-  owner:             { label: 'Owner',             variant: 'default' },
-  tenant:            { label: 'Tenant',            variant: 'secondary' },
-=======
-  | 'active' | 'inactive' | 'pending' | 'approved' | 'rejected'
-  | 'suspended' | 'expired' | 'draft' | 'published'
-  | 'paid' | 'unpaid' | 'overdue'
-  | 'open' | 'closed' | 'resolved' | 'in_progress'
-  | 'occupied' | 'vacant' | 'reserved' | 'under_maintenance'
-  | 'cancelled';
-
-const STATUS_CONFIG: Record<StatusValue, { label: string; variant: BadgeProps['variant'] }> = {
-  active:            { label: 'Active',            variant: 'success' },
-  inactive:          { label: 'Inactive',          variant: 'muted' },
-  pending:           { label: 'Pending',           variant: 'warning' },
-  approved:          { label: 'Approved',          variant: 'success' },
-  rejected:          { label: 'Rejected',          variant: 'destructive' },
-  suspended:         { label: 'Suspended',         variant: 'destructive' },
-  expired:           { label: 'Expired',           variant: 'muted' },
-  draft:             { label: 'Draft',             variant: 'secondary' },
-  published:         { label: 'Published',         variant: 'success' },
-  paid:              { label: 'Paid',              variant: 'success' },
-  unpaid:            { label: 'Unpaid',            variant: 'warning' },
-  overdue:           { label: 'Overdue',           variant: 'destructive' },
-  open:              { label: 'Open',              variant: 'info' },
-  closed:            { label: 'Closed',            variant: 'muted' },
-  resolved:          { label: 'Resolved',          variant: 'success' },
-  in_progress:       { label: 'In Progress',       variant: 'info' },
-  occupied:          { label: 'Occupied',          variant: 'success' },
-  vacant:            { label: 'Vacant',            variant: 'secondary' },
-  reserved:          { label: 'Reserved',          variant: 'warning' },
-  under_maintenance: { label: 'Under Maintenance', variant: 'destructive' },
-  cancelled:         { label: 'Cancelled',         variant: 'muted' },
->>>>>>> d852c2e (final)
-};
-
-export interface StatusBadgeProps extends Omit<BadgeProps, 'variant'> {
+interface StatusBadgeProps {
   status: StatusValue;
-  showDot?: boolean;
+  className?: string;
 }
 
-const StatusBadge = React.forwardRef<HTMLSpanElement, StatusBadgeProps>(
-  ({ status, showDot = true, ...props }, ref) => {
-    const key = String(status).toLowerCase();
-    const cfg = STATUS_CONFIG[key] ?? {
-      label:   key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-      variant: 'secondary' as const,
-    };
-    return (
-      <Badge ref={ref} variant={cfg.variant} dot={showDot} {...props}>
-        {cfg.label}
-      </Badge>
-    );
-  },
-);
-StatusBadge.displayName = 'StatusBadge';
+const statusStyles: Record<StatusValue, string> = {
+  active: 'bg-green-100 text-green-700',
+  inactive: 'bg-gray-100 text-gray-700',
+  pending: 'bg-yellow-100 text-yellow-700',
+  approved: 'bg-blue-100 text-blue-700',
+  rejected: 'bg-red-100 text-red-700',
+  suspended: 'bg-orange-100 text-orange-700',
+  expired: 'bg-gray-200 text-gray-800',
+  draft: 'bg-slate-100 text-slate-700',
+  published: 'bg-emerald-100 text-emerald-700',
+  paid: 'bg-green-100 text-green-700',
+  unpaid: 'bg-red-100 text-red-700',
+  overdue: 'bg-orange-100 text-orange-700',
+};
 
-export { StatusBadge };
+export const StatusBadge: React.FC<StatusBadgeProps> = ({
+  status,
+  className = '',
+}) => {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${statusStyles[status]} ${className}`}
+    >
+      {status}
+    </span>
+  );
+};
+
+export default StatusBadge;

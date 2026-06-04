@@ -3,7 +3,7 @@ export const env = {
   appVersion: import.meta.env.VITE_APP_VERSION ?? '1.0.0',
   appEnv:    (import.meta.env.VITE_APP_ENV    ?? 'development') as 'development' | 'staging' | 'production',
 
-  apiUrl:     import.meta.env.VITE_API_URL ?? import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api',
+  apiUrl:     import.meta.env.VITE_API_URL ?? import.meta.env.VITE_API_BASE_URL,
   apiTimeout: Number(import.meta.env.VITE_API_TIMEOUT ?? 30_000),
   uploadUrl:  import.meta.env.VITE_UPLOAD_URL ?? '',
 
