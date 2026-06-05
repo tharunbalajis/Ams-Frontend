@@ -1,4 +1,4 @@
-export { useResidents }      from './useResidents';
+export { useResidents, useResidentSummary } from './useResidents';
 export { useResident }       from './useResident';
 export { useCreateResident } from './useCreateResident';
 export { useUpdateResident } from './useUpdateResident';

@@ -13,6 +13,11 @@ export interface ResidentTableProps {
   onPageChange: (page: number) => void;
 }
 
+const TYPE_BADGE: Record<string, 'default' | 'secondary'> = {
+  OWNER:  'default',
+  TENANT: 'secondary',
+};
+
 export function ResidentTable({ data, loading, pagination, onPageChange }: ResidentTableProps) {
   const navigate = useNavigate();
 
@@ -22,7 +27,7 @@ export function ResidentTable({ data, loading, pagination, onPageChange }: Resid
       header:      'Name',
       cell:        ({ row }) => (
         <button
-          className="font-medium text-primary hover:underline"
+          className="font-medium text-primary hover:underline text-left"
           onClick={() => void navigate(RESIDENT_ROUTES.DETAIL.replace(':id', row.original.id))}
         >
           {row.original.full_name}
@@ -30,27 +35,48 @@ export function ResidentTable({ data, loading, pagination, onPageChange }: Resid
       ),
     },
     {
-      accessorKey: 'email',
-      header:      'Email',
-      cell:        ({ getValue }) => (getValue() as string | undefined) ?? '—',
+      id:     'unit',
+      header: 'Unit',
+      cell:   ({ row }) => (
+        <div className="flex flex-col">
+          <span className="font-medium">{row.original.unit_number}</span>
+          <span className="text-xs text-muted-foreground">{row.original.block_name}</span>
+        </div>
+      ),
     },
     {
       accessorKey: 'mobile_primary',
       header:      'Phone',
     },
     {
-      accessorKey: 'unit_id',
-      header:      'Unit',
-      cell:        ({ getValue }) => (
-        <Badge variant="secondary">Unit {getValue() as number}</Badge>
-      ),
+      accessorKey: 'email',
+      header:      'Email',
+      cell:        ({ getValue }) => (getValue() as string | undefined) ?? '—',
     },
     {
       accessorKey: 'resident_type',
       header:      'Type',
-      cell:        ({ getValue }) => (
-        <span className="capitalize">{(getValue() as string ?? '').toLowerCase()}</span>
-      ),
+      cell:        ({ getValue }) => {
+        const type = getValue() as string;
+        return (
+          <Badge variant={TYPE_BADGE[type] ?? 'secondary'}>
+            {type === 'OWNER' ? 'Owner' : 'Tenant'}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: 'move_in_date',
+      header:      'Move In',
+      cell:        ({ getValue }) => formatDate(getValue() as string),
+    },
+    {
+      accessorKey: 'move_out_date',
+      header:      'Move Out',
+      cell:        ({ getValue }) => {
+        const v = getValue() as string | undefined;
+        return v ? formatDate(v) : '—';
+      },
     },
     {
       accessorKey: 'is_active',
@@ -60,11 +86,6 @@ export function ResidentTable({ data, loading, pagination, onPageChange }: Resid
           {(getValue() as boolean) ? 'Active' : 'Inactive'}
         </Badge>
       ),
-    },
-    {
-      accessorKey: 'move_in_date',
-      header:      'Move In',
-      cell:        ({ getValue }) => formatDate(getValue() as string),
     },
     {
       id:     'actions',

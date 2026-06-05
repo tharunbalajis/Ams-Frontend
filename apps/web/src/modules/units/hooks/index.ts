@@ -1,6 +1,7 @@
 export {
   useUnits,
   useUnit,
+  useUnitSummary,
   useBlocks,
   useCreateUnit,
   useUpdateUnit,

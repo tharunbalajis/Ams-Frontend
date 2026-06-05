@@ -1,7 +1,7 @@
 import apiClient from '@/api/client';
 import { adaptListResponse } from '@/api/utils';
-import type { ApiResponse, ApiListResponse } from '@/types/api.types';
-import type { Unit, CreateUnitPayload, UpdateUnitPayload, UnitFiltersParams } from '../types/unit.types';
+import type { ApiResponse } from '@/types/api.types';
+import type { Unit, UnitDetail, UnitSummary, CreateUnitPayload, UpdateUnitPayload, UnitFiltersParams } from '../types/unit.types';
 import type { Block } from '../types/block.types';
 
 const BASE = '/units';
@@ -11,7 +11,10 @@ export const unitsApi = {
     apiClient.get(BASE, { params }).then((r) => adaptListResponse<Unit>(r.data)),
 
   getById: (id: number) =>
-    apiClient.get<Unit>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Unit>),
+    apiClient.get<UnitDetail>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<UnitDetail>),
+
+  getSummary: () =>
+    apiClient.get<UnitSummary>(`${BASE}/summary`).then((r) => r.data),
 
   create: (payload: CreateUnitPayload) =>
     apiClient.post<Unit>(BASE, payload).then((r) => ({ data: r.data, success: true }) as ApiResponse<Unit>),
@@ -22,7 +25,6 @@ export const unitsApi = {
   remove: (id: number) =>
     apiClient.delete(`${BASE}/${id}`).then((r) => r.data),
 
-  // Blocks are at /blocks (separate top-level resource)
   getBlocks: (params?: { society_id?: number }) =>
     apiClient.get<Block[]>('/blocks', { params }).then((r) => {
       const arr = Array.isArray(r.data) ? r.data : [];

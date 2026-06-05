@@ -3,6 +3,7 @@ import { adaptListResponse } from '@/api/utils';
 import type { ApiListResponse, ApiResponse } from '@/types/api.types';
 import type {
   Resident,
+  ResidentSummary,
   CreateResidentPayload,
   UpdateResidentPayload,
   ResidentFiltersParams,
@@ -17,6 +18,9 @@ export const residentsApi = {
   getById: (id: string) =>
     apiClient.get<Resident>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Resident>),
 
+  getSummary: () =>
+    apiClient.get<ResidentSummary>(`${BASE}/summary`).then((r) => r.data),
+
   create: (payload: CreateResidentPayload) =>
     apiClient.post<Resident>(BASE, payload).then((r) => ({ data: r.data, success: true }) as ApiResponse<Resident>),
 
@@ -25,7 +29,4 @@ export const residentsApi = {
 
   remove: (id: string) =>
     apiClient.delete(`${BASE}/${id}`).then((r) => r.data),
-
-  getDashboard: (society_id?: number) =>
-    apiClient.get(`${BASE}/dashboard`, { params: { society_id } }).then((r) => r.data),
 };

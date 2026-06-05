@@ -13,19 +13,27 @@ export function useUnits(params?: UnitFiltersParams) {
   });
 }
 
-export function useUnit(id: string) {
+export function useUnit(id: number) {
   return useQuery({
-    queryKey:  unitKeys.detail(id),
+    queryKey:  unitKeys.detail(String(id)),
     queryFn:   () => unitsApi.getById(id),
     staleTime: STALE_TIME.DEFAULT,
     enabled:   !!id,
   });
 }
 
-export function useBlocks() {
+export function useUnitSummary() {
   return useQuery({
-    queryKey:  unitKeys.blocks(),
-    queryFn:   () => unitsApi.getBlocks(),
+    queryKey:  unitKeys.summary(),
+    queryFn:   () => unitsApi.getSummary(),
+    staleTime: STALE_TIME.DEFAULT,
+  });
+}
+
+export function useBlocks(societyId?: number) {
+  return useQuery({
+    queryKey:  [...unitKeys.blocks(), societyId],
+    queryFn:   () => unitsApi.getBlocks(societyId ? { society_id: societyId } : undefined),
     staleTime: STALE_TIME.LONG,
   });
 }
@@ -36,18 +44,19 @@ export function useCreateUnit() {
     mutationFn: (payload: CreateUnitPayload) => unitsApi.create(payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: unitKeys.lists() });
+      void queryClient.invalidateQueries({ queryKey: unitKeys.summary() });
       toast.success('Unit created.');
     },
     onError: (error) => { toast.apiError(error); },
   });
 }
 
-export function useUpdateUnit(id: string) {
+export function useUpdateUnit(id: number) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: UpdateUnitPayload) => unitsApi.update(id, payload),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: unitKeys.detail(id) });
+      void queryClient.invalidateQueries({ queryKey: unitKeys.detail(String(id)) });
       void queryClient.invalidateQueries({ queryKey: unitKeys.lists() });
       toast.success('Unit updated.');
     },

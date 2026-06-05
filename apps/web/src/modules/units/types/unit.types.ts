@@ -1,26 +1,48 @@
-export type UnitType      = 'STUDIO' | '1BHK' | '2BHK' | '3BHK';
-export type OwnershipType = 'OWNED' | 'RENTED' | 'VACANT';
+export type UnitType        = 'STUDIO' | '1BHK' | '2BHK' | '3BHK' | '4BHK' | 'COMMERCIAL';
+export type OccupancyStatus = 'VACANT' | 'OWNER_OCCUPIED' | 'RENTED';
 
 export interface Unit {
-  unit_id:       number;   // PK — not 'id'
-  society_id:    number;
-  block_id?:     number;
-  unit_number:   string;
-  floor_number?: number;
-  unit_type:     UnitType;
-  ownership_type: OwnershipType;
-  is_active:     boolean;
-  super_built_up?: number;
-  carpet_area?:  number;
-  is_commercial: boolean;
-  parking_slots: number;
-  created_at:    string;
-  updated_at:    string;
-  // joined fields (may be present)
-  block_name?:   string;
+  unit_id:          number;
+  society_id:       number;
+  block_id:         number;
+  unit_number:      string;
+  floor_number?:    number;
+  unit_type:        UnitType;
+  ownership_type?:  string;
+  super_built_up?:  number;
+  carpet_area?:     number;
+  parking_slots?:   number;
+  is_active:        boolean;
+  occupancy_status: OccupancyStatus;
+  occupant_count:   number;
+  // joined fields
+  block_name:       string;
+  society_name:     string;
+  owner_name?:      string | null;
+  tenant_name?:     string | null;
 }
 
 export type UnitListItem = Unit;
+
+export interface UnitDetail extends Unit {
+  residents: {
+    id:             string;
+    full_name:      string;
+    resident_type:  'OWNER' | 'TENANT';
+    mobile_primary: string;
+    email?:         string;
+    move_in_date:   string;
+    move_out_date?: string;
+    is_active:      boolean;
+  }[];
+}
+
+export interface UnitSummary {
+  total_units:    number;
+  vacant:         number;
+  owner_occupied: number;
+  rented:         number;
+}
 
 export interface CreateUnitPayload {
   society_id:    number;
@@ -28,7 +50,6 @@ export interface CreateUnitPayload {
   unit_type:     UnitType;
   block_id?:     number;
   floor_number?: number;
-  ownership_type?: OwnershipType;
   super_built_up?: number;
   carpet_area?:  number;
   parking_slots?: number;
@@ -37,12 +58,12 @@ export interface CreateUnitPayload {
 export type UpdateUnitPayload = Partial<CreateUnitPayload>;
 
 export interface UnitFiltersParams {
-  society_id?:    number;
-  block_id?:      number;
-  unit_type?:     UnitType;
-  ownership_type?: OwnershipType;
-  is_active?:     boolean;
-  search?:        string;
-  page?:          number;
-  limit?:         number;
+  society_id?:       number;
+  block_id?:         number;
+  unit_type?:        UnitType;
+  occupancy_status?: OccupancyStatus;
+  is_active?:        boolean;
+  search?:           string;
+  limit?:            number;
+  offset?:           number;
 }

@@ -11,3 +11,11 @@ export function useResidents(params?: ResidentFiltersParams) {
     staleTime: STALE_TIME.DEFAULT,
   });
 }
+
+export function useResidentSummary() {
+  return useQuery({
+    queryKey:  residentKeys.summary(),
+    queryFn:   () => residentsApi.getSummary(),
+    staleTime: STALE_TIME.DEFAULT,
+  });
+}

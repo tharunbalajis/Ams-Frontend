@@ -5,6 +5,7 @@ export const residentKeys = {
   details: () => [...residentKeys.all, 'detail']           as const,
   detail:  (id: string) => [...residentKeys.details(), id] as const,
   dashboard: () => [...residentKeys.all, 'dashboard']      as const,
+  summary:   () => [...residentKeys.all, 'summary']         as const,
 
   lease: {
     all:    (residentId: string) => [...residentKeys.all, 'lease', residentId]         as const,

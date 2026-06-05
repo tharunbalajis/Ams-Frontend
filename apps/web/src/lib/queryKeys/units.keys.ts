@@ -25,6 +25,9 @@ export const unitKeys = {
   blocks: () =>
     [...unitKeys.all, 'blocks'] as const,
 
+  summary: () =>
+    [...unitKeys.all, 'summary'] as const,
+
   ownership: {
     all:    (unitId: string) => [...unitKeys.detail(unitId), 'ownership']          as const,
     detail: (unitId: string) => [...unitKeys.detail(unitId), 'ownership', 'current'] as const,
