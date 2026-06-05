@@ -1,4 +1,5 @@
 import apiClient from '@/api/client';
+import { getSocietyId } from '@/utils/getSocietyId';
 import { adaptListResponse } from '@/api/utils';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
 import type {
@@ -10,46 +11,136 @@ import type {
 
 const BASE = '/visitors';
 
+const sid = (): number => {
+  const id = getSocietyId();
+  return typeof id === 'number' ? id : 1;
+};
+
 export const visitorsApi = {
-  getAll: (params?: VisitorFiltersParams) =>
-    apiClient.get(BASE, { params }).then((r) => adaptListResponse<Visitor>(r.data)),
+  getAll: async (params?: VisitorFiltersParams): Promise<ApiListResponse<Visitor>> => {
+    try {
+      const queryParams = { 
+        society_id: sid(), 
+        limit: 20, 
+        offset: 0, 
+        ...params 
+      };
+      // Only include defined params
+      const filteredParams = Object.fromEntries(
+        Object.entries(queryParams).filter(([_, v]) => v !== undefined && v !== null)
+      );
+      const response = await apiClient.get(BASE, { params: filteredParams });
+      return adaptListResponse<Visitor>(response.data);
+    } catch (error) {
+      console.error('Error fetching visitors:', error);
+      return { data: [], total: 0, success: false };
+    }
+  },
 
-  getById: (id: string) =>
-    apiClient.get<Visitor>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
+  getById: async (id: string): Promise<ApiResponse<Visitor>> => {
+    try {
+      const response = await apiClient.get<Visitor>(`${BASE}/${id}`);
+      return { data: response.data, success: true };
+    } catch (error) {
+      console.error('Error fetching visitor:', error);
+      return { data: null, success: false };
+    }
+  },
 
-  create: (payload: CreateVisitorPayload) =>
-    apiClient.post<Visitor>(BASE, payload).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
+  create: async (payload: CreateVisitorPayload): Promise<ApiResponse<Visitor>> => {
+    try {
+      const response = await apiClient.post<Visitor>(BASE, { ...payload, society_id: sid() });
+      return { data: response.data, success: true };
+    } catch (error) {
+      console.error('Error creating visitor:', error);
+      return { data: null, success: false };
+    }
+  },
 
-  update: (id: string, payload: UpdateVisitorPayload) =>
-    apiClient.put<Visitor>(`${BASE}/${id}`, payload).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
+  update: async (id: string, payload: UpdateVisitorPayload): Promise<ApiResponse<Visitor>> => {
+    try {
+      const response = await apiClient.put<Visitor>(`${BASE}/${id}`, payload);
+      return { data: response.data, success: true };
+    } catch (error) {
+      console.error('Error updating visitor:', error);
+      return { data: null, success: false };
+    }
+  },
 
-  remove: (id: string) =>
-    apiClient.delete(`${BASE}/${id}`).then((r) => r.data),
+  remove: async (id: string): Promise<{ success: boolean }> => {
+    try {
+      await apiClient.delete(`${BASE}/${id}`);
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting visitor:', error);
+      return { success: false };
+    }
+  },
 
-  checkIn: (id: string) =>
-    apiClient.put<Visitor>(`${BASE}/${id}/checkin`, {}).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
+  checkIn: async (id: string, guardId?: string): Promise<ApiResponse<Visitor>> => {
+    try {
+      const response = await apiClient.put<Visitor>(`${BASE}/${id}/checkin`, guardId ? { guard_id: guardId } : {});
+      return { data: response.data, success: true };
+    } catch (error) {
+      console.error('Error checking in visitor:', error);
+      return { data: null, success: false };
+    }
+  },
 
-  checkOut: (id: string) =>
-    apiClient.put<Visitor>(`${BASE}/${id}/checkout`, {}).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
+  checkOut: async (id: string): Promise<ApiResponse<Visitor>> => {
+    try {
+      const response = await apiClient.put<Visitor>(`${BASE}/${id}/checkout`, {});
+      return { data: response.data, success: true };
+    } catch (error) {
+      console.error('Error checking out visitor:', error);
+      return { data: null, success: false };
+    }
+  },
+};
 
-  getDashboard: () =>
-    apiClient.get<Record<string, unknown>>(`${BASE}/dashboard`).then((r) => r.data),
+export const visitorPassesApi = {
+  getAll: (params?: { unit_id?: string; resident_id?: string }) =>
+    apiClient.get('/visitor-passes', { params: { society_id: sid(), ...params } }).then((r) => adaptListResponse(r.data)),
 
-  getInvites: (params?: Record<string, unknown>) =>
-    apiClient.get(`${BASE}/invites`, { params }).then((r) => adaptListResponse<Record<string, unknown>>(r.data)),
+  create: (payload: any) =>
+    apiClient.post('/visitor-passes', { ...payload, society_id: sid() }).then((r) => r.data),
 
-  createInvite: (payload: Record<string, unknown>) =>
-    apiClient.post(`${BASE}/invites`, payload).then((r) => ({ data: r.data, success: true })),
+  revoke: (id: string) =>
+    apiClient.put(`/visitor-passes/${id}/revoke`, {}).then((r) => r.data),
+};
 
-  revokeInvite: (id: string, data: { revoke_reason: string }) =>
-    apiClient.put(`${BASE}/invites/${id}/revoke`, data).then((r) => ({ data: r.data, success: true })),
+export const visitorInvitesApi = {
+  getAll: () =>
+    apiClient.get('/visitor-invites', { params: { society_id: sid() } }).then((r) => adaptListResponse(r.data)),
 
-  getDeliveries: (params?: Record<string, unknown>) =>
-    apiClient.get('/delivery-entries', { params }).then((r) => adaptListResponse<Record<string, unknown>>(r.data)),
+  create: (payload: any) =>
+    apiClient.post('/visitor-invites', { ...payload, society_id: sid() }).then((r) => r.data),
 
-  createDelivery: (payload: Record<string, unknown>) =>
-    apiClient.post('/delivery-entries', payload).then((r) => ({ data: r.data, success: true })),
+  revoke: (id: string, reason: string) =>
+    apiClient.put(`/visitor-invites/${id}/revoke`, { revoke_reason: reason }).then((r) => r.data),
+};
 
-  markDelivered: (id: string) =>
-    apiClient.put(`/delivery-entries/${id}/delivered`, {}).then((r) => ({ data: r.data, success: true })),
+export const deliveriesApi = {
+  getAll: (params?: { status?: string; limit?: number; offset?: number }) =>
+    apiClient.get('/deliveries', { params: { society_id: sid(), limit: 20, offset: 0, ...params } }).then((r) => adaptListResponse(r.data)),
+
+  create: (payload: any) =>
+    apiClient.post('/deliveries', { ...payload, society_id: sid() }).then((r) => r.data),
+
+  collect: (id: string) =>
+    apiClient.put(`/deliveries/${id}/collect`, {}).then((r) => r.data),
+};
+
+export const sosApi = {
+  getAll: (params?: { status?: string }) =>
+    apiClient.get('/sos', { params: { society_id: sid(), ...params } }).then((r) => adaptListResponse(r.data)),
+
+  create: (payload: any) =>
+    apiClient.post('/sos', { ...payload, society_id: sid() }).then((r) => r.data),
+
+  acknowledge: (id: string) =>
+    apiClient.put(`/sos/${id}/acknowledge`, {}).then((r) => r.data),
+
+  resolve: (id: string) =>
+    apiClient.put(`/sos/${id}/resolve`, {}).then((r) => r.data),
 };

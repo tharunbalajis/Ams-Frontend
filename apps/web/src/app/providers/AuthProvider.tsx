@@ -50,15 +50,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const setTokens = useCallback((t: AuthTokens | null) => setTokensState(t), []);
 
-  // On first mount: just verify the token is still present (no API call).
-  // GET /auth/me does NOT exist in the backend — rehydrate from localStorage only.
+  // On first mount: verify token and restore user session via GET /auth/me
   useEffect(() => {
-    if (!tokenManager.hasSession()) {
-      setUserState(null);
-      setTokensState(null);
-      localStorage.removeItem(USER_KEY);
+    async function restoreSession() {
+      if (!tokenManager.hasSession()) {
+        setUserState(null);
+        setTokensState(null);
+        localStorage.removeItem(USER_KEY);
+        return;
+      }
+      
+      // Token exists, try to restore user from /auth/me
+      setIsLoading(true);
+      try {
+        const res = await authApiService.me();
+        if (res.data) {
+          setUser(res.data);
+        } else {
+          // Token invalid, clear session
+          tokenManager.clearSession();
+          localStorage.removeItem(USER_KEY);
+          setUserState(null);
+          setTokensState(null);
+        }
+      } catch {
+        // Token invalid or API error, clear session
+        tokenManager.clearSession();
+        localStorage.removeItem(USER_KEY);
+        setUserState(null);
+        setTokensState(null);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, []);
+    
+    restoreSession();
+  }, [setUser]);
 
   const login = useCallback(async (payload: LoginPayload) => {
     setIsLoading(true);

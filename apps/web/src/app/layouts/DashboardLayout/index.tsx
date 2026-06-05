@@ -1,20 +1,27 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-
-// DashboardLayout — placeholder shell
-// Implement Sidebar, Topbar, and content area in Phase 2
+import { Sidebar } from '@/components/navigation/Sidebar';
+import { Topbar } from '@/components/navigation/Topbar';
 
 export function DashboardLayout() {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed((prev) => !prev);
+  };
+
   return (
-    <div className="flex h-screen bg-background">
-      {/* Sidebar — Phase 2 */}
-      <aside className="w-64 border-r bg-sidebar" />
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <Sidebar collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
 
+      {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Topbar — Phase 2 */}
-        <header className="h-14 border-b bg-card" />
+        {/* Topbar */}
+        <Topbar onMenuClick={toggleSidebar} sidebarCollapsed={sidebarCollapsed} />
 
-        {/* Main content */}
-        <main className="flex-1 overflow-auto p-6">
+        {/* Main Content */}
+        <main className="flex-1 overflow-auto bg-gray-100 p-6">
           <Outlet />
         </main>
       </div>

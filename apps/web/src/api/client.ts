@@ -5,17 +5,17 @@ import axios, {
 } from 'axios';
 import { tokenManager } from '@/lib/auth/tokenManager';
 
-const BASE_URL = 'http://localhost:4444/v1';
-console.log('BASE  URL', BASE_URL);
-const TIMEOUT  = Number(import.meta.env.VITE_API_TIMEOUT ?? 30_000);
+// Use environment variable for base URL
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4444/v1';
+const TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT ?? 30000);
 
-export const TOKEN_KEY         = import.meta.env.VITE_AUTH_TOKEN_KEY         ?? 'ams_access_token';
+export const TOKEN_KEY = import.meta.env.VITE_AUTH_TOKEN_KEY ?? 'ams_access_token';
 export const REFRESH_TOKEN_KEY = import.meta.env.VITE_AUTH_REFRESH_TOKEN_KEY ?? 'ams_refresh_token';
 
 let isRefreshing = false;
 let refreshQueue: Array<{ resolve: (token: string) => void; reject: (err: unknown) => void }> = [];
 
-function drainQueue(error: unknown, token: string | null = null): void {
+function processQueue(error: unknown, token: string | null = null): void {
   refreshQueue.forEach(({ resolve, reject }) => (error ? reject(error) : resolve(token!)));
   refreshQueue = [];
 }
@@ -26,6 +26,7 @@ export const apiClient: AxiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
 });
 
+// Request interceptor — attach token
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = tokenManager.getAccessToken();
   if (token && config.headers) {
@@ -34,6 +35,7 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
+// Response interceptor — handle 401 with refresh
 apiClient.interceptors.response.use(
   (res) => res,
   async (error) => {
@@ -53,7 +55,7 @@ apiClient.interceptors.response.use(
     }
 
     original._retry = true;
-    isRefreshing    = true;
+    isRefreshing = true;
 
     const refreshToken = tokenManager.getRefreshToken();
 
@@ -72,11 +74,11 @@ apiClient.interceptors.response.use(
       );
       const newToken = data.access_token;
       tokenManager.setAccessToken(newToken);
-      drainQueue(null, newToken);
+      processQueue(null, newToken);
       if (original.headers) original.headers.Authorization = `Bearer ${newToken}`;
       return apiClient(original);
     } catch (refreshError) {
-      drainQueue(refreshError, null);
+      processQueue(refreshError, null);
       tokenManager.clearSession();
       window.location.href = '/login';
       return Promise.reject(refreshError);
