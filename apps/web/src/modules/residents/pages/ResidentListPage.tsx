@@ -1,21 +1,30 @@
-import { useState }       from 'react';
-import { useNavigate }    from 'react-router-dom';
-import { Breadcrumbs, Button, PageHeader } from '@ams/ui';
-import { ResidentFilters } from '../components/ResidentFilters';
-import { ResidentTable }   from '../components/ResidentTable';
-import { useResidents }    from '../hooks/useResidents';
-import { usePagination }   from '@/hooks/usePagination';
-import { useDebounce }     from '@/hooks/useDebounce';
-import { RESIDENT_ROUTES } from '../constants/resident.constants';
+import { useState } from 'react';
+import {
+  Breadcrumbs, Button, PageHeader,
+  MetricCard,
+  Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerBody,
+} from '@ams/ui';
+import { ResidentFilters }   from '../components/ResidentFilters';
+import { ResidentTable }     from '../components/ResidentTable';
+import { ResidentForm }      from '../components/ResidentForm';
+import { useResidents, useResidentSummary } from '../hooks/useResidents';
+import { usePagination }     from '@/hooks/usePagination';
+import { useDebounce }       from '@/hooks/useDebounce';
 import type { ResidentFiltersParams } from '../types/resident.types';
 
 export function ResidentListPage() {
-  const navigate = useNavigate();
   const { page, pageSize, setPage, reset } = usePagination(1, 20);
-  const [filters, setFilters] = useState<Partial<ResidentFiltersParams>>({});
-  const debouncedSearch = useDebounce(filters.search, 300);
+  const [filters, setFilters]   = useState<Partial<ResidentFiltersParams>>({});
+  const [addOpen, setAddOpen]   = useState(false);
+  const debouncedSearch         = useDebounce(filters.search, 300);
 
-  const { data, isLoading } = useResidents({ ...filters, search: debouncedSearch, page, limit: pageSize });
+  const { data: summary, isLoading: summaryLoading } = useResidentSummary();
+  const { data, isLoading }                          = useResidents({
+    ...filters,
+    search: debouncedSearch,
+    offset: (page - 1) * pageSize,
+    limit:  pageSize,
+  });
 
   const handleFiltersChange = (next: Partial<ResidentFiltersParams>) => {
     setFilters(next);
@@ -34,11 +43,30 @@ export function ResidentListPage() {
           ]} />
         }
         actions={
-          <Button onClick={() => void navigate(RESIDENT_ROUTES.CREATE)}>
+          <Button onClick={() => setAddOpen(true)}>
             Add Resident
           </Button>
         }
       />
+
+      {/* KPI summary cards */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <MetricCard
+          title="Total Active"
+          value={summary?.total_active ?? 0}
+          loading={summaryLoading}
+        />
+        <MetricCard
+          title="Owners"
+          value={summary?.total_owners ?? 0}
+          loading={summaryLoading}
+        />
+        <MetricCard
+          title="Tenants"
+          value={summary?.total_tenants ?? 0}
+          loading={summaryLoading}
+        />
+      </div>
 
       <ResidentFilters filters={filters} onChange={handleFiltersChange} />
 
@@ -48,6 +76,21 @@ export function ResidentListPage() {
         pagination={{ page, pageSize, total: data?.meta?.total ?? 0 }}
         onPageChange={setPage}
       />
+
+      {/* Inline Add Resident drawer */}
+      <Drawer open={addOpen} onOpenChange={setAddOpen}>
+        <DrawerContent side="right" width="lg">
+          <DrawerHeader>
+            <DrawerTitle>Register New Resident</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
+            <ResidentForm
+              mode="create"
+              onSuccess={() => setAddOpen(false)}
+            />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

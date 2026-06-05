@@ -1,25 +1,20 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Card, CardContent, CardHeader, CardTitle, ErrorState, LoadingState, PageHeader } from '@ams/ui';
-import { UnitForm }       from '../components/UnitForm';
-import { useUnit }        from '../hooks/useUnit';
-import { useUpdateUnit }  from '../hooks/useUpdateUnit';
-import { UNIT_ROUTES }    from '../constants/unit.constants';
-import type { CreateUnitFormValues } from '../schemas/unit.schema';
+import { UnitForm }    from '../components/UnitForm';
+import { useUnit }     from '../hooks/useUnits';
+import { UNIT_ROUTES } from '../constants/unit.constants';
 
 export function EditUnitPage() {
-  const { id = '' } = useParams<{ id: string }>();
+  const { id = '' }  = useParams<{ id: string }>();
+  const navigate     = useNavigate();
+  const unitId       = Number(id);
 
-  const { data, isLoading, isError } = useUnit(id);
-  const { mutate, isPending }        = useUpdateUnit(id);
+  const { data, isLoading, isError } = useUnit(unitId);
 
   if (isLoading) return <LoadingState />;
   if (isError || !data?.data) return <ErrorState />;
 
   const unit = data.data;
-
-  const handleSubmit = (values: CreateUnitFormValues) => {
-    mutate(values as Parameters<typeof mutate>[0]);
-  };
 
   return (
     <div className="space-y-6">
@@ -41,7 +36,11 @@ export function EditUnitPage() {
           <CardTitle>Unit Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <UnitForm unit={unit} onSubmit={handleSubmit} isPending={isPending} />
+          <UnitForm
+            mode="edit"
+            unit={unit}
+            onSuccess={() => void navigate(UNIT_ROUTES.DETAIL.replace(':id', String(unit.unit_id)))}
+          />
         </CardContent>
       </Card>
     </div>

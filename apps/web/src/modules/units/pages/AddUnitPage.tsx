@@ -1,15 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Card, CardContent, CardHeader, CardTitle, PageHeader } from '@ams/ui';
-import { UnitForm }        from '../components/UnitForm';
-import { useCreateUnit }   from '../hooks/useCreateUnit';
-import { UNIT_ROUTES }     from '../constants/unit.constants';
-import type { CreateUnitFormValues } from '../schemas/unit.schema';
+import { UnitForm }    from '../components/UnitForm';
+import { UNIT_ROUTES } from '../constants/unit.constants';
 
 export function AddUnitPage() {
-  const { mutate, isPending } = useCreateUnit();
-
-  const handleSubmit = (values: CreateUnitFormValues) => {
-    mutate(values);
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="space-y-6">
@@ -30,7 +25,10 @@ export function AddUnitPage() {
           <CardTitle>Unit Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <UnitForm onSubmit={handleSubmit} isPending={isPending} />
+          <UnitForm
+            mode="create"
+            onSuccess={() => void navigate(UNIT_ROUTES.LIST)}
+          />
         </CardContent>
       </Card>
     </div>

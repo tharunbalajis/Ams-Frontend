@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
 import { Badge, Button, ServerTable } from '@ams/ui';
-import type { UnitListItem } from '../../types/unit.types';
+import type { UnitListItem, OccupancyStatus } from '../../types/unit.types';
 import type { PaginationState } from '@ams/ui';
 import { UNIT_ROUTES } from '../../constants/unit.constants';
 
@@ -12,6 +12,18 @@ export interface UnitTableProps {
   onPageChange: (page: number) => void;
 }
 
+const OCCUPANCY_BADGE: Record<OccupancyStatus, 'success' | 'warning' | 'secondary'> = {
+  OWNER_OCCUPIED: 'success',
+  RENTED:         'warning',
+  VACANT:         'secondary',
+};
+
+const OCCUPANCY_LABEL: Record<OccupancyStatus, string> = {
+  OWNER_OCCUPIED: 'Owner Occupied',
+  RENTED:         'Rented',
+  VACANT:         'Vacant',
+};
+
 export function UnitTable({ data, loading, pagination, onPageChange }: UnitTableProps) {
   const navigate = useNavigate();
 
@@ -21,7 +33,7 @@ export function UnitTable({ data, loading, pagination, onPageChange }: UnitTable
       header:      'Unit No.',
       cell:        ({ row }) => (
         <button
-          className="font-medium text-primary hover:underline"
+          className="font-medium text-primary hover:underline text-left"
           onClick={() => void navigate(UNIT_ROUTES.DETAIL.replace(':id', String(row.original.unit_id)))}
         >
           {row.original.unit_number}
@@ -29,46 +41,60 @@ export function UnitTable({ data, loading, pagination, onPageChange }: UnitTable
       ),
     },
     {
-      accessorKey: 'block_name',
-      header:      'Block',
-      cell:        ({ getValue }) => {
-        const v = getValue() as string | undefined;
-        return v ? <Badge variant="outline">{v}</Badge> : <span className="text-muted-foreground">—</span>;
-      },
-    },
-    {
-      accessorKey: 'floor_number',
-      header:      'Floor',
-      cell:        ({ getValue }) => (getValue() as number | undefined) ?? '—',
+      id:     'block',
+      header: 'Block',
+      cell:   ({ row }) => (
+        <div className="flex flex-col">
+          <span className="font-medium">{row.original.block_name}</span>
+          {row.original.floor_number != null && (
+            <span className="text-xs text-muted-foreground">Floor {row.original.floor_number}</span>
+          )}
+        </div>
+      ),
     },
     {
       accessorKey: 'unit_type',
       header:      'Type',
-      cell:        ({ getValue }) => <Badge variant="secondary">{getValue() as string}</Badge>,
+      cell:        ({ getValue }) => <Badge variant="outline">{getValue() as string}</Badge>,
+    },
+    {
+      accessorKey: 'occupancy_status',
+      header:      'Occupancy',
+      cell:        ({ getValue }) => {
+        const status = getValue() as OccupancyStatus;
+        return (
+          <Badge variant={OCCUPANCY_BADGE[status] ?? 'secondary'}>
+            {OCCUPANCY_LABEL[status] ?? status}
+          </Badge>
+        );
+      },
+    },
+    {
+      id:     'residents',
+      header: 'Resident(s)',
+      cell:   ({ row }) => {
+        const { owner_name, tenant_name, occupancy_status } = row.original;
+        if (occupancy_status === 'VACANT') return <span className="text-muted-foreground">—</span>;
+        return (
+          <div className="flex flex-col gap-0.5 text-sm">
+            {owner_name  && <span>{owner_name} <span className="text-xs text-muted-foreground">(Owner)</span></span>}
+            {tenant_name && <span>{tenant_name} <span className="text-xs text-muted-foreground">(Tenant)</span></span>}
+          </div>
+        );
+      },
     },
     {
       accessorKey: 'super_built_up',
-      header:      'Sq. Ft.',
+      header:      'Area',
       cell:        ({ getValue }) => {
         const v = getValue() as number | undefined;
         return v ? `${v} sq ft` : '—';
       },
     },
     {
-      accessorKey: 'ownership_type',
-      header:      'Ownership',
-      cell:        ({ getValue }) => (
-        <span className="capitalize">{(getValue() as string).replace(/_/g, ' ')}</span>
-      ),
-    },
-    {
-      accessorKey: 'is_active',
-      header:      'Status',
-      cell:        ({ getValue }) => (
-        <Badge variant={(getValue() as boolean) ? 'success' : 'secondary'}>
-          {(getValue() as boolean) ? 'Active' : 'Inactive'}
-        </Badge>
-      ),
+      accessorKey: 'parking_slots',
+      header:      'Parking',
+      cell:        ({ getValue }) => (getValue() as number | undefined) ?? 0,
     },
     {
       id:     'actions',
