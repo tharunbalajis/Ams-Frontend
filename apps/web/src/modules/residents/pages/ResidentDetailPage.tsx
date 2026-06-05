@@ -1,21 +1,14 @@
-import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Breadcrumbs, Button, PageHeader, ErrorState, LoadingState,
-  Card, CardContent, CardHeader, CardTitle, Badge, StatusBadge,
+  Card, CardContent, CardHeader, CardTitle, Badge,
 } from '@ams/ui';
 import { useResident }       from '../hooks/useResident';
-import { useVehicles }       from '../hooks/useVehicles';
-import { usePets }           from '../hooks/usePets';
-import { useLease }          from '../hooks/useLease';
 import { useDeleteResident } from '../hooks/useDeleteResident';
-import { VehicleTable }      from '../components/VehicleTable';
-import { PetTable }          from '../components/PetTable';
-import { LeaseSection }      from '../components/LeaseSection';
 import { RESIDENT_ROUTES }   from '../constants/resident.constants';
 import { formatDate }        from '@/utils/formatDate';
-import { formatPhone }       from '@/utils/formatPhone';
 import type { ReactNode }    from 'react';
+import { useState }          from 'react';
 
 function Field({ label, value }: { label: string; value: ReactNode }) {
   return (
@@ -31,10 +24,7 @@ export function ResidentDetailPage() {
   const navigate = useNavigate();
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const { data, isLoading, isError }       = useResident(id!);
-  const { data: vehiclesData }             = useVehicles(id!);
-  const { data: petsData }                 = usePets(id!);
-  const { data: leaseData }                = useLease(id!);
+  const { data, isLoading, isError } = useResident(id!);
   const { mutate: deleteResident, isPending: isDeleting } = useDeleteResident();
 
   if (isLoading) return <LoadingState variant="skeleton" rows={8} />;
@@ -43,20 +33,16 @@ export function ResidentDetailPage() {
   const r = data?.data;
   if (!r) return <ErrorState onRetry={() => void 0} />;
 
-  const vehicles = vehiclesData?.data ?? [];
-  const pets     = petsData?.data     ?? [];
-  const lease    = leaseData?.data    ?? null;
-
   return (
     <div className="space-y-6">
       <PageHeader
-        title={r.fullName}
-        description={`Unit ${r.unitNumber} · ${r.type.toLowerCase()}`}
+        title={r.full_name}
+        description={`Unit ${r.unit_id} · ${(r.resident_type ?? '').toLowerCase()}`}
         breadcrumbs={
           <Breadcrumbs items={[
-            { label: 'Dashboard',  href: '/dashboard' },
+            { label: 'Dashboard', href: '/dashboard' },
             { label: 'Residents', href: RESIDENT_ROUTES.LIST },
-            { label: r.fullName },
+            { label: r.full_name },
           ]} />
         }
         actions={
@@ -81,60 +67,23 @@ export function ResidentDetailPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-base">Profile</CardTitle>
-            <StatusBadge status={r.status} />
+            <Badge variant={r.is_active ? 'success' : 'secondary'}>
+              {r.is_active ? 'Active' : 'Inactive'}
+            </Badge>
           </div>
         </CardHeader>
         <CardContent>
           <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
-            <Field label="Full Name"     value={r.fullName} />
+            <Field label="Full Name"     value={r.full_name} />
             <Field label="Email"         value={r.email} />
-            <Field label="Phone"         value={formatPhone(r.phone)} />
-            <Field label="Unit"          value={r.unitNumber} />
-            <Field label="Type"          value={<span className="capitalize">{r.type.toLowerCase()}</span>} />
-            <Field label="Date of Birth" value={r.dateOfBirth ? formatDate(r.dateOfBirth) : '—'} />
-            <Field label="Gender"        value={r.gender ? <span className="capitalize">{r.gender.toLowerCase()}</span> : '—'} />
-            <Field label="Joined"        value={formatDate(r.createdAt)} />
+            <Field label="Mobile"        value={r.mobile_primary} />
+            <Field label="Unit ID"       value={r.unit_id} />
+            <Field label="Type"          value={<span className="capitalize">{(r.resident_type ?? '').toLowerCase()}</span>} />
+            <Field label="Relationship"  value={r.relationship} />
+            <Field label="Move In"       value={formatDate(r.move_in_date)} />
+            <Field label="Move Out"      value={r.move_out_date ? formatDate(r.move_out_date) : '—'} />
+            <Field label="Created"       value={formatDate(r.created_at)} />
           </dl>
-        </CardContent>
-      </Card>
-
-      {r.emergencyContact && (
-        <Card>
-          <CardHeader><CardTitle className="text-base">Emergency Contact</CardTitle></CardHeader>
-          <CardContent>
-            <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
-              <Field label="Name"         value={r.emergencyContact.name} />
-              <Field label="Relationship" value={r.emergencyContact.relationship} />
-              <Field label="Phone"        value={formatPhone(r.emergencyContact.phone)} />
-              <Field label="Email"        value={r.emergencyContact.email ?? '—'} />
-            </dl>
-          </CardContent>
-        </Card>
-      )}
-
-      <LeaseSection lease={lease} residentId={r.id} />
-
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-base">Vehicles</CardTitle>
-            <Badge variant="secondary">{vehicles.length}</Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <VehicleTable data={vehicles} residentId={r.id} />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-base">Pets</CardTitle>
-            <Badge variant="secondary">{pets.length}</Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <PetTable data={pets} residentId={r.id} />
         </CardContent>
       </Card>
     </div>

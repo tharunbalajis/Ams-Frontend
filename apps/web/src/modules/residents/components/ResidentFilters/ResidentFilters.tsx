@@ -1,5 +1,5 @@
 import { SearchInput, SelectField } from '@ams/ui';
-import { RESIDENT_TYPE_OPTIONS, RESIDENT_STATUS_OPTIONS } from '../../constants/resident.constants';
+import { RESIDENT_TYPE_OPTIONS } from '../../constants/resident.constants';
 import type { ResidentFiltersParams } from '../../types/resident.types';
 
 export interface ResidentFiltersProps {
@@ -7,28 +7,41 @@ export interface ResidentFiltersProps {
   onChange:  (filters: Partial<ResidentFiltersParams>) => void;
 }
 
+const STATUS_OPTIONS = [
+  { label: 'Active',   value: 'true' },
+  { label: 'Inactive', value: 'false' },
+];
+
 export function ResidentFilters({ filters, onChange }: ResidentFiltersProps) {
   return (
     <div className="flex flex-wrap gap-3">
       <SearchInput
         className="w-64"
         placeholder="Search residents..."
-        value={filters.search ?? ''}
-        onChange={(e) => onChange({ ...filters, search: (e.target as HTMLInputElement).value })}
-        onClear={() => onChange({ ...filters, search: '' })}
+        value={(filters as Record<string, string>).search ?? ''}
+        onChange={(e) => onChange({ ...filters, search: (e.target as HTMLInputElement).value } as Partial<ResidentFiltersParams>)}
+        onClear={() => onChange({ ...filters, search: undefined } as Partial<ResidentFiltersParams>)}
       />
       <SelectField
         className="w-40"
-        value={filters.type ?? 'all'}
-        onValueChange={(v) => onChange({ ...filters, type: v === 'all' ? undefined : v as ResidentFiltersParams['type'] })}
+        value={(filters as Record<string, string>).resident_type ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, ...( v === 'all' ? {} : { resident_type: v } ) } as Partial<ResidentFiltersParams>)}
         options={[{ label: 'All Types', value: 'all' }, ...RESIDENT_TYPE_OPTIONS]}
         placeholder="Type"
       />
       <SelectField
         className="w-40"
-        value={filters.status ?? 'all'}
-        onValueChange={(v) => onChange({ ...filters, status: v === 'all' ? undefined : v as ResidentFiltersParams['status'] })}
-        options={[{ label: 'All Statuses', value: 'all' }, ...RESIDENT_STATUS_OPTIONS]}
+        value={
+          filters.is_active === undefined ? 'all'
+          : filters.is_active ? 'true' : 'false'
+        }
+        onValueChange={(v) =>
+          onChange({
+            ...filters,
+            is_active: v === 'all' ? undefined : v === 'true',
+          })
+        }
+        options={[{ label: 'All Statuses', value: 'all' }, ...STATUS_OPTIONS]}
         placeholder="Status"
       />
     </div>

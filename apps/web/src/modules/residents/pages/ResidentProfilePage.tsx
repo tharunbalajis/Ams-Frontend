@@ -23,13 +23,13 @@ export function ResidentProfilePage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title={resident?.fullName ?? 'Profile'}
+        title={resident?.full_name ?? 'Profile'}
         description="Complete resident profile and history"
         breadcrumbs={
           <Breadcrumbs items={[
             { label: 'Dashboard',  href: '/dashboard' },
             { label: 'Residents', href: RESIDENT_ROUTES.LIST },
-            { label: resident?.fullName ?? 'Profile', href: RESIDENT_ROUTES.DETAIL.replace(':id', id!) },
+            { label: resident?.full_name ?? 'Profile', href: RESIDENT_ROUTES.DETAIL.replace(':id', id!) },
             { label: 'Profile' },
           ]} />
         }

@@ -1,23 +1,24 @@
 import { z } from 'zod';
 
 const lineItemSchema = z.object({
-  description: z.string().min(1),
-  amount:      z.number().positive(),
-  taxRate:     z.number().min(0).max(100).default(0),
+  maintenance_head_id: z.string().min(1, 'Head ID required'),
+  description:         z.string().min(1),
+  quantity:            z.number().positive().default(1),
+  rate:                z.number().positive(),
+  gst_rate:            z.number().min(0).max(28).default(0),
 });
 
 export const createInvoiceSchema = z.object({
-  type:        z.enum(['MAINTENANCE', 'SPECIAL_ASSESSMENT', 'PENALTY', 'LATE_FEE', 'MISCELLANEOUS']),
-  residentId:  z.string().min(1),
-  invoiceDate: z.string().min(1),
-  dueDate:     z.string().min(1),
-  lineItems:   z.array(lineItemSchema).min(1),
-  remarks:     z.string().optional(),
+  unit_id:        z.string().min(1, 'Unit ID is required'),
+  resident_id:    z.string().min(1, 'Resident ID is required'),
+  billing_period: z.string().regex(/^[A-Z]{3}-[0-9]{4}$/, 'Format: JUN-2026'),
+  invoice_date:   z.string().min(1),
+  due_date:       z.string().min(1),
+  line_items:     z.array(lineItemSchema).min(1, 'At least one line item required'),
 });
 
 export const updateInvoiceSchema = z.object({
-  dueDate: z.string().min(1).optional(),
-  remarks: z.string().optional(),
+  due_date: z.string().optional(),
 });
 
 export type CreateInvoiceFormValues = z.infer<typeof createInvoiceSchema>;

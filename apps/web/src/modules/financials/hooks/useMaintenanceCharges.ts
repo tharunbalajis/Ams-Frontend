@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { STALE_TIME } from '@/constants/query.constants';
 import { maintenanceApi } from '../api/maintenance.api';
 import { financialKeys } from '@/lib/queryKeys/financials.keys';
-import type { CreateMaintenanceHeadPayload, GenerateInvoicesPayload } from '../types/maintenance.types';
+import type { CreateMaintenanceHeadPayload } from '../types/maintenance.types';
 
 export function useMaintenanceHeads(params?: Record<string, unknown>) {
   return useQuery({
@@ -26,16 +26,6 @@ export function useCreateMaintenanceHead() {
     mutationFn: (payload: CreateMaintenanceHeadPayload) => maintenanceApi.createHead(payload),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: financialKeys.heads.all() });
-    },
-  });
-}
-
-export function useGenerateInvoices() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (payload: GenerateInvoicesPayload) => maintenanceApi.generateInvoices(payload),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: financialKeys.invoices.all() });
     },
   });
 }

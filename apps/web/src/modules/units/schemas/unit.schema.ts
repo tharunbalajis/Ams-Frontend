@@ -1,13 +1,14 @@
 import { z } from 'zod';
 
 export const createUnitSchema = z.object({
-  unitNumber:    z.string().min(1),
-  block:         z.string().min(1),
-  floor:         z.number().int().min(0),
-  type:          z.enum(['STUDIO', '1BHK', '2BHK', '3BHK', '4BHK', 'PENTHOUSE', 'DUPLEX', 'COMMERCIAL']),
-  squareFeet:    z.number().positive(),
-  ownershipType: z.enum(['OWNED', 'RENTED', 'LEASED']),
-  description:   z.string().optional(),
+  unit_number:   z.string().min(1, 'Unit number is required'),
+  unit_type:     z.enum(['STUDIO', '1BHK', '2BHK', '3BHK']),
+  block_id:      z.string().optional(),
+  floor_number:  z.string().optional(),
+  ownership_type: z.enum(['OWNED', 'RENTED', 'VACANT']).optional(),
+  super_built_up: z.string().optional(),
+  carpet_area:   z.string().optional(),
+  parking_slots: z.string().optional(),
 });
 
 export const updateUnitSchema = createUnitSchema.partial();

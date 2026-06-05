@@ -2,7 +2,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, FormField, Input, SelectField, TextArea } from '@ams/ui';
 import { createComplaintSchema, type CreateComplaintFormValues } from '../../schemas/complaint.schema';
-import { COMPLAINT_CATEGORY_OPTIONS, PRIORITY_OPTIONS } from '../../constants';
+import { PRIORITY_OPTIONS } from '../../constants';
+import { useCategories } from '../../hooks/useComplaint';
 
 export interface ComplaintFormProps {
   onSubmit:   (values: CreateComplaintFormValues) => void;
@@ -11,14 +12,17 @@ export interface ComplaintFormProps {
 }
 
 export function ComplaintForm({ onSubmit, onCancel, isPending }: ComplaintFormProps) {
+  const { data: catData } = useCategories();
+  const categories = catData?.data ?? [];
+
   const form = useForm<CreateComplaintFormValues>({
     resolver:      zodResolver(createComplaintSchema),
     defaultValues: {
       title:       '',
-      categoryId:  '',
+      cat_id:      '',
       priority:    'MEDIUM',
       description: '',
-      residentId:  '',
+      unit_id:     '',
     },
   });
 
@@ -37,12 +41,16 @@ export function ComplaintForm({ onSubmit, onCancel, isPending }: ComplaintFormPr
       </FormField>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField control={form.control} name="categoryId" label="Category" required>
+        <FormField control={form.control} name="cat_id" label="Category" required>
           {(field) => (
             <SelectField
               value={field.value as string}
               onValueChange={field.onChange}
-              options={COMPLAINT_CATEGORY_OPTIONS}
+              options={
+                categories.length
+                  ? categories.filter(c => c.id).map(c => ({ label: c.category_name, value: c.id }))
+                  : [{ label: 'Loading…', value: 'loading' }]
+              }
               placeholder="Select category"
               disabled={isPending}
             />
@@ -62,13 +70,14 @@ export function ComplaintForm({ onSubmit, onCancel, isPending }: ComplaintFormPr
         </FormField>
       </div>
 
-      <FormField control={form.control} name="residentId" label="Resident ID" required>
+      <FormField control={form.control} name="unit_id" label="Unit ID" required>
         {(field) => (
           <Input
+            type="number"
             value={field.value as string}
             onChange={field.onChange}
             onBlur={field.onBlur}
-            placeholder="Resident ID"
+            placeholder="Unit number"
             disabled={isPending}
           />
         )}

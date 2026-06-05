@@ -34,7 +34,7 @@ export function ComplaintDetailPage() {
 
   const { mutate: resolve, isPending: resolving } = useMutation({
     mutationFn: (values: ResolutionFormValues) =>
-      complaintsApi.updateStatus(id, values.closeAfterResolve ? 'CLOSED' : 'RESOLVED', values.resolutionNotes),
+      complaintsApi.updateStatus(id, values.closeAfterResolve ? 'closed' : 'resolved', values.resolutionNotes),
     onSuccess: () => { invalidate(); setResolveOpen(false); },
   });
 
@@ -53,7 +53,7 @@ export function ComplaintDetailPage() {
     <div className="space-y-6">
       <PageHeader
         title={complaint.title}
-        description={`${complaint.categoryName} · Unit ${complaint.unitNumber}`}
+        description={`${complaint.category_name ?? complaint.cat_id.slice(0, 8)} · Unit ${complaint.unit_id}`}
         breadcrumbs={
           <Breadcrumbs items={[
             { label: 'Dashboard',  href: '/dashboard' },
@@ -65,7 +65,7 @@ export function ComplaintDetailPage() {
           <div className="flex gap-2">
             <ComplaintStatusBadge priority={complaint.priority} />
             <ComplaintStatusBadge status={complaint.status} />
-            {complaint.status !== 'RESOLVED' && complaint.status !== 'CLOSED' && (
+            {complaint.status !== 'resolved' && complaint.status !== 'closed' && (
               <>
                 <Button variant="outline" onClick={() => setAssignOpen(true)}>Assign</Button>
                 <Button onClick={() => setResolveOpen(true)}>Resolve</Button>
@@ -87,10 +87,9 @@ export function ComplaintDetailPage() {
           <div className="lg:col-span-2 space-y-4">
             <p className="text-sm leading-relaxed">{complaint.description}</p>
             <div className="grid gap-3 sm:grid-cols-2 text-sm">
-              <div><p className="text-muted-foreground">Resident</p><p className="font-medium">{complaint.residentName}</p></div>
-              <div><p className="text-muted-foreground">Unit</p><p className="font-medium">{complaint.unitNumber}</p></div>
-              <div><p className="text-muted-foreground">Assigned To</p><p className="font-medium">{complaint.assignedTo ?? '—'}</p></div>
-              <div><p className="text-muted-foreground">Date</p><p className="font-medium">{complaint.complaintDate}</p></div>
+              <div><p className="text-muted-foreground">Unit</p><p className="font-medium">Unit {complaint.unit_id}</p></div>
+              <div><p className="text-muted-foreground">Assigned To</p><p className="font-medium">{complaint.assigned_to ?? '—'}</p></div>
+              <div><p className="text-muted-foreground">Date</p><p className="font-medium">{complaint.created_at}</p></div>
             </div>
           </div>
         </TabsContent>

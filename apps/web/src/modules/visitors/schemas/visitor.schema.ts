@@ -1,24 +1,12 @@
 import { z } from 'zod';
 
 export const createVisitorSchema = z.object({
-  name:              z.string().min(1),
-  mobile:            z.string().min(10),
-  type:              z.enum(['GUEST', 'DELIVERY', 'SERVICE_PROVIDER', 'VENDOR', 'MAINTENANCE', 'EMERGENCY']),
-  purposeOfVisit:    z.string().min(1),
-  residentId:        z.string().min(1),
-  vehicleNumber:     z.string().optional(),
-  idProof:           z.string().optional(),
-  expectedEntryTime: z.string().min(1),
-  expectedExitTime:  z.string().optional(),
-});
-
-export const createInviteSchema = z.object({
-  visitorName:   z.string().min(1),
-  visitorMobile: z.string().min(10),
-  visitorType:   z.enum(['GUEST', 'DELIVERY', 'SERVICE_PROVIDER', 'VENDOR', 'MAINTENANCE', 'EMERGENCY']),
-  validFrom:     z.string().min(1),
-  validUntil:    z.string().min(1),
+  visitor_name:   z.string().min(1, 'Visitor name is required'),
+  visitor_mobile: z.string().optional(),
+  visitor_type:   z.enum(['GUEST', 'DELIVERY', 'DOMESTIC_HELP', 'SERVICE', 'CONTRACTOR', 'BROKER', 'UNKNOWN']),
+  purpose:        z.string().optional(),
+  unit_id:        z.string().optional(),
+  resident_id:    z.string().optional(),
 });
 
 export type CreateVisitorFormValues = z.infer<typeof createVisitorSchema>;
-export type CreateInviteFormValues  = z.infer<typeof createInviteSchema>;

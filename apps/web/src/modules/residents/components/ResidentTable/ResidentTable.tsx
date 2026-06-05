@@ -1,6 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
-import { Badge, Button, ServerTable, StatusBadge } from '@ams/ui';
+import { Badge, Button, ServerTable } from '@ams/ui';
 import { formatDate } from '@/utils/formatDate';
 import type { ResidentListItem } from '../../types/resident.types';
 import type { PaginationState } from '@ams/ui';
@@ -18,49 +18,52 @@ export function ResidentTable({ data, loading, pagination, onPageChange }: Resid
 
   const columns: ColumnDef<ResidentListItem>[] = [
     {
-      accessorKey: 'fullName',
+      accessorKey: 'full_name',
       header:      'Name',
       cell:        ({ row }) => (
         <button
           className="font-medium text-primary hover:underline"
           onClick={() => void navigate(RESIDENT_ROUTES.DETAIL.replace(':id', row.original.id))}
         >
-          {row.original.fullName}
+          {row.original.full_name}
         </button>
       ),
     },
     {
       accessorKey: 'email',
       header:      'Email',
+      cell:        ({ getValue }) => (getValue() as string | undefined) ?? '—',
     },
     {
-      accessorKey: 'phone',
+      accessorKey: 'mobile_primary',
       header:      'Phone',
     },
     {
-      accessorKey: 'unitNumber',
+      accessorKey: 'unit_id',
       header:      'Unit',
       cell:        ({ getValue }) => (
-        <Badge variant="secondary">{getValue() as string}</Badge>
+        <Badge variant="secondary">Unit {getValue() as number}</Badge>
       ),
     },
     {
-      accessorKey: 'type',
+      accessorKey: 'resident_type',
       header:      'Type',
       cell:        ({ getValue }) => (
-        <span className="capitalize">{getValue() as string}</span>
+        <span className="capitalize">{(getValue() as string ?? '').toLowerCase()}</span>
       ),
     },
     {
-      accessorKey: 'status',
+      accessorKey: 'is_active',
       header:      'Status',
       cell:        ({ getValue }) => (
-        <StatusBadge status={getValue() as 'active' | 'inactive' | 'pending' | 'suspended'} />
+        <Badge variant={(getValue() as boolean) ? 'success' : 'secondary'}>
+          {(getValue() as boolean) ? 'Active' : 'Inactive'}
+        </Badge>
       ),
     },
     {
-      accessorKey: 'createdAt',
-      header:      'Joined',
+      accessorKey: 'move_in_date',
+      header:      'Move In',
       cell:        ({ getValue }) => formatDate(getValue() as string),
     },
     {

@@ -1,54 +1,34 @@
-import type { ID, Nullable, Timestamp } from '@/types/common.types';
-
-export type ExpenseStatus = 'DRAFT' | 'PENDING_APPROVAL' | 'APPROVED' | 'PAID' | 'REJECTED';
+export type ExpenseStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
 export interface Expense {
-  id:            ID;
-  expenseNumber: string;
-  headId:        ID;
-  headName:      string;
-  status:        ExpenseStatus;
-  vendor:        string;
-  expenseDate:   string;
-  amount:        number;
-  description:   string;
-  approvedBy:    Nullable<string>;
-  approvedAt:    Nullable<Timestamp>;
-  paidAt:        Nullable<Timestamp>;
-  receiptUrl:    Nullable<string>;
-  createdAt:     Timestamp;
-  updatedAt:     Timestamp;
+  id:           string;
+  society_id:   number;
+  category_id:  string;
+  expense_date: string;
+  description:  string;
+  amount:       number;
+  gst_amount:   number;
+  status:       ExpenseStatus;
+  is_active:    boolean;
+  created_at:   string;
 }
 
-export type ExpenseListItem = Pick<
-  Expense,
-  | 'id'
-  | 'expenseNumber'
-  | 'headName'
-  | 'status'
-  | 'vendor'
-  | 'expenseDate'
-  | 'amount'
-  | 'approvedBy'
->;
+export type ExpenseListItem = Expense;
 
 export interface CreateExpensePayload {
-  headId:      ID;
-  vendor:      string;
-  expenseDate: string;
-  amount:      number;
-  description: string;
-  receiptUrl?: string;
+  category_id:  string;
+  expense_date: string;
+  description:  string;
+  amount:       number;
+  gst_amount?:  number;
 }
 
 export type UpdateExpensePayload = Partial<CreateExpensePayload>;
 
 export interface ExpenseFiltersParams {
-  search?:   string;
-  headId?:   ID;
-  status?:   ExpenseStatus;
-  dateFrom?: string;
-  dateTo?:   string;
-  page?:     number;
-  limit?:    number;
+  society_id?: number;
+  status?:     ExpenseStatus;
+  search?:     string;
+  page?:       number;
+  limit?:      number;
 }

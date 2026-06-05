@@ -1,7 +1,5 @@
 export type {
   UnitType,
-  UnitStatus,
-  OccupancyStatus,
   OwnershipType,
   Unit,
   UnitListItem,
@@ -9,14 +7,6 @@ export type {
   UpdateUnitPayload,
   UnitFiltersParams,
 } from './unit.types';
-
-export type {
-  OwnerInfo,
-  Ownership,
-  CreateOwnershipPayload,
-  UpdateOwnershipPayload,
-  OwnershipHistory,
-} from './ownership.types';
 
 export type {
   Block,

@@ -42,8 +42,7 @@ export function useUpdateVisitor(id: string) {
 export function useCheckInVisitor() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, gateNumber }: { id: string; gateNumber?: string }) =>
-      visitorsApi.checkIn(id, gateNumber),
+    mutationFn: ({ id }: { id: string }) => visitorsApi.checkIn(id),
     onSuccess: (_, { id }) => {
       void queryClient.invalidateQueries({ queryKey: visitorKeys.detail(id) });
       void queryClient.invalidateQueries({ queryKey: visitorKeys.lists() });

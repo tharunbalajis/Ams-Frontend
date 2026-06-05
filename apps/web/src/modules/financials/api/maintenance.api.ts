@@ -4,10 +4,8 @@ import type {
   MaintenanceHead,
   CreateMaintenanceHeadPayload,
   UpdateMaintenanceHeadPayload,
-  GenerateInvoicesPayload,
 } from '../types/maintenance.types';
 
-// Backend path: /maintenance-heads  (NOT /financials/heads)
 const BASE = '/maintenance-heads';
 
 function wrapArray<T>(data: T[]): ApiListResponse<T> {
@@ -30,7 +28,4 @@ export const maintenanceApi = {
 
   deleteHead: (id: string) =>
     apiClient.delete(`${BASE}/${id}`).then((r) => r.data),
-
-  generateInvoices: (payload: GenerateInvoicesPayload) =>
-    apiClient.post<ApiResponse<{ count: number }>>(`${BASE}/generate`, payload).then((r) => r.data),
 };

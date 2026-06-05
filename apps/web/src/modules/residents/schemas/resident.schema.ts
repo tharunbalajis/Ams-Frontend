@@ -1,26 +1,17 @@
 import { z } from 'zod';
 
-const emergencyContactSchema = z.object({
-  name:         z.string().min(1),
-  relationship: z.string().min(1),
-  phone:        z.string().min(10),
-  email:        z.string().email().optional(),
-});
-
 export const createResidentSchema = z.object({
-  type:             z.enum(['OWNER', 'TENANT']),
-  firstName:        z.string().min(1),
-  lastName:         z.string().min(1),
-  email:            z.string().email(),
-  phone:            z.string().min(10),
-  unitId:           z.string().min(1),
-  dateOfBirth:      z.string().optional(),
-  gender:           z.enum(['MALE', 'FEMALE', 'OTHER']).optional(),
-  emergencyContact: emergencyContactSchema.optional(),
+  full_name:     z.string().min(1, 'Full name is required'),
+  mobile_primary: z.string().min(10, 'Mobile number is required'),
+  unit_id:       z.string().min(1, 'Unit is required'),
+  move_in_date:  z.string().min(1, 'Move-in date is required'),
+  resident_type: z.enum(['OWNER', 'TENANT', 'FAMILY']).optional(),
+  relationship:  z.enum(['PRIMARY', 'SPOUSE', 'CHILD', 'PARENT', 'DEPENDENT']).optional(),
+  email:         z.string().email().optional().or(z.literal('')),
+  mobile_secondary: z.string().optional(),
 });
 
-export const updateResidentSchema = createResidentSchema.partial().omit({ unitId: true });
+export const updateResidentSchema = createResidentSchema.partial();
 
-export type CreateResidentFormValues  = z.infer<typeof createResidentSchema>;
-export type UpdateResidentFormValues  = z.infer<typeof updateResidentSchema>;
-export type EmergencyContactFormValues = z.infer<typeof emergencyContactSchema>;
+export type CreateResidentFormValues = z.infer<typeof createResidentSchema>;
+export type UpdateResidentFormValues = z.infer<typeof updateResidentSchema>;

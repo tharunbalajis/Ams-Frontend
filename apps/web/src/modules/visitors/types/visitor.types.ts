@@ -1,82 +1,46 @@
-import type { ID, Nullable, Timestamp } from '@/types/common.types';
-
 export type VisitorType =
   | 'GUEST'
   | 'DELIVERY'
-  | 'SERVICE_PROVIDER'
-  | 'VENDOR'
-  | 'MAINTENANCE'
-  | 'EMERGENCY';
-
-export type VisitorStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'BLACKLISTED';
-export type EntryStatus   = 'CHECKED_IN' | 'CHECKED_OUT' | 'EXPECTED' | 'OVERSTAY' | 'NO_SHOW';
+  | 'DOMESTIC_HELP'
+  | 'SERVICE'
+  | 'CONTRACTOR'
+  | 'BROKER'
+  | 'UNKNOWN';
 
 export interface Visitor {
-  id:                ID;
-  name:              string;
-  mobile:            string;
-  type:              VisitorType;
-  status:            VisitorStatus;
-  entryStatus:       EntryStatus;
-  purposeOfVisit:    string;
-  residentId:        ID;
-  residentName:      string;
-  unitNumber:        string;
-  vehicleNumber:     Nullable<string>;
-  idProof:           Nullable<string>;
-  expectedEntryTime: string;
-  expectedExitTime:  Nullable<string>;
-  actualEntryTime:   Nullable<string>;
-  actualExitTime:    Nullable<string>;
-  gateNumber:        Nullable<string>;
-  securityNotes:     Nullable<string>;
-  isPreApproved:     boolean;
-  createdAt:         Timestamp;
-  updatedAt:         Timestamp;
+  id:             string;
+  society_id:     number;
+  unit_id:        number;
+  resident_id:    string;
+  visitor_name:   string;   // NOT full_name
+  visitor_mobile?: string;  // NOT mobile
+  visitor_type:   VisitorType;
+  purpose?:       string;
+  check_in_at?:   string;   // NOT check_in_time
+  check_out_at?:  string;
+  status:         string;
+  is_active:      boolean;
+  created_at:     string;
 }
 
-export type VisitorListItem = Pick<
-  Visitor,
-  | 'id'
-  | 'name'
-  | 'mobile'
-  | 'type'
-  | 'status'
-  | 'entryStatus'
-  | 'purposeOfVisit'
-  | 'residentName'
-  | 'unitNumber'
-  | 'expectedEntryTime'
-  | 'actualEntryTime'
-  | 'actualExitTime'
-  | 'isPreApproved'
->;
+export type VisitorListItem = Visitor;
 
 export interface CreateVisitorPayload {
-  name:              string;
-  mobile:            string;
-  type:              VisitorType;
-  purposeOfVisit:    string;
-  residentId:        ID;
-  vehicleNumber?:    string;
-  idProof?:          string;
-  expectedEntryTime: string;
-  expectedExitTime?: string;
+  visitor_name:   string;
+  visitor_type:   VisitorType;
+  society_id?:    number;
+  unit_id?:       number;
+  resident_id?:   string;
+  purpose?:       string;
+  visitor_mobile?: string;
 }
 
 export type UpdateVisitorPayload = Partial<CreateVisitorPayload>;
 
 export interface VisitorFiltersParams {
-  search?:      string;
-  type?:        VisitorType;
-  status?:      VisitorStatus;
-  entryStatus?: EntryStatus;
-  residentId?:  ID;
-  unitNumber?:  string;
-  dateFrom?:    string;
-  dateTo?:      string;
-  page?:        number;
-  limit?:       number;
-  sortBy?:      string;
-  sortDir?:     'asc' | 'desc';
+  society_id?: number;
+  status?:     string;
+  search?:     string;
+  page?:       number;
+  limit?:      number;
 }

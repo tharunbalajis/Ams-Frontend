@@ -18,19 +18,19 @@ export function EditUnitPage() {
   const unit = data.data;
 
   const handleSubmit = (values: CreateUnitFormValues) => {
-    mutate(values);
+    mutate(values as Parameters<typeof mutate>[0]);
   };
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={`Edit Unit ${unit.unitNumber}`}
-        description={`Block ${unit.block} · Floor ${unit.floor}`}
+        title={`Edit Unit ${unit.unit_number}`}
+        description={`${unit.block_name ? `Block ${unit.block_name} · ` : ''}Floor ${unit.floor_number ?? '—'}`}
         breadcrumbs={
           <Breadcrumbs items={[
-            { label: 'Dashboard',            href: '/dashboard' },
-            { label: 'Units',                href: UNIT_ROUTES.LIST },
-            { label: unit.unitNumber,        href: UNIT_ROUTES.DETAIL.replace(':id', id) },
+            { label: 'Dashboard', href: '/dashboard' },
+            { label: 'Units',     href: UNIT_ROUTES.LIST },
+            { label: unit.unit_number, href: UNIT_ROUTES.DETAIL.replace(':id', String(unit.unit_id)) },
             { label: 'Edit' },
           ]} />
         }

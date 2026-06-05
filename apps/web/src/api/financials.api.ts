@@ -1,28 +1,42 @@
 import apiClient from './client';
+import type { Invoice } from '@/modules/financials/types/invoice.types';
+import type { MaintenanceHead } from '@/modules/financials/types/maintenance.types';
+import type { Expense } from '@/modules/financials/types/expense.types';
 
 export const financialsApi = {
-  // Invoices: /invoices (NOT /financials/invoices)
-  getInvoices:        (params?: unknown) => apiClient.get('/invoices', { params }),
-  getInvoiceById:     (id: string)       => apiClient.get(`/invoices/${id}`),
-  createInvoice:      (payload: unknown) => apiClient.post('/invoices', payload),
-  updateInvoice:      (id: string, payload: unknown) => apiClient.put(`/invoices/${id}`, payload),
-  getInvoicePayments: (id: string)       => apiClient.get(`/invoices/${id}/payments`),
-  recordPayment:      (id: string, payload: unknown) => apiClient.post(`/invoices/${id}/payments`, payload),
-
-  // Expenses: /expenses (NOT /financials/expenses)
-  getExpenses:        (params?: unknown) => apiClient.get('/expenses', { params }),
-  getExpenseById:     (id: string)       => apiClient.get(`/expenses/${id}`),
-  createExpense:      (payload: unknown) => apiClient.post('/expenses', payload),
-  updateExpense:      (id: string, payload: unknown) => apiClient.put(`/expenses/${id}`, payload),
-  approveExpense:     (id: string)       => apiClient.put(`/expenses/${id}/approve`, {}),
-
-  // Maintenance heads: /maintenance-heads (NOT /financials/heads)
-  getHeads:           (params?: unknown) => apiClient.get('/maintenance-heads', { params }),
-  getHeadById:        (id: string)       => apiClient.get(`/maintenance-heads/${id}`),
-  createHead:         (payload: unknown) => apiClient.post('/maintenance-heads', payload),
-  updateHead:         (id: string, payload: unknown) => apiClient.put(`/maintenance-heads/${id}`, payload),
-  deleteHead:         (id: string)       => apiClient.delete(`/maintenance-heads/${id}`),
-
-  // Dashboard: /finance/dashboard
-  getDashboard:       (params?: unknown) => apiClient.get('/finance/dashboard', { params }),
+  getDashboard: () => apiClient.get('/finance/dashboard'),
+  getInvoices: (params?: { society_id?: number; status?: string; unit_id?: number }) =>
+    apiClient.get<Invoice[]>('/invoices', { params }),
+  getInvoiceById: (id: string) => apiClient.get<Invoice>(`/invoices/${id}`),
+  createInvoice: (data: {
+    unit_id: number; resident_id: string;
+    billing_period: string;
+    invoice_date: string; due_date: string;
+    line_items: Array<{
+      maintenance_head_id: string; description: string;
+      quantity: number; rate: number; gst_rate: number;
+    }>;
+  }) => apiClient.post<Invoice>('/invoices', data),
+  getPaymentsByInvoice: (id: string) => apiClient.get(`/invoices/${id}/payments`),
+  recordPayment: (id: string, data: {
+    amount: number; payment_mode: string; idempotency_key: string;
+  }) => apiClient.post(`/invoices/${id}/payments`, data),
+  getMaintenanceHeads: () => apiClient.get<MaintenanceHead[]>('/maintenance-heads'),
+  createMaintenanceHead: (data: {
+    head_name: string; head_type: string; calculation_basis: string;
+    amount: number; frequency: string; gst_applicable?: boolean; gst_rate?: number;
+  }) => apiClient.post<MaintenanceHead>('/maintenance-heads', data),
+  updateMaintenanceHead: (id: string, data: Partial<MaintenanceHead>) =>
+    apiClient.put<MaintenanceHead>(`/maintenance-heads/${id}`, data),
+  deleteMaintenanceHead: (id: string) => apiClient.delete(`/maintenance-heads/${id}`),
+  getExpenseCategories: () => apiClient.get('/expense-categories'),
+  createExpenseCategory: (data: { society_id: number; category_name: string }) =>
+    apiClient.post('/expense-categories', data),
+  getExpenses: (params?: { society_id?: number; status?: string }) =>
+    apiClient.get<Expense[]>('/expenses', { params }),
+  createExpense: (data: {
+    category_id: string; expense_date: string; description: string;
+    amount: number; gst_amount?: number;
+  }) => apiClient.post<Expense>('/expenses', data),
+  approveExpense: (id: string) => apiClient.put(`/expenses/${id}/approve`, {}),
 };

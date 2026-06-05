@@ -1,8 +1,7 @@
 import apiClient from '@/api/client';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
-import type { Expense, ExpenseListItem, CreateExpensePayload, UpdateExpensePayload, ExpenseFiltersParams } from '../types/expense.types';
+import type { Expense, CreateExpensePayload, UpdateExpensePayload, ExpenseFiltersParams } from '../types/expense.types';
 
-// Backend path: /expenses  (NOT /financials/expenses)
 const BASE = '/expenses';
 
 function wrapArray<T>(data: T[]): ApiListResponse<T> {
@@ -12,7 +11,7 @@ function wrapArray<T>(data: T[]): ApiListResponse<T> {
 
 export const expensesApi = {
   getAll: (params?: ExpenseFiltersParams) =>
-    apiClient.get<ExpenseListItem[]>(BASE, { params }).then((r) => wrapArray(r.data)),
+    apiClient.get<Expense[]>(BASE, { params }).then((r) => wrapArray(r.data)),
 
   getById: (id: string) =>
     apiClient.get<Expense>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Expense>),

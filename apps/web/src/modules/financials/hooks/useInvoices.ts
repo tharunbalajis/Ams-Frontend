@@ -55,16 +55,3 @@ export function useUpdateInvoice(id: string) {
     onError: (error) => { toast.apiError(error); },
   });
 }
-
-export function useCancelInvoice() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (id: string) => invoicesApi.cancel(id),
-    onSuccess: (_, id) => {
-      void queryClient.invalidateQueries({ queryKey: financialKeys.invoices.detail(id) });
-      void queryClient.invalidateQueries({ queryKey: financialKeys.invoices.all() });
-      toast.success('Invoice cancelled.');
-    },
-    onError: (error) => { toast.apiError(error); },
-  });
-}

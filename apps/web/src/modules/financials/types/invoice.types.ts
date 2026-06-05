@@ -1,89 +1,59 @@
-import type { ID, Nullable, Timestamp } from '@/types/common.types';
-
-export type InvoiceStatus = 'DRAFT' | 'PENDING' | 'PARTIALLY_PAID' | 'PAID' | 'OVERDUE' | 'CANCELLED';
-export type InvoiceType   = 'MAINTENANCE' | 'SPECIAL_ASSESSMENT' | 'PENALTY' | 'LATE_FEE' | 'MISCELLANEOUS';
+export type InvoiceStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED';
 
 export interface InvoiceLineItem {
-  id?:         ID;
-  description: string;
-  amount:      number;
-  taxRate:     number;
-  taxAmount:   number;
-  total:       number;
+  maintenance_head_id: string;
+  description:         string;
+  quantity:            number;
+  rate:                number;
+  gst_rate:            number;
 }
 
 export interface Invoice {
-  id:            ID;
-  invoiceNumber: string;
-  type:          InvoiceType;
-  status:        InvoiceStatus;
-  residentId:    ID;
-  residentName:  string;
-  unitNumber:    string;
-  invoiceDate:   string;
-  dueDate:       string;
-  subtotal:      number;
-  taxAmount:     number;
-  totalAmount:   number;
-  paidAmount:    number;
-  balanceDue:    number;
-  lineItems:     InvoiceLineItem[];
-  remarks:       Nullable<string>;
-  generatedBy:   string;
-  createdAt:     Timestamp;
-  updatedAt:     Timestamp;
+  id:             string;
+  society_id:     number;
+  unit_id:        number;
+  resident_id:    string;
+  invoice_number: string;
+  billing_period: string;   // format: "JUN-2026"
+  invoice_date:   string;
+  due_date:       string;
+  subtotal:       number;
+  gst_amount:     number;
+  penalty_amount: number;
+  total_amount:   number;
+  paid_amount:    number;
+  status:         InvoiceStatus;
+  is_active:      boolean;
+  created_at:     string;
 }
 
-export type InvoiceListItem = Pick<
-  Invoice,
-  | 'id'
-  | 'invoiceNumber'
-  | 'type'
-  | 'status'
-  | 'residentName'
-  | 'unitNumber'
-  | 'invoiceDate'
-  | 'dueDate'
-  | 'totalAmount'
-  | 'paidAmount'
-  | 'balanceDue'
->;
+export type InvoiceListItem = Invoice;
 
 export interface CreateInvoicePayload {
-  type:        InvoiceType;
-  residentId:  ID;
-  invoiceDate: string;
-  dueDate:     string;
-  lineItems:   Omit<InvoiceLineItem, 'id'>[];
-  remarks?:    string;
+  unit_id:        number;
+  resident_id:    string;
+  billing_period: string;    // "JUN-2026" — required
+  invoice_date:   string;
+  due_date:       string;
+  line_items:     InvoiceLineItem[];  // required
 }
 
-export type UpdateInvoicePayload = Partial<Pick<CreateInvoicePayload, 'dueDate' | 'remarks'>>;
+export type UpdateInvoicePayload = Partial<Pick<CreateInvoicePayload, 'due_date'>>;
 
 export interface InvoiceFiltersParams {
-  search?:     string;
-  type?:       InvoiceType;
+  society_id?: number;
+  unit_id?:    number;
   status?:     InvoiceStatus;
-  residentId?: ID;
-  dateFrom?:   string;
-  dateTo?:     string;
+  search?:     string;
   page?:       number;
   limit?:      number;
-  sortBy?:     string;
-  sortDir?:    'asc' | 'desc';
 }
 
 export interface InvoicePaymentRecord {
-  invoiceId:     ID;
-  invoiceNumber: string;
-  totalAmount:   number;
-  paidAmount:    number;
-  balanceDue:    number;
-  payments:      {
-    id:             ID;
-    paymentDate:    string;
-    amount:         number;
-    method:         string;
-    transactionRef: Nullable<string>;
-  }[];
+  id:              string;
+  invoice_id:      string;
+  amount:          number;
+  payment_mode:    string;
+  idempotency_key: string;
+  created_at:      string;
 }

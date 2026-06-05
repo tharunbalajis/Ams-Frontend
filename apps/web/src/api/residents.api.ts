@@ -1,15 +1,21 @@
 import apiClient from './client';
-
-// Residents API — placeholder definitions
-// Aligns with backend: modules/residents
-// Implement in Phase 2
+import type { Resident } from '@/modules/residents/types/resident.types';
 
 const BASE = '/residents';
 
 export const residentsApi = {
-  getAll: (params?: unknown) => apiClient.get(BASE, { params }),
-  getById: (id: string) => apiClient.get(`${BASE}/${id}`),
-  create: (payload: unknown) => apiClient.post(BASE, payload),
-  update: (id: string, payload: unknown) => apiClient.put(`${BASE}/${id}`, payload),
+  getAll: (params?: Record<string, unknown>) =>
+    apiClient.get<Resident[]>(BASE, { params }),
+  getById: (id: string) => apiClient.get<Resident>(`${BASE}/${id}`),
+  create: (data: {
+    society_id: number; unit_id: number; full_name: string;
+    mobile_primary: string; move_in_date: string;
+    relationship?: string; resident_type?: string;
+    email?: string; mobile_secondary?: string;
+  }) => apiClient.post<Resident>(BASE, data),
+  update: (id: string, data: Partial<Resident>) =>
+    apiClient.put<Resident>(`${BASE}/${id}`, data),
   remove: (id: string) => apiClient.delete(`${BASE}/${id}`),
+  getDashboard: (society_id: number) =>
+    apiClient.get('/residents/dashboard', { params: { society_id } }),
 };

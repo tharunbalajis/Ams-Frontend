@@ -1,6 +1,5 @@
 export type {
   InvoiceStatus,
-  InvoiceType,
   InvoiceLineItem,
   Invoice,
   InvoiceListItem,
@@ -9,15 +8,6 @@ export type {
   InvoiceFiltersParams,
   InvoicePaymentRecord,
 } from './invoice.types';
-
-export type {
-  PaymentMethod,
-  PaymentStatus,
-  Payment,
-  PaymentListItem,
-  CreatePaymentPayload,
-  PaymentFiltersParams,
-} from './payment.types';
 
 export type {
   ExpenseStatus,
@@ -35,12 +25,4 @@ export type {
   MaintenanceHead,
   CreateMaintenanceHeadPayload,
   UpdateMaintenanceHeadPayload,
-  GenerateInvoicesPayload,
 } from './maintenance.types';
-
-export type {
-  FinancialDashboard,
-  TrendPoint,
-  ExpenseBreakdown,
-  FinancialAnalytics,
-} from './analytics.types';

@@ -1,9 +1,5 @@
 import { SearchInput, SelectField } from '@ams/ui';
-import {
-  COMPLAINT_CATEGORY_OPTIONS,
-  PRIORITY_OPTIONS,
-  STATUS_OPTIONS,
-} from '../../constants';
+import { PRIORITY_OPTIONS, STATUS_OPTIONS } from '../../constants';
 import type { ComplaintFiltersParams } from '../../types/complaint.types';
 
 export interface ComplaintFiltersProps {
@@ -17,17 +13,9 @@ export function ComplaintFilters({ filters, onChange }: ComplaintFiltersProps) {
       <SearchInput
         className="w-64"
         placeholder="Search complaints..."
-        value={filters.search ?? ''}
+        value={(filters as Record<string, string>).search ?? ''}
         onChange={(e) => onChange({ ...filters, search: (e.target as HTMLInputElement).value })}
-        onClear={() => onChange({ ...filters, search: '' })}
-      />
-
-      <SelectField
-        className="w-44"
-        value={filters.categoryId ?? 'all'}
-        onValueChange={(v) => onChange({ ...filters, categoryId: v === 'all' ? undefined : v })}
-        options={[{ label: 'All Categories', value: 'all' }, ...COMPLAINT_CATEGORY_OPTIONS]}
-        placeholder="Category"
+        onClear={() => onChange({ ...filters, search: undefined })}
       />
 
       <SelectField

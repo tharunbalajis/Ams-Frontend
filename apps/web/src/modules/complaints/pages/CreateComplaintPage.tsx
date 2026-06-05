@@ -3,12 +3,19 @@ import { ComplaintForm }    from '../components/ComplaintForm';
 import { useCreateComplaint } from '../hooks/useCreateComplaint';
 import { COMPLAINT_ROUTES }   from '../constants/complaint.constants';
 import type { CreateComplaintFormValues } from '../schemas/complaint.schema';
+import { useAuth } from '@/hooks/useAuth';
 
 export function CreateComplaintPage() {
+  const { user } = useAuth();
   const { mutate, isPending } = useCreateComplaint();
 
   const handleSubmit = (values: CreateComplaintFormValues) => {
-    mutate(values);
+    mutate({
+      ...values,
+      unit_id:    Number(values.unit_id),
+      raised_by:  user?.id ?? '',
+      society_id: user?.society_id ?? 1,
+    });
   };
 
   return (

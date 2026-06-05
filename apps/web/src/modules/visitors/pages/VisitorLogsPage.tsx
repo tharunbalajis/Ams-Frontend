@@ -6,17 +6,15 @@ import { VisitorTable }   from '../components/VisitorTable';
 import { useVisitorLogs } from '../hooks/useVisitorLogs';
 import { useCreateVisitor, useCheckInVisitor, useCheckOutVisitor } from '../hooks/useVisitor';
 import { usePagination }  from '@/hooks/usePagination';
-import { useDebounce }    from '@/hooks/useDebounce';
-import type { VisitorFiltersParams }     from '../types/visitor.types';
-import type { CreateVisitorFormValues }  from '../schemas/visitor.schema';
+import type { VisitorFiltersParams } from '../types/visitor.types';
+import type { CreateVisitorFormValues } from '../schemas/visitor.schema';
 
 export function VisitorLogsPage() {
   const { page, pageSize, setPage, reset } = usePagination(1, 20);
   const [filters,  setFilters]  = useState<Partial<VisitorFiltersParams>>({});
   const [showForm, setShowForm] = useState(false);
-  const debouncedSearch = useDebounce(filters.search, 300);
 
-  const { data, isLoading } = useVisitorLogs({ ...filters, search: debouncedSearch, page, limit: pageSize });
+  const { data, isLoading } = useVisitorLogs(filters);
   const { mutate: createVisitor, isPending: creating } = useCreateVisitor();
   const { mutate: checkIn }  = useCheckInVisitor();
   const { mutate: checkOut } = useCheckOutVisitor();
@@ -27,7 +25,17 @@ export function VisitorLogsPage() {
   };
 
   const handleCreate = (values: CreateVisitorFormValues) => {
-    createVisitor(values, { onSuccess: () => setShowForm(false) });
+    createVisitor(
+      {
+        visitor_name:   values.visitor_name,
+        visitor_type:   values.visitor_type!,
+        visitor_mobile: values.visitor_mobile,
+        purpose:        values.purpose,
+        unit_id:        values.unit_id ? Number(values.unit_id) : undefined,
+        resident_id:    values.resident_id,
+      },
+      { onSuccess: () => setShowForm(false) },
+    );
   };
 
   return (

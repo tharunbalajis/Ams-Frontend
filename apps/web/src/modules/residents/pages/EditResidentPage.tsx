@@ -15,12 +15,12 @@ export function EditResidentPage() {
     <div className="space-y-6">
       <PageHeader
         title="Edit Resident"
-        description={`Editing ${resident?.fullName ?? 'resident'}`}
+        description={`Editing ${resident?.full_name ?? 'resident'}`}
         breadcrumbs={
           <Breadcrumbs items={[
             { label: 'Dashboard',  href: '/dashboard' },
             { label: 'Residents', href: RESIDENT_ROUTES.LIST },
-            { label: resident?.fullName ?? 'Edit', href: RESIDENT_ROUTES.DETAIL.replace(':id', id!) },
+            { label: resident?.full_name ?? 'Edit', href: RESIDENT_ROUTES.DETAIL.replace(':id', id!) },
             { label: 'Edit' },
           ]} />
         }

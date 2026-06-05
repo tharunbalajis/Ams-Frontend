@@ -1,9 +1,5 @@
 import { SearchInput, SelectField } from '@ams/ui';
-import {
-  VISITOR_TYPE_OPTIONS,
-  VISITOR_STATUS_OPTIONS,
-  ENTRY_STATUS_OPTIONS,
-} from '../../constants';
+import { VISITOR_TYPE_OPTIONS } from '../../constants';
 import type { VisitorFiltersParams } from '../../types/visitor.types';
 
 export interface VisitorFiltersProps {
@@ -17,32 +13,28 @@ export function VisitorFilters({ filters, onChange }: VisitorFiltersProps) {
       <SearchInput
         className="w-64"
         placeholder="Search by name or mobile..."
-        value={filters.search ?? ''}
+        value={(filters as Record<string, string>).search ?? ''}
         onChange={(e) => onChange({ ...filters, search: (e.target as HTMLInputElement).value })}
-        onClear={() => onChange({ ...filters, search: '' })}
+        onClear={() => onChange({ ...filters, search: undefined })}
       />
 
       <SelectField
         className="w-44"
-        value={filters.type ?? 'all'}
-        onValueChange={(v) => onChange({ ...filters, type: v === 'all' ? undefined : v as VisitorFiltersParams['type'] })}
+        value={(filters as Record<string, string>).visitor_type ?? 'all'}
+        onValueChange={(v) => onChange({ ...filters, ...( v === 'all' ? {} : { visitor_type: v } ) })}
         options={[{ label: 'All Types', value: 'all' }, ...VISITOR_TYPE_OPTIONS]}
-        placeholder="Type"
-      />
-
-      <SelectField
-        className="w-40"
-        value={filters.entryStatus ?? 'all'}
-        onValueChange={(v) => onChange({ ...filters, entryStatus: v === 'all' ? undefined : v as VisitorFiltersParams['entryStatus'] })}
-        options={[{ label: 'All Entry', value: 'all' }, ...ENTRY_STATUS_OPTIONS]}
-        placeholder="Entry Status"
+        placeholder="Visitor Type"
       />
 
       <SelectField
         className="w-40"
         value={filters.status ?? 'all'}
-        onValueChange={(v) => onChange({ ...filters, status: v === 'all' ? undefined : v as VisitorFiltersParams['status'] })}
-        options={[{ label: 'All Status', value: 'all' }, ...VISITOR_STATUS_OPTIONS]}
+        onValueChange={(v) => onChange({ ...filters, status: v === 'all' ? undefined : v })}
+        options={[
+          { label: 'All Status', value: 'all' },
+          { label: 'Active',     value: 'active' },
+          { label: 'Inactive',   value: 'inactive' },
+        ]}
         placeholder="Status"
       />
     </div>

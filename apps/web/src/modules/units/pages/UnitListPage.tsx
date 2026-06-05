@@ -5,7 +5,6 @@ import { UnitFilters } from '../components/UnitFilters';
 import { UnitTable }   from '../components/UnitTable';
 import { useUnits }    from '../hooks/useUnits';
 import { usePagination } from '@/hooks/usePagination';
-import { useDebounce }   from '@/hooks/useDebounce';
 import { UNIT_ROUTES }   from '../constants/unit.constants';
 import type { UnitFiltersParams } from '../types/unit.types';
 
@@ -13,14 +12,8 @@ export function UnitListPage() {
   const navigate = useNavigate();
   const { page, pageSize, setPage, reset } = usePagination(1, 20);
   const [filters, setFilters] = useState<Partial<UnitFiltersParams>>({});
-  const debouncedSearch = useDebounce(filters.search, 300);
 
-  const { data, isLoading } = useUnits({
-    ...filters,
-    search: debouncedSearch,
-    page,
-    limit: pageSize,
-  });
+  const { data, isLoading } = useUnits(filters);
 
   const handleFiltersChange = (next: Partial<UnitFiltersParams>) => {
     setFilters(next);

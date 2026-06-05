@@ -1,30 +1,20 @@
-import type { InvoiceStatus, InvoiceType } from '../types/invoice.types';
+import type { InvoiceStatus } from '../types/invoice.types';
 
 export const INVOICE_STATUS_OPTIONS: { label: string; value: InvoiceStatus }[] = [
-  { label: 'Draft',          value: 'DRAFT' },
-  { label: 'Pending',        value: 'PENDING' },
-  { label: 'Partially Paid', value: 'PARTIALLY_PAID' },
-  { label: 'Paid',           value: 'PAID' },
-  { label: 'Overdue',        value: 'OVERDUE' },
-  { label: 'Cancelled',      value: 'CANCELLED' },
+  { label: 'Pending',   value: 'PENDING' },
+  { label: 'Paid',      value: 'PAID' },
+  { label: 'Overdue',   value: 'OVERDUE' },
+  { label: 'Cancelled', value: 'CANCELLED' },
 ];
 
 export const INVOICE_STATUS_COLOR: Record<InvoiceStatus, string> = {
-  DRAFT:          'secondary',
-  PENDING:        'warning',
-  PARTIALLY_PAID: 'warning',
-  PAID:           'success',
-  OVERDUE:        'destructive',
-  CANCELLED:      'outline',
+  PENDING:   'warning',
+  PAID:      'success',
+  OVERDUE:   'destructive',
+  CANCELLED: 'outline',
 };
 
-export const INVOICE_TYPE_OPTIONS: { label: string; value: InvoiceType }[] = [
-  { label: 'Monthly Maintenance', value: 'MAINTENANCE' },
-  { label: 'Special Assessment',  value: 'SPECIAL_ASSESSMENT' },
-  { label: 'Penalty',             value: 'PENALTY' },
-  { label: 'Late Fee',            value: 'LATE_FEE' },
-  { label: 'Miscellaneous',       value: 'MISCELLANEOUS' },
-];
+export const INVOICE_TYPE_OPTIONS: { label: string; value: string }[] = [];
 
 export const FINANCIAL_ROUTES = {
   DASHBOARD:      '/financials',

@@ -14,21 +14,19 @@ export function VisitorForm({ onSubmit, onCancel, isPending }: VisitorFormProps)
   const form = useForm<CreateVisitorFormValues>({
     resolver:      zodResolver(createVisitorSchema),
     defaultValues: {
-      name:              '',
-      mobile:            '',
-      type:              undefined,
-      purposeOfVisit:    '',
-      residentId:        '',
-      vehicleNumber:     '',
-      expectedEntryTime: '',
-      expectedExitTime:  '',
+      visitor_name:   '',
+      visitor_mobile: '',
+      visitor_type:   undefined,
+      purpose:        '',
+      unit_id:        '',
+      resident_id:    '',
     },
   });
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField control={form.control} name="name" label="Visitor Name" required>
+        <FormField control={form.control} name="visitor_name" label="Visitor Name" required>
           {(field) => (
             <Input
               value={field.value as string}
@@ -40,7 +38,7 @@ export function VisitorForm({ onSubmit, onCancel, isPending }: VisitorFormProps)
           )}
         </FormField>
 
-        <FormField control={form.control} name="mobile" label="Mobile Number" required>
+        <FormField control={form.control} name="visitor_mobile" label="Mobile Number">
           {(field) => (
             <Input
               type="tel"
@@ -53,7 +51,7 @@ export function VisitorForm({ onSubmit, onCancel, isPending }: VisitorFormProps)
           )}
         </FormField>
 
-        <FormField control={form.control} name="type" label="Visitor Type" required>
+        <FormField control={form.control} name="visitor_type" label="Visitor Type" required>
           {(field) => (
             <SelectField
               value={field.value as string}
@@ -65,7 +63,7 @@ export function VisitorForm({ onSubmit, onCancel, isPending }: VisitorFormProps)
           )}
         </FormField>
 
-        <FormField control={form.control} name="purposeOfVisit" label="Purpose of Visit" required>
+        <FormField control={form.control} name="purpose" label="Purpose of Visit">
           {(field) => (
             <Input
               value={field.value as string}
@@ -77,37 +75,26 @@ export function VisitorForm({ onSubmit, onCancel, isPending }: VisitorFormProps)
           )}
         </FormField>
 
-        <FormField control={form.control} name="expectedEntryTime" label="Expected Entry Time" required>
+        <FormField control={form.control} name="unit_id" label="Unit ID">
           {(field) => (
             <Input
-              type="datetime-local"
+              type="number"
               value={field.value as string}
               onChange={field.onChange}
               onBlur={field.onBlur}
+              placeholder="Unit number"
               disabled={isPending}
             />
           )}
         </FormField>
 
-        <FormField control={form.control} name="expectedExitTime" label="Expected Exit Time">
-          {(field) => (
-            <Input
-              type="datetime-local"
-              value={field.value as string}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              disabled={isPending}
-            />
-          )}
-        </FormField>
-
-        <FormField control={form.control} name="vehicleNumber" label="Vehicle Number">
+        <FormField control={form.control} name="resident_id" label="Resident ID">
           {(field) => (
             <Input
               value={field.value as string}
               onChange={field.onChange}
               onBlur={field.onBlur}
-              placeholder="e.g. MH12AB1234"
+              placeholder="Resident UUID"
               disabled={isPending}
             />
           )}

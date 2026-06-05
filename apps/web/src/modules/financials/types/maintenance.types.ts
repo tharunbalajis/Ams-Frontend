@@ -1,37 +1,29 @@
-import type { ID, Timestamp } from '@/types/common.types';
-
-export type HeadType         = 'MAINTENANCE' | 'UTILITIES' | 'SECURITY' | 'HOUSEKEEPING' | 'ADMIN' | 'OTHER';
-export type Frequency        = 'MONTHLY' | 'QUARTERLY' | 'HALF_YEARLY' | 'YEARLY' | 'ONE_TIME';
-export type CalculationBasis = 'PER_UNIT' | 'PER_SQ_FT' | 'FIXED' | 'PERCENTAGE';
+export type HeadType         = 'MAINTENANCE' | 'UTILITY' | 'FUND' | 'OTHER';
+export type Frequency        = 'MONTHLY' | 'QUARTERLY' | 'ANNUAL' | 'ONE_TIME';
+export type CalculationBasis = 'FLAT' | 'PER_SQFT' | 'CUSTOM';
 
 export interface MaintenanceHead {
-  id:               ID;
-  name:             string;
-  code:             string;
-  headType:         HeadType;
-  frequency:        Frequency;
-  calculationBasis: CalculationBasis;
-  defaultAmount:    number;
-  isActive:         boolean;
-  description:      string;
-  createdAt:        Timestamp;
-  updatedAt:        Timestamp;
+  id:                string;
+  society_id:        number;
+  head_name:         string;
+  head_type:         HeadType;
+  calculation_basis: CalculationBasis;
+  amount:            number;
+  gst_applicable:    boolean;
+  gst_rate:          number;
+  frequency:         Frequency;
+  is_active:         boolean;
+  created_at:        string;
 }
 
 export interface CreateMaintenanceHeadPayload {
-  name:             string;
-  code:             string;
-  headType:         HeadType;
-  frequency:        Frequency;
-  calculationBasis: CalculationBasis;
-  defaultAmount:    number;
-  description?:     string;
+  head_name:         string;
+  head_type:         HeadType;
+  calculation_basis: CalculationBasis;
+  amount:            number;
+  frequency:         Frequency;
+  gst_applicable?:   boolean;
+  gst_rate?:         number;
 }
 
 export type UpdateMaintenanceHeadPayload = Partial<CreateMaintenanceHeadPayload>;
-
-export interface GenerateInvoicesPayload {
-  headId:  ID;
-  period:  string;
-  dueDate: string;
-}

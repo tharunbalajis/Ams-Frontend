@@ -1,85 +1,66 @@
-import type { ID, Nullable, Timestamp } from '@/types/common.types';
-
 export type Priority        = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-export type ComplaintStatus = 'OPEN' | 'ASSIGNED' | 'IN_PROGRESS' | 'ON_HOLD' | 'RESOLVED' | 'CLOSED';
+export type ComplaintStatus = 'open' | 'in_progress' | 'resolved' | 'closed';
 
 export interface ComplaintCategory {
-  id:   ID;
-  name: string;
-  code: string;
-}
-
-export interface ComplaintMedia {
-  id:        ID;
-  url:       string;
-  mimeType:  string;
-  fileName:  string;
-  createdAt: Timestamp;
+  id:                string;
+  society_id:        number;
+  category_name:     string;
+  sla_hours:         number;
+  escalation_hours:  number;
+  is_active:         boolean;
+  created_at:        string;
 }
 
 export interface Complaint {
-  id:            ID;
-  title:         string;
-  categoryId:    ID;
-  categoryName:  string;
-  priority:      Priority;
-  status:        ComplaintStatus;
-  description:   string;
-  residentId:    ID;
-  residentName:  string;
-  unitNumber:    string;
-  media:         ComplaintMedia[];
-  complaintDate: string;
-  resolvedAt:    Nullable<Timestamp>;
-  closedAt:      Nullable<Timestamp>;
-  assignedTo:    Nullable<string>;
-  createdAt:     Timestamp;
-  updatedAt:     Timestamp;
+  id:           string;
+  society_id:   number;
+  unit_id:      number;
+  resident_id:  string;
+  raised_by:    string;
+  cat_id:       string;     // FK to complaint_categories — NOT category_id
+  ticket_number?: string;
+  title:        string;
+  description:  string;
+  priority:     Priority;
+  status:       ComplaintStatus;
+  assigned_to?: string;
+  sla_breach:   boolean;
+  is_active:    boolean;
+  created_at:   string;
+  updated_at:   string;
+  // possible joined fields
+  category_name?: string;
 }
 
-export type ComplaintListItem = Pick<
-  Complaint,
-  | 'id'
-  | 'title'
-  | 'categoryName'
-  | 'priority'
-  | 'status'
-  | 'residentName'
-  | 'unitNumber'
-  | 'assignedTo'
-  | 'complaintDate'
-  | 'resolvedAt'
->;
+export type ComplaintListItem = Complaint;
 
 export interface CreateComplaintPayload {
+  society_id:  number;
+  unit_id:     number;
+  raised_by:   string;   // UUID of logged-in user — required
+  cat_id:      string;   // NOT category_id
   title:       string;
-  categoryId:  ID;
-  priority:    Priority;
   description: string;
-  residentId:  ID;
+  priority?:   Priority;
 }
 
 export type UpdateComplaintPayload = Partial<CreateComplaintPayload & { status: ComplaintStatus }>;
 
 export interface ComplaintFiltersParams {
-  search?:    string;
-  categoryId?: ID;
-  priority?:  Priority;
-  status?:    ComplaintStatus;
-  assignedTo?: string;
-  dateFrom?:  string;
-  dateTo?:    string;
-  page?:      number;
-  limit?:     number;
-  sortBy?:    string;
-  sortDir?:   'asc' | 'desc';
+  society_id?: number;
+  status?:     ComplaintStatus;
+  priority?:   Priority;
+  cat_id?:     string;
+  search?:     string;
+  page?:       number;
+  limit?:      number;
 }
 
 export interface ComplaintTimelineEvent {
-  id:          ID;
-  complaintId: ID;
+  id:          string;
+  complaint_id: string;
   event:       string;
-  description: Nullable<string>;
-  performedBy: string;
-  timestamp:   Timestamp;
+  description?: string;
+  performed_by: string;
+  timestamp:   string;
 }

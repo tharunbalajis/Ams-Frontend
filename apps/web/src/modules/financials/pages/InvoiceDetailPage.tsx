@@ -40,13 +40,13 @@ export function InvoiceDetailPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title={invoice.invoiceNumber}
-        description={`${invoice.residentName} · Unit ${invoice.unitNumber}`}
+        title={invoice.invoice_number}
+        description={`Unit ${invoice.unit_id} · ${invoice.billing_period}`}
         breadcrumbs={
           <Breadcrumbs items={[
             { label: 'Dashboard', href: '/dashboard' },
             { label: 'Invoices',  href: FINANCIAL_ROUTES.INVOICES },
-            { label: invoice.invoiceNumber },
+            { label: invoice.invoice_number },
           ]} />
         }
       />

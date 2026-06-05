@@ -20,13 +20,13 @@ export function VisitorDetailPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title={visitor.name}
-        description={`${visitor.type.replace('_', ' ')} · Unit ${visitor.unitNumber}`}
+        title={visitor.visitor_name}
+        description={`${visitor.visitor_type.replace(/_/g, ' ')} · Unit ${visitor.unit_id}`}
         breadcrumbs={
           <Breadcrumbs items={[
             { label: 'Dashboard', href: '/dashboard' },
             { label: 'Visitors',  href: VISITOR_ROUTES.LIST },
-            { label: visitor.name },
+            { label: visitor.visitor_name },
           ]} />
         }
       />

@@ -1,61 +1,42 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Breadcrumbs, Button, PageHeader, LoadingState, ErrorState, Tabs, TabsContent, TabsList, TabsTrigger } from '@ams/ui';
-import { UnitProfile }      from '../components/UnitProfile';
-import { OwnershipSection } from '../components/OwnershipSection';
-import { useUnit }          from '../hooks/useUnit';
-import { useOwnership }     from '../hooks/useOwnership';
-import { UNIT_ROUTES }      from '../constants/unit.constants';
+import { Breadcrumbs, Button, PageHeader, LoadingState, ErrorState } from '@ams/ui';
+import { UnitProfile } from '../components/UnitProfile';
+import { useUnit }     from '../hooks/useUnit';
+import { UNIT_ROUTES } from '../constants/unit.constants';
 
 export function UnitDetailPage() {
   const { id = '' } = useParams<{ id: string }>();
   const navigate     = useNavigate();
 
-  const { data: unit,      isLoading: loadingUnit,      isError: errorUnit }  = useUnit(id);
-  const { data: ownership, isLoading: loadingOwnership }                       = useOwnership(id);
+  const { data: unit, isLoading, isError } = useUnit(id);
 
-  if (loadingUnit) return <LoadingState />;
-  if (errorUnit || !unit?.data) return <ErrorState />;
+  if (isLoading) return <LoadingState />;
+  if (isError || !unit?.data) return <ErrorState />;
 
   const u = unit.data;
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title={`Unit ${u.unitNumber}`}
-        description={`Block ${u.block} · Floor ${u.floor} · ${u.type}`}
+        title={`Unit ${u.unit_number}`}
+        description={`${u.block_name ? `Block ${u.block_name} · ` : ''}Floor ${u.floor_number ?? '—'} · ${u.unit_type}`}
         breadcrumbs={
           <Breadcrumbs items={[
             { label: 'Dashboard', href: '/dashboard' },
             { label: 'Units',     href: UNIT_ROUTES.LIST },
-            { label: u.unitNumber },
+            { label: u.unit_number },
           ]} />
         }
         actions={
           <Button
             variant="outline"
-            onClick={() => void navigate(UNIT_ROUTES.EDIT.replace(':id', id))}
+            onClick={() => void navigate(UNIT_ROUTES.EDIT.replace(':id', String(u.unit_id)))}
           >
             Edit Unit
           </Button>
         }
       />
-
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="ownership">Ownership</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="mt-4">
-          <UnitProfile unit={u} ownership={ownership?.data} />
-        </TabsContent>
-
-        <TabsContent value="ownership" className="mt-4">
-          {!loadingOwnership && ownership?.data && (
-            <OwnershipSection ownership={ownership.data} />
-          )}
-        </TabsContent>
-      </Tabs>
+      <UnitProfile unit={u} />
     </div>
   );
 }

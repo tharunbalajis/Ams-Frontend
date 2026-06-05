@@ -19,6 +19,18 @@ export function ComplaintTable({ data, loading, pagination, onPageChange }: Comp
 
   const columns: ColumnDef<ComplaintListItem>[] = [
     {
+      accessorKey: 'ticket_number',
+      header:      'Ticket #',
+      cell:        ({ row }) => (
+        <button
+          className="max-w-xs truncate text-left font-medium text-primary hover:underline"
+          onClick={() => void navigate(COMPLAINT_ROUTES.DETAIL.replace(':id', row.original.id))}
+        >
+          {row.original.ticket_number ?? row.original.id.slice(0, 8)}
+        </button>
+      ),
+    },
+    {
       accessorKey: 'title',
       header:      'Title',
       cell:        ({ row }) => (
@@ -31,9 +43,10 @@ export function ComplaintTable({ data, loading, pagination, onPageChange }: Comp
       ),
     },
     {
-      accessorKey: 'categoryName',
+      accessorKey: 'category_name',
       header:      'Category',
-      cell:        ({ getValue }) => <span>{getValue() as string}</span>,
+      cell:        ({ row }) =>
+        <span>{row.original.category_name ?? row.original.cat_id.slice(0, 8)}</span>,
     },
     {
       accessorKey: 'priority',
@@ -50,22 +63,20 @@ export function ComplaintTable({ data, loading, pagination, onPageChange }: Comp
       ),
     },
     {
-      accessorKey: 'residentName',
-      header:      'Resident',
-      cell:        ({ row }) => (
-        <div>
-          <p className="font-medium">{row.original.residentName}</p>
-          <p className="text-xs text-muted-foreground">Unit {row.original.unitNumber}</p>
-        </div>
-      ),
+      accessorKey: 'unit_id',
+      header:      'Unit',
+      cell:        ({ getValue }) => `Unit ${getValue() as number}`,
     },
     {
-      accessorKey: 'assignedTo',
+      accessorKey: 'assigned_to',
       header:      'Assigned To',
-      cell:        ({ getValue }) => (getValue() as string | null) ?? '—',
+      cell:        ({ getValue }) => {
+        const v = getValue() as string | undefined;
+        return v ? v.slice(0, 8) + '…' : '—';
+      },
     },
     {
-      accessorKey: 'complaintDate',
+      accessorKey: 'created_at',
       header:      'Date',
       cell:        ({ getValue }) => formatDate(getValue() as string),
     },

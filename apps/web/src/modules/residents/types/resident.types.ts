@@ -1,62 +1,44 @@
-import type { ID, Nullable, Timestamp } from '@/types/common.types';
-
-export type ResidentType   = 'OWNER' | 'TENANT';
-export type ResidentStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING' | 'SUSPENDED';
-export type ResidentGender = 'MALE' | 'FEMALE' | 'OTHER';
-
-export interface EmergencyContact {
-  name:         string;
-  relationship: string;
-  phone:        string;
-  email?:       string;
-}
+export type ResidentType        = 'OWNER' | 'TENANT' | 'FAMILY';
+export type ResidentRelationship = 'PRIMARY' | 'SPOUSE' | 'CHILD' | 'PARENT' | 'DEPENDENT';
 
 export interface Resident {
-  id:               ID;
-  type:             ResidentType;
-  firstName:        string;
-  lastName:         string;
-  fullName:         string;
-  email:            string;
-  phone:            string;
-  dateOfBirth:      Nullable<string>;
-  gender:           Nullable<ResidentGender>;
-  profileImage:     Nullable<string>;
-  unitId:           ID;
-  unitNumber:       string;
-  status:           ResidentStatus;
-  emergencyContact: Nullable<EmergencyContact>;
-  idProof:          Nullable<string>;
-  createdAt:        Timestamp;
-  updatedAt:        Timestamp;
+  id:               string;
+  society_id:       number;
+  unit_id:          number;
+  full_name:        string;
+  relationship:     ResidentRelationship;
+  resident_type:    ResidentType;
+  mobile_primary:   string;
+  mobile_secondary?: string;
+  email?:           string;
+  move_in_date:     string;
+  move_out_date?:   string;
+  is_active:        boolean;
+  created_at:       string;
+  updated_at:       string;
 }
 
-export type ResidentListItem = Pick<
-  Resident,
-  'id' | 'fullName' | 'email' | 'phone' | 'unitNumber' | 'type' | 'status' | 'createdAt'
->;
+export type ResidentListItem = Resident;
 
 export interface CreateResidentPayload {
-  type:             ResidentType;
-  firstName:        string;
-  lastName:         string;
-  email:            string;
-  phone:            string;
-  unitId:           ID;
-  dateOfBirth?:     string;
-  gender?:          ResidentGender;
-  emergencyContact?: EmergencyContact;
+  society_id:    number;
+  unit_id:       number;
+  full_name:     string;
+  mobile_primary: string;
+  move_in_date:  string;
+  relationship?: ResidentRelationship;
+  resident_type?: ResidentType;
+  email?:        string;
+  mobile_secondary?: string;
 }
 
 export type UpdateResidentPayload = Partial<CreateResidentPayload>;
 
 export interface ResidentFiltersParams {
-  search?:   string;
-  type?:     ResidentType;
-  status?:   ResidentStatus;
-  unitId?:   ID;
-  page?:     number;
-  limit?:    number;
-  sortBy?:   string;
-  sortDir?:  'asc' | 'desc';
+  society_id?: number;
+  unit_id?:    number;
+  is_active?:  boolean;
+  search?:     string;
+  page?:       number;
+  limit?:      number;
 }
