@@ -1,4 +1,5 @@
 import apiClient from '@/api/client';
+import { adaptListResponse } from '@/api/utils';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
 import type {
   Invoice,
@@ -10,14 +11,9 @@ import type {
 
 const BASE = '/invoices';
 
-function wrapArray<T>(data: T[]): ApiListResponse<T> {
-  const arr = Array.isArray(data) ? data : [];
-  return { data: arr, meta: { total: arr.length, page: 1, limit: arr.length || 20, totalPages: 1, hasNextPage: false, hasPreviousPage: false }, success: true };
-}
-
 export const invoicesApi = {
   getAll: (params?: InvoiceFiltersParams) =>
-    apiClient.get<Invoice[]>(BASE, { params }).then((r) => wrapArray(r.data)),
+    apiClient.get(BASE, { params }).then((r) => adaptListResponse<Invoice>(r.data)),
 
   getById: (id: string) =>
     apiClient.get<Invoice>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Invoice>),

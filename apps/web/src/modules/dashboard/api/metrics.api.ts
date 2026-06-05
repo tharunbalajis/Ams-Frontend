@@ -1,27 +1,14 @@
 import apiClient from '@/api/client';
-
-export interface DashboardData {
-  residents?:  Record<string, unknown>;
-  complaints?: Record<string, unknown>;
-  visitors?:   Record<string, unknown>;
-  finance?:    Record<string, unknown>;
-}
+import type { DashboardSummary } from '../types/dashboard.types';
 
 export const metricsApi = {
-  // GET /dashboard/metrics does NOT exist — call 4 real endpoints in parallel.
-  getMetrics: async (_params?: { period?: string }): Promise<DashboardData> => {
-    const [residents, complaints, visitors, finance] = await Promise.allSettled([
-      apiClient.get('/residents/dashboard', { params: { society_id: 1 } }).then(r => r.data),
-      apiClient.get('/complaints/dashboard').then(r => r.data),
-      apiClient.get('/visitors/dashboard').then(r => r.data),
-      apiClient.get('/finance/dashboard').then(r => r.data),
-    ]);
-
-    return {
-      residents:  residents.status  === 'fulfilled' ? residents.value  as Record<string, unknown> : undefined,
-      complaints: complaints.status === 'fulfilled' ? complaints.value as Record<string, unknown> : undefined,
-      visitors:   visitors.status   === 'fulfilled' ? visitors.value   as Record<string, unknown> : undefined,
-      finance:    finance.status    === 'fulfilled' ? finance.value    as Record<string, unknown> : undefined,
-    };
-  },
+  getMetrics: (_params?: { period?: string }) =>
+    apiClient.get<{ data: DashboardSummary } | DashboardSummary>('/dashboard/metrics').then((r) => {
+      const body = r.data as unknown;
+      // Backend wraps the payload in { data: ... }
+      if (body && typeof body === 'object' && 'data' in (body as Record<string, unknown>)) {
+        return (body as { data: DashboardSummary }).data;
+      }
+      return body as DashboardSummary;
+    }),
 };

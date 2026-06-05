@@ -1,4 +1,5 @@
 import apiClient from '@/api/client';
+import { adaptListResponse } from '@/api/utils';
 import type { ApiListResponse, ApiResponse } from '@/types/api.types';
 import type {
   Resident,
@@ -9,18 +10,9 @@ import type {
 
 const BASE = '/residents';
 
-function wrapArray<T>(data: T[]): ApiListResponse<T> {
-  const arr = Array.isArray(data) ? data : [];
-  return {
-    data: arr,
-    meta: { total: arr.length, page: 1, limit: arr.length || 20, totalPages: 1, hasNextPage: false, hasPreviousPage: false },
-    success: true,
-  };
-}
-
 export const residentsApi = {
   getAll: (params?: ResidentFiltersParams) =>
-    apiClient.get<Resident[]>(BASE, { params }).then((r) => wrapArray(r.data)),
+    apiClient.get(BASE, { params }).then((r) => adaptListResponse<Resident>(r.data)),
 
   getById: (id: string) =>
     apiClient.get<Resident>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Resident>),

@@ -1,4 +1,5 @@
 import apiClient from '@/api/client';
+import { adaptListResponse } from '@/api/utils';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
 import type {
   Complaint,
@@ -12,14 +13,9 @@ import type {
 
 const BASE = '/complaints';
 
-function wrapArray<T>(data: T[]): ApiListResponse<T> {
-  const arr = Array.isArray(data) ? data : [];
-  return { data: arr, meta: { total: arr.length, page: 1, limit: arr.length || 20, totalPages: 1, hasNextPage: false, hasPreviousPage: false }, success: true };
-}
-
 export const complaintsApi = {
   getAll: (params?: ComplaintFiltersParams) =>
-    apiClient.get<Complaint[]>(BASE, { params }).then((r) => wrapArray(r.data)),
+    apiClient.get(BASE, { params }).then((r) => adaptListResponse<Complaint>(r.data)),
 
   getById: (id: string) =>
     apiClient.get<Complaint>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Complaint>),
@@ -42,11 +38,11 @@ export const complaintsApi = {
     apiClient.put<Complaint>(`${BASE}/${id}/assign`, { assigned_to }).then((r) => ({ data: r.data, success: true }) as ApiResponse<Complaint>),
 
   getTimeline: (id: string) =>
-    apiClient.get<ComplaintTimelineEvent[]>(`${BASE}/${id}/timeline`).then((r) => wrapArray(r.data)),
+    apiClient.get(`${BASE}/${id}/timeline`).then((r) => adaptListResponse<ComplaintTimelineEvent>(r.data)),
 
   // Backend: /complaint-categories (separate resource)
   getCategories: (params?: { society_id?: number }) =>
-    apiClient.get<ComplaintCategory[]>('/complaint-categories', { params }).then((r) => wrapArray(r.data)),
+    apiClient.get('/complaint-categories', { params }).then((r) => adaptListResponse<ComplaintCategory>(r.data)),
 
   createCategory: (data: { society_id: number; category_name: string; sla_hours?: number; escalation_hours?: number }) =>
     apiClient.post<ComplaintCategory>('/complaint-categories', data).then((r) => ({ data: r.data, success: true }) as ApiResponse<ComplaintCategory>),

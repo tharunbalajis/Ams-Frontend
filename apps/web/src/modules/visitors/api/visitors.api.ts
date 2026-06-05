@@ -1,4 +1,5 @@
 import apiClient from '@/api/client';
+import { adaptListResponse } from '@/api/utils';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
 import type {
   Visitor,
@@ -9,18 +10,9 @@ import type {
 
 const BASE = '/visitors';
 
-function wrapArray<T>(data: T[]): ApiListResponse<T> {
-  const arr = Array.isArray(data) ? data : [];
-  return {
-    data: arr,
-    meta: { total: arr.length, page: 1, limit: arr.length || 20, totalPages: 1, hasNextPage: false, hasPreviousPage: false },
-    success: true,
-  };
-}
-
 export const visitorsApi = {
   getAll: (params?: VisitorFiltersParams) =>
-    apiClient.get<Visitor[]>(BASE, { params }).then((r) => wrapArray(r.data)),
+    apiClient.get(BASE, { params }).then((r) => adaptListResponse<Visitor>(r.data)),
 
   getById: (id: string) =>
     apiClient.get<Visitor>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Visitor>),
@@ -44,10 +36,7 @@ export const visitorsApi = {
     apiClient.get<Record<string, unknown>>(`${BASE}/dashboard`).then((r) => r.data),
 
   getInvites: (params?: Record<string, unknown>) =>
-    apiClient.get(`${BASE}/invites`, { params }).then((r) => {
-      const arr = Array.isArray(r.data) ? r.data : [];
-      return wrapArray(arr);
-    }),
+    apiClient.get(`${BASE}/invites`, { params }).then((r) => adaptListResponse<Record<string, unknown>>(r.data)),
 
   createInvite: (payload: Record<string, unknown>) =>
     apiClient.post(`${BASE}/invites`, payload).then((r) => ({ data: r.data, success: true })),
@@ -56,10 +45,7 @@ export const visitorsApi = {
     apiClient.put(`${BASE}/invites/${id}/revoke`, data).then((r) => ({ data: r.data, success: true })),
 
   getDeliveries: (params?: Record<string, unknown>) =>
-    apiClient.get('/delivery-entries', { params }).then((r) => {
-      const arr = Array.isArray(r.data) ? r.data : [];
-      return wrapArray(arr);
-    }),
+    apiClient.get('/delivery-entries', { params }).then((r) => adaptListResponse<Record<string, unknown>>(r.data)),
 
   createDelivery: (payload: Record<string, unknown>) =>
     apiClient.post('/delivery-entries', payload).then((r) => ({ data: r.data, success: true })),

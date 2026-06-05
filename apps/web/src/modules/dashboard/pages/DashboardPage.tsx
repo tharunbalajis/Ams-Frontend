@@ -1,7 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import apiClient from '@/api/client';
-import { useAuth } from '@/hooks/useAuth';
+import { useDashboardMetrics } from '../hooks/useDashboardMetrics';
 
 function KpiCard({
   label, value, sub, color = 'blue',
@@ -24,71 +22,48 @@ function KpiCard({
   );
 }
 
+function KpiSkeleton() {
+  return (
+    <div className="rounded-xl border p-5 bg-muted animate-pulse">
+      <div className="h-3 w-24 rounded bg-muted-foreground/20 mb-3" />
+      <div className="h-8 w-16 rounded bg-muted-foreground/20 mb-2" />
+      <div className="h-3 w-32 rounded bg-muted-foreground/20" />
+    </div>
+  );
+}
+
 export function DashboardPage() {
-  const { user } = useAuth();
   const navigate = useNavigate();
-  const societyId = user?.society_id ?? 1;
+  const { data: metrics, isLoading } = useDashboardMetrics();
 
-  const { data: rd } = useQuery({
-    queryKey: ['dashboard', 'residents', societyId],
-    queryFn:  () => apiClient.get('/residents/dashboard', { params: { society_id: societyId } }).then(r => r.data as Record<string, unknown>),
-  });
-
-  const { data: cd } = useQuery({
-    queryKey: ['dashboard', 'complaints'],
-    queryFn:  () => apiClient.get('/complaints/dashboard').then(r => r.data as Record<string, unknown>),
-  });
-
-  const { data: vd } = useQuery({
-    queryKey: ['dashboard', 'visitors'],
-    queryFn:  () => apiClient.get('/visitors/dashboard').then(r => r.data as Record<string, unknown>),
-  });
-
-  const { data: fd } = useQuery({
-    queryKey: ['dashboard', 'finance'],
-    queryFn:  () => apiClient.get('/finance/dashboard').then(r => r.data as Record<string, unknown>),
-  });
-
-  const get = (obj: Record<string, unknown> | undefined, ...keys: string[]): number => {
-    if (!obj) return 0;
-    for (const key of keys) {
-      const parts = key.split('.');
-      let val: unknown = obj;
-      for (const p of parts) val = (val as Record<string, unknown>)?.[p];
-      if (val != null) return Number(val);
-    }
-    return 0;
-  };
-
-  const totalResidents  = get(rd,  'total_residents', 'residents.total', 'total');
-  const occupiedUnits   = get(rd,  'units.occupied', 'occupied_units');
-  const totalUnits      = get(rd,  'units.total', 'total_units');
-  const occupancyPct    = get(rd,  'units.occupancy_rate_percent', 'occupancy_rate');
-  const openComplaints  = get(cd,  'by_status.open', 'open_complaints', 'stats.open', 'open');
-  const visitorsToday   = get(vd,  'today.total', 'today_visitors', 'total', 'today');
-  const activeVisitors  = get(vd,  'active', 'checked_in');
-  const monthlyCollect  = get(fd,  'payments_this_month', 'monthly_collection', 'total_collected');
-  const pendingInvoices = get(fd,  'invoices.by_status.PENDING', 'pending_invoices');
-  const overdueInvoices = get(fd,  'invoices.by_status.OVERDUE', 'overdue_invoices');
+  const r  = metrics?.residents;
+  const u  = metrics?.units;
+  const v  = metrics?.visitors;
+  const c  = metrics?.complaints;
+  const f  = metrics?.financials;
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {user?.full_name ? `Welcome back, ${user.full_name}` : 'Green Valley Apartments — Overview'}
-        </p>
+        <p className="mt-1 text-sm text-muted-foreground">Green Valley Apartments — Overview</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard label="Total Residents"    value={totalResidents}  color="blue"   sub="registered residents" />
-        <KpiCard label="Occupied Units"     value={`${occupiedUnits} / ${totalUnits}`} color="green" sub={`${occupancyPct}% occupancy`} />
-        <KpiCard label="Open Complaints"    value={openComplaints}  color="amber"  sub="awaiting resolution" />
-        <KpiCard label="Visitors Today"     value={visitorsToday}   color="purple" sub={`${activeVisitors} still inside`} />
-        <KpiCard label="Monthly Collection" value={`₹${monthlyCollect.toLocaleString('en-IN')}`} color="green" sub="this month" />
-        <KpiCard label="Pending Invoices"   value={pendingInvoices} color="amber"  sub="awaiting payment" />
-        <KpiCard label="Overdue Invoices"   value={overdueInvoices} color="red"    sub="past due date" />
-        <KpiCard label="Active Visitors"    value={activeVisitors}  color="blue"   sub="currently inside" />
+        {isLoading ? (
+          Array.from({ length: 8 }).map((_, i) => <KpiSkeleton key={i} />)
+        ) : (
+          <>
+            <KpiCard label="Total Residents"     value={r?.total ?? 0}                                            color="blue"   sub={`${r?.active ?? 0} active`} />
+            <KpiCard label="Occupied Units"      value={`${u?.occupied ?? 0} / ${u?.total ?? 0}`}                color="green"  sub={`${u?.occupancy ?? 0}% occupancy`} />
+            <KpiCard label="Open Complaints"     value={c?.open ?? 0}                                            color="amber"  sub="awaiting resolution" />
+            <KpiCard label="Visitors Today"      value={v?.today ?? 0}                                           color="purple" sub={`${v?.active ?? 0} still inside`} />
+            <KpiCard label="Monthly Collection"  value={`₹${(f?.monthlyCollection ?? 0).toLocaleString('en-IN')}`} color="green"  sub="this month" />
+            <KpiCard label="Pending Payments"    value={`₹${(f?.pendingPayments ?? 0).toLocaleString('en-IN')}`}   color="amber"  sub="awaiting payment" />
+            <KpiCard label="Overdue Amount"      value={`₹${(f?.overdueAmount ?? 0).toLocaleString('en-IN')}`}     color="red"    sub="past due date" />
+            <KpiCard label="Active Staff"        value={metrics?.staff?.active ?? 0}                             color="blue"   sub="on duty" />
+          </>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

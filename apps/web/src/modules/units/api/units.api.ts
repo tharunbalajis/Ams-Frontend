@@ -1,22 +1,14 @@
 import apiClient from '@/api/client';
+import { adaptListResponse } from '@/api/utils';
 import type { ApiResponse, ApiListResponse } from '@/types/api.types';
 import type { Unit, CreateUnitPayload, UpdateUnitPayload, UnitFiltersParams } from '../types/unit.types';
 import type { Block } from '../types/block.types';
 
 const BASE = '/units';
 
-function wrapArray<T>(data: T[]): ApiListResponse<T> {
-  const arr = Array.isArray(data) ? data : [];
-  return {
-    data: arr,
-    meta: { total: arr.length, page: 1, limit: arr.length || 20, totalPages: 1, hasNextPage: false, hasPreviousPage: false },
-    success: true,
-  };
-}
-
 export const unitsApi = {
   getAll: (params?: UnitFiltersParams) =>
-    apiClient.get<Unit[]>(BASE, { params }).then((r) => wrapArray(r.data)),
+    apiClient.get(BASE, { params }).then((r) => adaptListResponse<Unit>(r.data)),
 
   getById: (id: number) =>
     apiClient.get<Unit>(`${BASE}/${id}`).then((r) => ({ data: r.data, success: true }) as ApiResponse<Unit>),
